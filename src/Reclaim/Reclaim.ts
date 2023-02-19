@@ -2,17 +2,16 @@ import { initialiseUser } from "../firebase";
 import { Template, TemplateClaim } from "../types";
 import generateTemplateId from "../utils/generateUuid";
 import Connection from "./Connection";
+import { Wallet } from 'ethers'
 
 export class Reclaim { 
 
     private firebaseInitPromise: Promise<string>;
-    creatorWalletAddress: string;
+    private creatorWallet: Wallet
 
-    constructor( 
-        creatorWalletAddress: string 
-    ) {
+    constructor() {
         this.firebaseInitPromise = initialiseUser()
-        this.creatorWalletAddress = creatorWalletAddress
+        this.creatorWallet = Wallet.createRandom()
     }
 
     getConsent = async (templateName: string, templateClaims: TemplateClaim[]) => {
@@ -22,11 +21,11 @@ export class Reclaim {
             id: generateTemplateId(),
             name: templateName,
             firebaseToken,
-            walletAddress: this.creatorWalletAddress,
+            publicKey: this.creatorWallet.publicKey,
             claims: templateClaims
         }
 
-        return new Connection(template)
+        return new Connection(template, this.creatorWallet.privateKey)
     }
 
 }
