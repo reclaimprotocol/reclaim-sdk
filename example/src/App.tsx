@@ -28,12 +28,11 @@ const templateClaims = [
 function App() {
 
   const [templateLink, setTemplateLink] = useState('')
-  const [walletAddress, setWalletAddress] = useState('')
 
   const createTemplateLink = async (e: any) => {
     e.preventDefault()
 
-    const reclaim = new Reclaim(walletAddress)
+    const reclaim = new Reclaim()
 
     const connection = await reclaim.getConsent(
       templateName,
@@ -53,17 +52,6 @@ function App() {
       <header className="App-header">
 
         <h3>Template <span style={{fontStyle:'italic'}}>{templateName}</span></h3>
-
-        <div style={{flexDirection:'row'}}>
-          <label>
-            Your Wallet Address: {' '}
-          </label>
-          <input
-            name='wallet-address'
-            onChange={(e) => setWalletAddress(e.target.value)}
-            value={walletAddress}
-          />
-        </div>
         
         <br></br>
         
@@ -83,7 +71,6 @@ function App() {
         <br></br>
 
         <button 
-          disabled={!walletAddress}
           onClick={createTemplateLink}
         >
           Create Template Link
