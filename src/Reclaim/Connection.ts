@@ -1,4 +1,4 @@
-import { WEB_APP_URL } from "../config";
+import { RECLAIM_APP_URL } from "../config";
 import { messaging, onMessage, MessagePayload } from "../firebase";
 import { Template, TemplateLinkNotificationData } from "../types";
 import { isTemplateLinkNotificationData } from "../utils/typeGuards";
@@ -39,7 +39,7 @@ export default class Connection {
     }
 
     get link() {
-        return WEB_APP_URL + '/' + encodeURIComponent(JSON.stringify(this.template))
+        return RECLAIM_APP_URL + encodeURIComponent(JSON.stringify(this.template))
     }
 
     onSubmit = (func: (payload: TemplateLinkNotificationData) => void) => {
