@@ -2,26 +2,25 @@ import { useState } from 'react';
 import './App.css';
 import { Reclaim } from '@questbook/template-client-sdk';
 
-const templateName = "Meta-Allum"
+const templateName = "Questbook-Allum"
 
-const facebookTemplateClaim = {
-  provider: "facebook",
+const googleTemplateClaim = {
+  provider: "google-login",
   params: {
-    email: '@facebook.com',
-    occupation: 'software-engineer'
+    email: '@gmail.com'
   }
 }
 
-const metaTemplateClaim = {
-  provider: 'meta',
+const githubTemplateClaim = {
+  provider: 'github-repo',
   params: {
-    email: '@meta.com'
+    repo: 'questbook/grants-frontend'
   }
 }
 
 const templateClaims = [
-  facebookTemplateClaim,
-  metaTemplateClaim
+  googleTemplateClaim,
+  githubTemplateClaim
 ]
 
 function App() {
