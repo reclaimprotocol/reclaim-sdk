@@ -1,0 +1,76 @@
+import express, { Express, Request, Response } from 'express';
+import dotenv from 'dotenv';
+import { Reclaim, generateTemplateId } from '@questbook/template-client-sdk';
+import { Pool } from 'pg'
+import cors from 'cors';
+
+dotenv.config();
+
+const app: Express = express();
+const port = process.env.PORT || 8000;
+const dbPort = parseInt(process.env.DB_PORT ?? '5432')
+const callbackUrl = process.env.CALLBACK_URL!
+
+app.use(express.json())
+app.use(cors())
+
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: dbPort
+})
+
+const reclaim = new Reclaim(callbackUrl);
+
+const connection = reclaim.getConsent(
+  'Questbook-Employee',
+  [
+    {
+      provider: "google-login",
+      params: { }
+    }
+  ]
+)
+
+app.get('/reset', async (req: Request, res: Response) => {
+
+  await pool.query(" \
+    CREATE TABLE IF NOT EXISTS submitted_links ( \
+      id SERIAL, \
+      callback_id TEXT NOT NULL, \
+      claims JSON NULL); \
+  ")
+
+  await pool.query("TRUNCATE TABLE submitted_links");
+
+  res.send('Reset Database');
+
+});
+
+
+app.get('/reclaim-url', async (req: Request, res: Response) => {
+  
+  const callbackId = 'user-' + generateTemplateId();
+  
+  const url = connection.generateTemplate(callbackId).url;
+  
+  res.json({ url });
+});
+
+app.post('/submit-link/:id', async (req: Request, res: Response) => {
+
+  const { id: callbackId } = req.params;
+
+  const claims = { claims: req.body.claims };
+
+  await pool.query("INSERT INTO submitted_links (callback_id, claims) VALUES ($1, $2)", [callbackId, claims])
+
+  res.send("OK")
+
+});
+
+app.listen(port, () => {
+  console.log(`Server is running at http://localhost:${port}`);
+});
