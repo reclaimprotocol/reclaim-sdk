@@ -6,18 +6,7 @@ export type TemplateClaim = {
 export type Template = {
     id: string
     name: string
-    firebaseToken: string
+    callbackUrl: string
     publicKey: string
     claims: TemplateClaim[]
-}
-
-export type TemplateLinkNotificationData = {
-    title: string
-    body: string
-    data: {
-        link: any
-        templateId: string
-        templateName: string
-        signatures: Array<string>
-    }
 }

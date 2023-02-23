@@ -1,26 +1,24 @@
-import { initialiseUser } from "../firebase";
 import { Template, TemplateClaim } from "../types";
-import generateTemplateId from "../utils/generateUuid";
+import { generateTemplateId } from "../utils";
 import Connection from "./Connection";
 import { Wallet } from 'ethers'
 
 export class Reclaim { 
 
-    private firebaseInitPromise: Promise<string>;
     private creatorWallet: Wallet
+    private callbackUrl: string
 
-    constructor() {
-        this.firebaseInitPromise = initialiseUser()
+    constructor(callbackUrl: string) {
+        this.callbackUrl = callbackUrl
         this.creatorWallet = Wallet.createRandom()
     }
 
-    getConsent = async (templateName: string, templateClaims: TemplateClaim[]) => {
-        const firebaseToken = await this.firebaseInitPromise
+    getConsent = (templateName: string, templateClaims: TemplateClaim[]) => {
 
         const template: Template = {
             id: generateTemplateId(),
             name: templateName,
-            firebaseToken,
+            callbackUrl: this.callbackUrl,
             publicKey: this.creatorWallet.publicKey,
             claims: templateClaims
         }
