@@ -50,7 +50,7 @@ app.get('/reset', async (req: Request, res: Response) => {
 });
 
 
-app.get('/reclaim-url', async (req: Request, res: Response) => {
+app.get('/home', async (req: Request, res: Response) => {
   
   const callbackId = 'user-' + generateTemplateId();
   
@@ -59,7 +59,7 @@ app.get('/reclaim-url', async (req: Request, res: Response) => {
   res.json({ url });
 });
 
-app.post('/submit-link/:id', async (req: Request, res: Response) => {
+app.post('/callback/:id', async (req: Request, res: Response) => {
 
   const { id: callbackId } = req.params;
 

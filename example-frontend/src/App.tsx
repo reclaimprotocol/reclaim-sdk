@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import axios from 'axios'
 
-const getCallbackUrl = process.env.REACT_APP_BACKEND_BASE_URL + '/reclaim-url'
+const getCallbackUrl = process.env.REACT_APP_BACKEND_BASE_URL + '/home'
 
 function App() {
 
