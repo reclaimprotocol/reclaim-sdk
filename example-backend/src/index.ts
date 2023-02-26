@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import { Reclaim, generateTemplateId } from '@questbook/template-client-sdk';
 import { Pool } from 'pg'
 import cors from 'cors';
+import { verifyEncryptedClaims } from '@questbook/reclaim-crypto-sdk';
 
 dotenv.config();
 
@@ -65,7 +66,9 @@ app.post('/callback/:id', async (req: Request, res: Response) => {
 
   const claims = { claims: req.body.claims };
 
-  await pool.query("INSERT INTO submitted_links (callback_id, claims) VALUES ($1, $2)", [callbackId, claims])
+  const verifiedClaimProofs = connection.verifyEncryptedClaimProofs(claims);
+
+  await pool.query("INSERT INTO submitted_links (callback_id, claims) VALUES ($1, $2)", [callbackId, verifiedClaimProofs])
 
   res.send("OK")
 

@@ -10,3 +10,19 @@ export type Template = {
     publicKey: string
     claims: TemplateClaim[]
 }
+
+export type Claim = {
+    id: number
+    provider: string
+    redactedParameters: string
+    params: {
+        [key: string]: string
+    }
+    ownerPublicKey: Uint8Array
+    timestampS: number
+    witnessAddresses: string[]
+    signatures: Uint8Array
+}
+export interface Link {
+    claims: Claim[]
+}
