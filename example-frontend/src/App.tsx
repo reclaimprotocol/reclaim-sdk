@@ -10,19 +10,22 @@ function App() {
   const [callbackUrl, setCallbackUrl] = React.useState<string | null>(null)
   const [callbackId, setCallbackId] = React.useState<string | null>(null)
   const [status, setStatus] = React.useState<string | null>(null)
+  const [loading, setLoading] = React.useState<boolean>(false)
 
   const getStatus = async (callbackId: string) => {
     const response = await axios.get(getStatusUrl + `/${callbackId}`);
     setStatus(response.data.status);
   }
 
-  React.useEffect(() => {
-    axios.get(getCallbackUrl)
-      .then(response => {
-        setCallbackId(response.data.callbackId)
-        setCallbackUrl(response.data.url);
-      })
-  }, [])
+  const proveIt = async (e: any) => {
+    e.preventDefault();
+    const response = await axios.get(getCallbackUrl)
+
+    setCallbackId(response.data.callbackId)
+    setCallbackUrl(response.data.url);
+    setLoading(true)
+
+  }
 
   React.useEffect(() => {
     if (!callbackId) return;
@@ -41,15 +44,22 @@ function App() {
 
         <h2>Claim that you have a google account!</h2>
 
-        {callbackUrl &&
-          <a
+        {!callbackUrl &&
+        <button
+        disabled={!!callbackUrl}
+        onClick={proveIt}>
+          Get Link
+        </button>
+          
+        }
+        {callbackUrl && <a
             className="App-link"
             href={callbackUrl}
           >
             Claim it
-          </a>
-        }
-        {status === 'verified' ? <h3>Thanks for submitting your link!</h3> : <div className='loader'></div>}
+          </a>}
+        {status === 'verified' ? <h3>Thanks for submitting your link!</h3> : 
+        (loading ? <div className='loader'></div> : <></>)}
       </header>
     </div>
   );
