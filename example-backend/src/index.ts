@@ -55,7 +55,7 @@ app.get('/home', async (req: Request, res: Response) => {
   
   const callbackId = 'user-' + generateTemplateId();
   
-  const url = connection.generateTemplate(callbackId).url;
+  const url = (await connection).generateTemplate(callbackId).url;
   
   res.json({ url });
 });
@@ -64,11 +64,9 @@ app.post('/callback/:id', async (req: Request, res: Response) => {
 
   const { id: callbackId } = req.params;
 
-  const claims = { claims: req.body.claims };
+  const claims = req.body.claims;
 
-  const verifiedClaimProofs = connection.verifyEncryptedClaimProofs(claims);
-
-  await pool.query("INSERT INTO submitted_links (callback_id, claims) VALUES ($1, $2)", [callbackId, verifiedClaimProofs])
+  await pool.query("INSERT INTO submitted_links (callback_id, claims) VALUES ($1, $2)", [callbackId, claims])
 
   res.send("OK")
 

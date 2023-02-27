@@ -21,7 +21,7 @@ export type Claim = {
     ownerPublicKey: Uint8Array
     timestampS: number
     witnessAddresses: string[]
-    signatures: Uint8Array
+    signatures: string[]
 }
 export interface Link {
     claims: Claim[]
