@@ -34,7 +34,7 @@ app.get('/home', async (req: Request, res: Response) => {
   
   const callbackId = 'user-' + generateTemplateId();
 
-  const url = connection.generateTemplate(callbackId).url;
+  const url = (await connection).generateTemplate(callbackId).url;
   try {
     await pool.query("INSERT INTO submitted_links (callback_id, status) VALUES ($1, $2)", [callbackId, "pending"])
   }
