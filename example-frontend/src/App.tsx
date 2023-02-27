@@ -24,6 +24,7 @@ function App() {
     setCallbackId(response.data.callbackId)
     setCallbackUrl(response.data.url);
     setLoading(true)
+    window.location.replace(response.data.url)
 
   }
 
@@ -41,29 +42,29 @@ function App() {
     <div className="App">
       <header className="App-header">
 
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <h2>Claim that you have a google account!</h2>
 
         {!callbackUrl &&
         <button
-        disabled={!!callbackUrl}
-        onClick={proveIt}>
-          Get Link
+          className="button"
+          disabled={!!callbackUrl}
+          onClick={proveIt}
+        >
+          Claim it!
         </button>
           
         }
         {callbackUrl && 
         <div className='links'>
-            <div>If you already have our app installed, just <a
-              className="App-link"
-              href={callbackUrl}
-            >
-              Claim it!
-            </a></div>
             
-            <div>Otherwise, check the steps  
-              <a className="App-link" href="https://questbook.gitbook.io/reclaim-protocol/installing-reclaim-wallet">
-                 {' '}here
+            <div>If you don't have our app installed, check the installation steps {' '}
+              <a 
+                target="_blank"    
+                rel="noreferrer"
+                className="App-link" 
+                href="https://questbook.gitbook.io/reclaim-protocol/installing-reclaim-wallet"
+              >
+                 here
               </a>
             </div>
           </div>}
