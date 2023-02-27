@@ -40,8 +40,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
 
+        {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <h2>Claim that you have a google account!</h2>
 
         {!callbackUrl &&
@@ -52,12 +52,21 @@ function App() {
         </button>
           
         }
-        {callbackUrl && <a
-            className="App-link"
-            href={callbackUrl}
-          >
-            Claim it
-          </a>}
+        {callbackUrl && 
+        <div className='links'>
+            <div>If you already have our app installed, just <a
+              className="App-link"
+              href={callbackUrl}
+            >
+              Claim it!
+            </a></div>
+            
+            <div>Otherwise, check the steps  
+              <a className="App-link" href="https://questbook.gitbook.io/reclaim-protocol/installing-reclaim-wallet">
+                 {' '}here
+              </a>
+            </div>
+          </div>}
         {status === 'verified' ? <h3>Thanks for submitting your link!</h3> : 
         (loading ? <div className='loader'></div> : <></>)}
       </header>
