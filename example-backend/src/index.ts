@@ -39,7 +39,7 @@ app.get('/home', async (req: Request, res: Response) => {
   
   await pool.query("INSERT INTO submitted_links (callback_id, status) VALUES ($1, $2)", [callbackId, "pending"])
   
-  res.json({ url });
+  res.json({ url, callbackId });
 });
 
 app.post('/callback/:id', async (req: Request, res: Response) => {

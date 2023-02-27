@@ -8,6 +8,7 @@ const getStatusUrl = process.env.REACT_APP_BACKEND_BASE_URL + '/status'
 function App() {
 
   const [callbackUrl, setCallbackUrl] = React.useState<string | null>(null)
+  const [callbackId, setCallbackId] = React.useState<string | null>(null)
   const [status, setStatus] = React.useState<string | null>(null)
 
   const getStatus = async (callbackId: string) => {
@@ -15,42 +16,40 @@ function App() {
     setStatus(response.data.status);
   }
 
-  const proveIt = async (e: any) => {
-    e.preventDefault();
-
-    const response = await axios.get(getCallbackUrl);
-
-    setCallbackUrl(response.data.url);
-
-  }
+  React.useEffect(() => {
+    axios.get(getCallbackUrl)
+      .then(response => {
+        setCallbackId(response.data.callbackId)
+        setCallbackUrl(response.data.url);
+      })
+  }, [])
 
   React.useEffect(() => {
-    if (!callbackUrl) return;
+    if (!callbackId) return;
 
     const interval = setInterval(() => {
-      getStatus(callbackUrl)
+      getStatus(callbackId)
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [callbackUrl]);
+  }, [callbackId]);
 
   return (
     <div className="App">
       <header className="App-header">
         {/* <img src={logo} className="App-logo" alt="logo" /> */}
 
-        <h2>Are you a questbook employee?</h2>
-        {status === null ?
-          <>
-            <button
-              onClick={proveIt}
-            >
-              PROVE IT!
-            </button>
-            <br></br>
-            {callbackUrl && <a href={callbackUrl}>Open App</a>}
-          </> : (status !== 'pending' ? <h3>Thanks for submitting your link!</h3> : <div></div>)
+        <h2>Claim that you have a google account!</h2>
+
+        {callbackUrl &&
+          <a
+            className="App-link"
+            href={callbackUrl}
+          >
+            Claim it
+          </a>
         }
+        {status === 'verified' ? <h3>Thanks for submitting your link!</h3> : <div className='loader'></div>}
       </header>
     </div>
   );
