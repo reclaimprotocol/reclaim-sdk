@@ -9,8 +9,7 @@ dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 8000;
-const dbPort = parseInt(process.env.DB_PORT ?? '5432')
-const callbackUrl = process.env.CALLBACK_URL!
+const callbackUrl = process.env.CALLBACK_URL! + 'callback/'
 
 app.use(express.json())
 app.use(cors())
@@ -36,34 +35,70 @@ app.get('/home', async (req: Request, res: Response) => {
   const callbackId = 'user-' + generateTemplateId();
 
   const url = connection.generateTemplate(callbackId).url;
-  
-  await pool.query("INSERT INTO submitted_links (callback_id, status) VALUES ($1, $2)", [callbackId, "pending"])
+  try {
+    await pool.query("INSERT INTO submitted_links (callback_id, status) VALUES ($1, $2)", [callbackId, "pending"])
+  }
+  catch (e){
+    res.send(`500 - Internal Server Error - ${e}`)
+  }
   
   res.json({ url, callbackId });
 });
 
 app.post('/callback/:id', async (req: Request, res: Response) => {
 
-  const { id: callbackId } = req.params;
+  let callbackId, claims;
 
-  const claims = { claims: req.body.claims };
+  try {
+    callbackId = req.params.id;
+  }
+  catch {
+    res.send(`400 - Bad Request: callbackId is required`)
+    return
+  }
 
-  await pool.query("UPDATE submitted_links SET claims = $2 AND status = $3 WHERE callback_id = $1;", [callbackId, JSON.stringify(claims), 'verified'])
+  try{
+    claims = { claims: req.body.claims };
+  }
+  catch {
+    res.send(`400 - Bad Request: claims are required`)
+    return
+  }
+
+  try {
+    await pool.query("UPDATE submitted_links SET claims = $1, status = $2 WHERE callback_id = $3;", [JSON.stringify(claims), 'verified', callbackId])
+  }
+  catch (e){
+    res.send(`500 - Internal Server Error - ${e}`)
+  }
 
   res.send("200 - OK")
 
 });
 
 app.get('/status/:callbackId', async (req: Request, res: Response) => {
+  let statuses, callbackId;
 
-  const { callbackId } = req.params;
+  try{
+    callbackId = req.params.callbackId;
+  }
+  catch {
+    res.send(`400 - Bad Request: callbackId is required`)
+    return
+  }
 
-  const statuses = await pool.query("SELECT status FROM submitted_links WHERE callback_id = $1", [callbackId])
+  try {
+    statuses = await pool.query("SELECT status FROM submitted_links WHERE callback_id = $1", [callbackId])
+  }
+  catch (e){
+    res.send(`500 - Internal Server Error - ${e}`)
+    return
+  }
 
   res.json({ status: statuses.rows[0].status })
 
 });
 
 app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${8000}`);
+  console.log(`Server is running at http://localhost:${port}`);
 });
