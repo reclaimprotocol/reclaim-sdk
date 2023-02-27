@@ -48,9 +48,7 @@ app.post('/callback/:id', async (req: Request, res: Response) => {
 
   const claims = { claims: req.body.claims };
 
-  const verifiedClaimProofs = connection.verifyEncryptedClaimProofs(claims);
-
-  await pool.query("UPDATE submitted_links SET claims = $2 AND status = $3 WHERE callback_id = $1;", [callbackId, verifiedClaimProofs, 'verified'])
+  await pool.query("UPDATE submitted_links SET claims = $2 AND status = $3 WHERE callback_id = $1;", [callbackId, JSON.stringify(claims), 'verified'])
 
   res.send("200 - OK")
 
@@ -67,5 +65,5 @@ app.get('/status/:callbackId', async (req: Request, res: Response) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+  console.log(`Server is running at http://localhost:${8000}`);
 });
