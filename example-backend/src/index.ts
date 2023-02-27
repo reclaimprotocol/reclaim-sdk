@@ -41,7 +41,7 @@ app.get('/reset', async (req: Request, res: Response) => {
     CREATE TABLE IF NOT EXISTS submitted_links ( \
       id SERIAL, \
       callback_id TEXT NOT NULL, \
-      claims JSON NULL); \
+      claims TEXT NULL); \
   ")
 
   await pool.query("TRUNCATE TABLE submitted_links");
@@ -65,8 +65,8 @@ app.post('/callback/:id', async (req: Request, res: Response) => {
   const { id: callbackId } = req.params;
 
   const claims = req.body.claims;
-
-  await pool.query("INSERT INTO submitted_links (callback_id, claims) VALUES ($1, $2)", [callbackId, claims])
+  console.log(claims);
+  await pool.query("INSERT INTO submitted_links (callback_id, claims) VALUES ($1, $2)", [callbackId, JSON.stringify(claims)])
 
   res.send("OK")
 
