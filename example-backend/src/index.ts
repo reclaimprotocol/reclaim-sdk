@@ -35,6 +35,7 @@ app.get('/home', async (req: Request, res: Response) => {
   const callbackId = 'user-' + generateTemplateId();
 
   const url = (await connection).generateTemplate(callbackId).url;
+
   try {
     await pool.query("INSERT INTO submitted_links (callback_id, status) VALUES ($1, $2)", [callbackId, "pending"])
   }
@@ -47,21 +48,28 @@ app.get('/home', async (req: Request, res: Response) => {
 
 app.post('/callback/:id', async (req: Request, res: Response) => {
 
-  let callbackId, claims;
-
-  try {
-    callbackId = req.params.id;
-  }
-  catch {
+  if(!req.params.id){
     res.send(`400 - Bad Request: callbackId is required`)
     return
   }
 
-  try{
-    claims = { claims: req.body.claims };
-  }
-  catch {
+  if(!req.body.claims){
     res.send(`400 - Bad Request: claims are required`)
+    return
+  }
+
+  const callbackId = req.body.id;
+  const claims = { claims: req.body.claims };
+
+  try{
+    const results = await pool.query("SELECT callback_id FROM submitted_links WHERE callback_id = $1", [callbackId]);
+    if(results.rows.length === 0){
+      res.send(`404 - Not Found: callbackId not found`)
+      return
+    }
+  }
+  catch (e) {
+    res.send(`500 - Internal Server Error - ${e}`)
     return
   }
 
@@ -77,13 +85,24 @@ app.post('/callback/:id', async (req: Request, res: Response) => {
 });
 
 app.get('/status/:callbackId', async (req: Request, res: Response) => {
-  let statuses, callbackId;
+  let statuses;
+  
+  if(!req.params.callbackId){
+    res.send(`400 - Bad Request: callbackId is required`)
+    return
+  }
+
+  const callbackId = req.params.callbackId;
 
   try{
-    callbackId = req.params.callbackId;
+    const results = await pool.query("SELECT callback_id FROM submitted_links WHERE callback_id = $1", [callbackId]);
+    if(results.rows.length === 0){
+      res.send(`404 - Not Found: callbackId not found`)
+      return
+    }
   }
-  catch {
-    res.send(`400 - Bad Request: callbackId is required`)
+  catch (e) {
+    res.send(`500 - Internal Server Error - ${e}`)
     return
   }
 
@@ -95,8 +114,12 @@ app.get('/status/:callbackId', async (req: Request, res: Response) => {
     return
   }
 
-  res.json({ status: statuses.rows[0].status })
+  res.json({ status: statuses?.rows[0]?.status })
 
+});
+
+process.on('uncaughtException', function (err) {
+  console.log('Caught exception: ', err);
 });
 
 app.listen(port, () => {
