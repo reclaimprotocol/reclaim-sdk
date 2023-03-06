@@ -1,9 +1,9 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
-import { Reclaim, generateTemplateId } from '@questbook/template-client-sdk';
+import { Reclaim, generateUuid } from '@questbook/template-client-sdk';
 import { Pool } from 'pg'
 import cors from 'cors';
-import { verifyEncryptedClaims } from '@questbook/reclaim-crypto-sdk';
+// import { verifyEncryptedClaims } from '@questbook/reclaim-crypto-sdk';
 
 dotenv.config();
 
@@ -30,17 +30,24 @@ const connection = reclaim.getConsent(
   ]
 )
 
-app.get('/home', async (req: Request, res: Response) => {
+app.get('/home/:username', async (req: Request, res: Response) => {
   
-  const callbackId = 'user-' + generateTemplateId();
+  const username = req.params.username;
 
-  const url = (await connection).generateTemplate(callbackId).url;
+  const callbackId = 'user-' + generateUuid();
+
+  const template = (await connection).generateTemplate(callbackId);
+
+  const url = template.url
+
+  const templateId = template.id
 
   try {
-    await pool.query("INSERT INTO submitted_links (callback_id, status) VALUES ($1, $2)", [callbackId, "pending"])
+    await pool.query("INSERT INTO submitted_links (callback_id, status, username, template_id) VALUES ($1, $2, $3, $4)", [callbackId, "pending", username, templateId])
   }
   catch (e){
     res.send(`500 - Internal Server Error - ${e}`)
+    return
   }
   
   res.json({ url, callbackId });
@@ -78,6 +85,7 @@ app.post('/callback/:id', async (req: Request, res: Response) => {
   }
   catch (e){
     res.send(`500 - Internal Server Error - ${e}`)
+    return
   }
 
   res.send("200 - OK")
