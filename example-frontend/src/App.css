@@ -135,4 +135,36 @@
   text-decoration: none;
   display: inline-block;
   font-size: 20px;
+  /* change opacity on hover:*/
+  /* opacity: 0.8; */
+  transition: 0.3s;
+  cursor: pointer;
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+}
+
+.button:hover {
+  background-color: #61dafb;
+  color: black;
+  opacity: 0.8;
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+}
+
+.username-input {
+  height: 50px;
+  border-radius: 10px;
+  border: none;
+  padding: 0 20px;
+  font-size: 20px;
+  font-weight: 500;
+  color: black;
+  background-color: #61dafb;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  outline: none;
+  transition: 0.3s;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }

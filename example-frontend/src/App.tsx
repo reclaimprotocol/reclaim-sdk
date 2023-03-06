@@ -11,6 +11,7 @@ function App() {
   const [callbackId, setCallbackId] = React.useState<string | null>(null)
   const [status, setStatus] = React.useState<string | null>(null)
   const [loading, setLoading] = React.useState<boolean>(false)
+  const [username, setUsername] = React.useState<string>()
 
   const getStatus = async (callbackId: string) => {
     const response = await axios.get(getStatusUrl + `/${callbackId}`);
@@ -19,7 +20,8 @@ function App() {
 
   const proveIt = async (e: any) => {
     e.preventDefault();
-    const response = await axios.get(getCallbackUrl)
+    console.log(username)
+    const response = await axios.get(getCallbackUrl + '/' + username)
 
     setCallbackId(response.data.callbackId)
     setCallbackUrl(response.data.url);
@@ -44,14 +46,25 @@ function App() {
 
         <h2>Claim that you have a google account!</h2>
 
-        {!callbackUrl &&
+
+
+        {!callbackUrl && <div className='actions'>
+
+          <input
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Enter your username"
+          value={username}
+          className="username-input"
+        />
+        
         <button
           className="button"
-          disabled={!!callbackUrl}
+          disabled={(!!callbackUrl) || (!username)}
           onClick={proveIt}
         >
           Claim it!
         </button>
+        </div>
           
         }
         {callbackUrl && 
