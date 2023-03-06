@@ -1,5 +1,5 @@
 import { Template, TemplateClaim } from "../types";
-import { generateTemplateId } from "../utils";
+import { generateUuid } from "../utils";
 import Connection from "./Connection";
 import { Wallet } from 'ethers'
 import { signatures } from "@questbook/reclaim-crypto-sdk";
@@ -16,7 +16,7 @@ export class Reclaim {
 
     getConsent = async (templateName: string, templateClaims: TemplateClaim[]) => {
         const template: Template = {
-            id: generateTemplateId(),
+            id: generateUuid(),
             name: templateName,
             callbackUrl: this.callbackUrl,
             publicKey: this.creatorWallet.publicKey,
