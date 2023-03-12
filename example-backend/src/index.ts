@@ -1,22 +1,35 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import { Reclaim, generateUuid } from '@questbook/template-client-sdk';
-import { Pool } from 'pg'
 import cors from 'cors';
+import sqlite3, { Database } from 'sqlite3'
+import { open } from 'sqlite'
+
+let singletonDb : Database | undefined = undefined;
+
+
+const getDb = async () => {
+    if(singletonDb !== undefined)
+      return singletonDb;
+    const db = await open({
+      filename: '/tmp/database.db',
+      driver: sqlite3.cached.Database
+    })
+    await db.exec('CREATE TABLE IF NOT EXISTS submitted_links (callback_id TEXT, status TEXT, username TEXT, template_id TEXT, claims TEXT)');
+    return db;
+}
+
 // import { verifyEncryptedClaims } from '@questbook/reclaim-crypto-sdk';
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 8000;
-const callbackUrl = process.env.CALLBACK_URL! + 'callback/'
+const callbackUrl = process.env.CALLBACK_URL! + '/callback/'
 
 app.use(express.json())
 app.use(cors())
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
-})
 
 const reclaim = new Reclaim(callbackUrl);
 
@@ -31,7 +44,8 @@ const connection = reclaim.getConsent(
 )
 
 app.get('/home/:username', async (req: Request, res: Response) => {
-  
+  const db = await getDb();
+
   const username = req.params.username;
 
   const callbackId = 'user-' + generateUuid();
@@ -43,7 +57,7 @@ app.get('/home/:username', async (req: Request, res: Response) => {
   const templateId = template.id
 
   try {
-    await pool.query("INSERT INTO submitted_links (callback_id, status, username, template_id) VALUES ($1, $2, $3, $4)", [callbackId, "pending", username, templateId])
+    await db.run("INSERT INTO submitted_links (callback_id, status, username, template_id) VALUES (?, ?, ?, ?)", callbackId, "pending", username, templateId)
   }
   catch (e){
     res.send(`500 - Internal Server Error - ${e}`)
@@ -55,6 +69,10 @@ app.get('/home/:username', async (req: Request, res: Response) => {
 
 app.post('/callback/:id', async (req: Request, res: Response) => {
 
+  console.log("Got callback for id: " + req.params.id);
+
+  const db = await getDb();
+
   if(!req.params.id){
     res.send(`400 - Bad Request: callbackId is required`)
     return
@@ -65,25 +83,16 @@ app.post('/callback/:id', async (req: Request, res: Response) => {
     return
   }
 
-  const callbackId = req.body.id;
+  const callbackId = req.params.id;
+
   const claims = { claims: req.body.claims };
 
-  try{
-    const results = await pool.query("SELECT callback_id FROM submitted_links WHERE callback_id = $1", [callbackId]);
-    if(results.rows.length === 0){
-      res.send(`404 - Not Found: callbackId not found`)
-      return
-    }
-  }
-  catch (e) {
-    res.send(`500 - Internal Server Error - ${e}`)
-    return
-  }
-
   try {
-    await pool.query("UPDATE submitted_links SET claims = $1, status = $2 WHERE callback_id = $3;", [JSON.stringify(claims), 'verified', callbackId])
+    await db.run("UPDATE submitted_links SET claims = ?, status = ? WHERE callback_id = ?;", JSON.stringify(claims), 'verified', callbackId);
+    console.log("updated");
   }
   catch (e){
+    console.log("error", e);
     res.send(`500 - Internal Server Error - ${e}`)
     return
   }
@@ -93,7 +102,10 @@ app.post('/callback/:id', async (req: Request, res: Response) => {
 });
 
 app.get('/status/:callbackId', async (req: Request, res: Response) => {
-  let statuses;
+
+  const db = await getDb();
+
+  let row;
   
   if(!req.params.callbackId){
     res.send(`400 - Bad Request: callbackId is required`)
@@ -102,27 +114,15 @@ app.get('/status/:callbackId', async (req: Request, res: Response) => {
 
   const callbackId = req.params.callbackId;
 
-  try{
-    const results = await pool.query("SELECT callback_id FROM submitted_links WHERE callback_id = $1", [callbackId]);
-    if(results.rows.length === 0){
-      res.send(`404 - Not Found: callbackId not found`)
-      return
-    }
-  }
-  catch (e) {
-    res.send(`500 - Internal Server Error - ${e}`)
-    return
-  }
-
   try {
-    statuses = await pool.query("SELECT status FROM submitted_links WHERE callback_id = $1", [callbackId])
+    row = await db.get("SELECT status FROM submitted_links WHERE callback_id = $1", [callbackId])
   }
   catch (e){
     res.send(`500 - Internal Server Error - ${e}`)
     return
   }
 
-  res.json({ status: statuses?.rows[0]?.status })
+  res.json({ status: row.status })
 
 });
 
