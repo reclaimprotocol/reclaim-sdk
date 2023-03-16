@@ -1,6 +1,6 @@
 {
-  "name": "@questbook/template-client-sdk",
-  "version": "1.0.0",
+  "name": "template-client-sdk",
+  "version": "1.0.3",
   "description": "SDK for Questbook Template Client",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -16,7 +16,7 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "@questbook/reclaim-crypto-sdk": "../crypto-sdk",
+    "@questbookapp/reclaim-crypto-sdk": "^0.0.1",
     "@types/lodash": "^4.14.191",
     "dotenv": "^16.0.3",
     "ethers": "^5.7.2",
