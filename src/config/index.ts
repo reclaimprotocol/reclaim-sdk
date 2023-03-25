@@ -1,1 +1,1 @@
-export const RECLAIM_APP_URL = "credwallet://template/"
+export const RECLAIM_APP_URL = "reclaim://template/"
