@@ -1,1 +1,1 @@
-export const RECLAIM_APP_URL = "reclaim://template/"
+export const RECLAIM_APP_URL = "https://share.reclaimprotocol.org/template/"
