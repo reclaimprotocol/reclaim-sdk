@@ -1,4 +1,4 @@
-import { EncryptedClaimProof, verifyEncryptedClaims } from "@questbookapp/reclaim-crypto-sdk";
+import { EncryptedClaimProof, verifyEncryptedClaims } from "@reclaimprotocol/reclaim-crypto-sdk";
 import { RECLAIM_APP_URL } from "../config";
 import { Claim, Link, Template } from "../types";
 import TemplateInstance from "./Template";
