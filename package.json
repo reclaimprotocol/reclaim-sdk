@@ -1,6 +1,6 @@
 {
-  "name": "template-client-sdk",
-  "version": "1.0.3",
+  "name": "@reclaimprotocol/reclaim-sdk",
+  "version": "1.0.4",
   "description": "SDK for Questbook Template Client",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
