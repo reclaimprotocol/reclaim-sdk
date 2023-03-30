@@ -20,7 +20,7 @@ export class Reclaim {
 
     /**
      * Constructor
-     * @param callbackUrl - url to which the user will be redirected after submitting the claim
+     * @param callbackUrl - callback url called when user submits the claim
      */
     constructor(callbackUrl: string) {
         this.callbackUrl = callbackUrl
