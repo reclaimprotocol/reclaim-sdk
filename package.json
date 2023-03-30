@@ -1,7 +1,7 @@
 {
   "name": "@reclaimprotocol/reclaim-sdk",
   "version": "1.0.4",
-  "description": "Reclaim SDK for integrating Reclaim protocol with your applications",
+  "description": "Reclaim SDK for integrating Reclaim protocol with third party applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
