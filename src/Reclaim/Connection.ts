@@ -1,9 +1,6 @@
-import { EncryptedClaimProof, verifyEncryptedClaims } from "@reclaimprotocol/reclaim-crypto-sdk";
-import { RECLAIM_APP_URL } from "../config";
-import { Claim, Link, Template } from "../types";
+import { Template } from "../types";
 import TemplateInstance from "./Template";
-import { omit } from "lodash";
-import { ethers } from "ethers";
+
 export default class Connection {
 
     private template: Template

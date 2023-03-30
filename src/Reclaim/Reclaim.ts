@@ -2,7 +2,6 @@ import { Template, TemplateClaim } from "../types";
 import { generateUuid } from "../utils";
 import Connection from "./Connection";
 import { Wallet } from 'ethers'
-import { signatures } from "@reclaimprotocol/reclaim-crypto-sdk";
 
 export class Reclaim { 
 
