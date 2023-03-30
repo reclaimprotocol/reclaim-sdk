@@ -1,60 +1,32 @@
-# Running the examples
+# Reclaim-SDK
+The SDK to integrate third party applications with [Reclaim Protocol](https://questbook.gitbook.io/reclaim-protocol/)
 
-## Build the template sdk
 
+## Install
 ```
-cd /template-client-sdk
-npm install
-npm run build
-```
-
-## Run the backend 
-```
-cd example-backend
-```
-### Note your server IP
-```
-$ ifconfig
+npm i @reclaimprotocol/reclaim-sdk
 ```
 
-### Edit `.env`
+## Getting started
+To connect to Reclaim Protocol instantiate Reclaim class and call `connect` method to connect your application. `connect` method accepts the application name and the provider that will be used to create the claim.
+
+Check the providers available [here](/src/types/index.ts)
+
 ```
-PORT=8000
-CALLBACK_URL=http://<ip from ifconfig>:8000
-```
-### Run server
-```
-npm install
-npm run build
-npm run
+// callbackUrl is triggered when user submits the claim on Reclaim app
+const reclaim = new Reclaim(callbackUrl)
+const connection = reclaim.connect(
+  'application name',
+  [
+    {
+      provider: 'google-login',
+      params: {}
+    }
+  ]
+)
+
 ```
 
-## Run the frontend
-(React project)
-```
-cd example-frontend
-npm install
-```
-### Edit .env
-```
-REACT_APP_BACKEND_BASE_URL=http://<ip from ifconfig>:8000
-```
-### Run app server
-```
-npm start
-```
-Open app on http://localhost:3000
+## Example
 
-# Playing around
-You'll need a mobile device with Reclaim Wallet Mobile App installed
-Follow on screen instructions
-
-All the data and proofs are stored at `/tmp/databases.db`
-
-You can view the proofs and status of each form : 
-```
-$ sqlite3 /tmp/databases.db
-sqlite3> select * from submitted_links;
-```
-
-Proofs are updated in the DB only when submitted correctly from the app :)
+Check the [examples](/examples/) folder to run a sample project using Reclaim-sdk
