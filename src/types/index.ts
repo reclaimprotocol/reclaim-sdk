@@ -1,6 +1,6 @@
 export type PROVIDER = 'google-login' | 'yc-login' | 'github-contributor'
 
-export type TemplateClaim = {
+export type ClaimProvider = {
     provider: PROVIDER
     params: { [key: string]: string }
 }
@@ -10,7 +10,7 @@ export type Template = {
     name: string
     callbackUrl: string
     publicKey: string
-    claims: TemplateClaim[]
+    claims: ClaimProvider[]
 }
 
 export type Claim = {
