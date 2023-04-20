@@ -24,7 +24,7 @@ export class Reclaim {
 			claims: claims,
 		}
 
-		return new Connection(template, 'creatorPrivateKey')
+		return new Connection(template)
 	}
 
 	/**
