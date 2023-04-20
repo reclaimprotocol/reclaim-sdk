@@ -1,9 +1,12 @@
+import { BigNumber } from 'ethers'
+
 export type PROVIDER = 'google-login' | 'yc-login' | 'github-contributor'
 
 export type Claim = {
     templateClaimId: number
     provider: PROVIDER
-    params: { [key: string]: string }
+    parameters: { [key: string]: string }
+    chainId: number
 }
 
 export type Template = {
@@ -23,6 +26,12 @@ export interface Proof extends Claim{
     timestampS: number
     witnessAddresses: string[]
     signatures: string[]
-    templateUrl: string
     redactedParameters: string
+}
+
+export type RequestClaim = {
+	infoHash: string
+	owner: string
+	timestampS: number
+	claimId: BigNumber
 }
