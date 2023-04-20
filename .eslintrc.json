@@ -1,0 +1,6 @@
+{
+  "extends": "@creatoros",
+  "rules": {
+    "no-console": 1
+  }
+}

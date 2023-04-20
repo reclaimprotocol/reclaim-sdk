@@ -1,30 +1,37 @@
+import { BigNumber } from 'ethers'
+
 export type PROVIDER = 'google-login' | 'yc-login' | 'github-contributor'
 
-export type ClaimProvider = {
+export type Claim = {
+    templateClaimId: number
     provider: PROVIDER
-    params: { [key: string]: string }
+    parameters: { [key: string]: string }
+    chainId: number
 }
 
 export type Template = {
     id: string
     name: string
     callbackUrl: string
-    publicKey: string
-    claims: ClaimProvider[]
-}
-
-export type Claim = {
-    id: number
-    provider: string
-    redactedParameters: string
-    params: {
-        [key: string]: string
-    }
-    ownerPublicKey: Uint8Array
-    timestampS: number
-    witnessAddresses: string[]
-    signatures: string[]
+    claims: Claim[]
 }
 export interface Link {
     claims: Claim[]
+}
+
+export interface Proof extends Claim{
+    onChainClaimId: number
+    templateClaimId: number
+    ownerPublicKey: string
+    timestampS: number
+    witnessAddresses: string[]
+    signatures: string[]
+    redactedParameters: string
+}
+
+export type RequestClaim = {
+	infoHash: string
+	owner: string
+	timestampS: number
+	claimId: BigNumber
 }

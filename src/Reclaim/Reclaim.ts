@@ -1,48 +1,87 @@
-import { Template, ClaimProvider } from "../types";
-import { generateUuid } from "../utils";
-import Connection from "./Connection";
-import { Wallet } from 'ethers'
+import { Claim, ClaimProof, hashClaimInfo, verifyWitnessSignature } from '@reclaimprotocol/crypto-sdk'
+import { utils } from 'ethers'
+import P from 'pino'
+import { Claim as TemplateClaim, Proof, Template } from '../types'
+import { generateUuid, getClaimWitnessOnChain, getOnChainClaimDataFromRequestId } from '../utils'
+import Connection from './Connection'
+
+const logger = P()
 
 /** Reclaim class */
-export class Reclaim { 
+export class Reclaim {
 
-    /**
-     * Property creatorWallet
-     * @type {Wallet}
-     */
-    private creatorWallet: Wallet
-
-    /**
-     * Property callbackUrl
-     * @type {string}
-    */
-    private callbackUrl: string
-
-    /**
-     * Constructor
-     * @param callbackUrl - callback url called when user submits the claim
-     */
-    constructor(callbackUrl: string) {
-        this.callbackUrl = callbackUrl
-        this.creatorWallet = Wallet.createRandom()
-    }
-
-    /**
+	/**
      * Connect to Reclaim
      * @param applicationName - name of the application
-     * @param claimProviders - providers to get claims
+     * @param claims - providers to get claims
      * @returns {Promise<Connection>}
      */
-    connect = async (applicationName: string, claimProviders: ClaimProvider[]): Promise<Connection> => {
-        const template: Template = {
-            id: generateUuid(),
-            name: applicationName,
-            callbackUrl: this.callbackUrl,
-            publicKey: this.creatorWallet.publicKey,
-            claims: claimProviders
-        }
+	connect = async(applicationName: string, claims: TemplateClaim[], callbackUrl: string): Promise<Connection> => {
+		const template: Template = {
+			id: generateUuid(),
+			name: applicationName,
+			callbackUrl: callbackUrl,
+			claims: claims,
+		}
 
-        return new Connection(template, this.creatorWallet.privateKey)
-    }
+		return new Connection(template)
+	}
 
+	/**
+     * function to verify the witness signatures
+     * @param proofs proofs returned by the callback URL
+     * @returns {Promise<boolean>} boolean value denotes if the verification was successful or failed
+     */
+	verifyCorrectnessOfProof = async(proofs: Proof[]): Promise<boolean> => {
+		let result: boolean = false
+
+		for(const proof of proofs) {
+			// fetch on chain witness address for the claim
+			const witnesses = await getClaimWitnessOnChain(proof.chainId, proof.onChainClaimId)
+
+			// if no witnesses are present: return false
+			if(!witnesses.length) {
+				logger.error('No witnesses found on chain')
+				return result
+			}
+
+			const claim: Claim = {
+				id: proof.onChainClaimId,
+				ownerPublicKey: Buffer.from(proof.ownerPublicKey, 'hex'),
+				provider: proof.provider,
+				timestampS: proof.timestampS,
+				witnessAddresses: witnesses,
+				redactedParameters: proof.redactedParameters
+			}
+
+			const decryptedProof: ClaimProof = {
+				parameters: JSON.stringify(proof.parameters),
+				signatures: proof.signatures.map(signature => {
+					return utils.arrayify(signature)
+				})
+			}
+			// fetch on chain claim data from the request id
+			const claimData = await getOnChainClaimDataFromRequestId(proof.chainId, proof.onChainClaimId)
+			const onChainInfoHash = claimData.infoHash
+			const calculatedInfoHash = hashClaimInfo({ parameters: decryptedProof.parameters, provider: proof.provider, context: '' }) //TODO: pass context from the app
+
+			// if the info hash is not same: return false
+			if(onChainInfoHash.toLowerCase() !== calculatedInfoHash.toLowerCase()) {
+				logger.error('Info hash mismatch')
+				return result
+			}
+
+			try {
+				// verify the witness signature
+				result = verifyWitnessSignature(claim, decryptedProof)
+				logger.info(`isCorrectProof: ${result}`)
+			} catch(error) {
+				// if the witness signature is not valid: return false
+				logger.error(`${error}`)
+				result = false
+			}
+		}
+
+		return result
+	}
 }
