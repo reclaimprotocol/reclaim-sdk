@@ -14,9 +14,6 @@ export type Template = {
     callbackUrl: string
     claims: Claim[]
 }
-export interface Link {
-    claims: Claim[]
-}
 
 export interface Proof extends Claim{
     onChainClaimId: number
