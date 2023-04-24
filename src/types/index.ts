@@ -6,7 +6,6 @@ export type Claim = {
     templateClaimId: number
     provider: PROVIDER
     parameters: { [key: string]: string }
-    chainId: number
 }
 
 export type Template = {
@@ -27,6 +26,7 @@ export interface Proof extends Claim{
     witnessAddresses: string[]
     signatures: string[]
     redactedParameters: string
+    chainId: number
 }
 
 export type RequestClaim = {
