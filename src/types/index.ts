@@ -1,4 +1,5 @@
 import { BigNumber } from 'ethers'
+import { GithubCommits, GithubPullRequests, GithubRepository, GithubRepositoryLang, GithubRepositoryTopics, KeyOf, QueryStringObject } from './utils'
 
 export type ProviderParams = {
     provider: 'google-login',
@@ -10,31 +11,27 @@ export type ProviderParams = {
 } |
 
 {
-    provider: 'github-contributor',
-    parameters: { repoName: string }
+    provider: 'github-contributed',
+    parameters: GithubLoginParams<"github-contributed">
 }
   |
 
 {
     provider: 'github-commits',
-    parameters: { repoName: string }
+    parameters: GithubLoginParams<"github-commits">
 } |
 {
     provider: 'github-issues',
-    parameters: { repoName: string }
+    parameters: GithubLoginParams<"github-issues">
 } |
 
 {
-    provider: 'github-contributed',
-    parameters: { repoName: string }
-} |
-{
     provider: 'github-languages',
-    parameters: { repoName: string }
+    parameters: GithubLoginParams<"github-languages">
 } |
 {
     provider: 'github-pullRequests',
-    parameters: { repoName: string }
+    parameters: GithubLoginParams<"github-pullRequests">
 }
 
 export type ProviderName = ProviderParams['provider']
@@ -67,3 +64,34 @@ export type RequestClaim = {
     timestampS: number
     claimId: BigNumber
 }
+
+export type ApiType = keyof GithubApiProvider
+
+export type GithubApi = {
+	'github-topics': GithubRepositoryTopics
+	'github-contributed': GithubRepository[]
+	'github-languages': GithubRepositoryLang
+	'github-commits': GithubCommits[]
+	'github-pullRequests': GithubPullRequests[]
+	'github-issues': GithubPullRequests[]
+}
+
+export type PartialObj<T> = {
+	readonly [K in keyof T]: T[K] extends Array<infer U> ? Partial<U>[] : T[K]
+}
+
+export type GithubApiProvider = PartialObj<GithubApi>
+
+export type GithubLoginParams<T extends ApiType> = {
+	/** the github repo in the format `owner/repo` */
+	repo: string
+	/** query string for the path eg: per_page: 100 */
+	qs?: QueryStringObject
+	/** type of the provider eg: `github-commits` */
+	type: T
+	/** the response object to match with the provider */
+	response?: GithubApiProvider[T]
+	/** the array of keys which user wants to verify eg: ['sha', 'node_id'] in case of github-commits `type` */
+	keys: KeyOf<GithubApiProvider[T]>[]
+}
+
