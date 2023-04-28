@@ -1,12 +1,47 @@
 import { BigNumber } from 'ethers'
 
-export type PROVIDER = 'google-login' | 'yc-login' | 'github-contributor'
+export type ProviderParams = {
+    provider: 'google-login',
+    parameters: {}
+} |
+{
+    provider: 'yc-login',
+    parameters: {}
+} |
+
+{
+    provider: 'github-contributor',
+    parameters: { repoName: string }
+}
+  |
+
+{
+    provider: 'github-commits',
+    parameters: { repoName: string }
+} |
+{
+    provider: 'github-issues',
+    parameters: { repoName: string }
+} |
+
+{
+    provider: 'github-contributed',
+    parameters: { repoName: string }
+} |
+{
+    provider: 'github-languages',
+    parameters: { repoName: string }
+} |
+{
+    provider: 'github-pullRequests',
+    parameters: { repoName: string }
+}
+
+export type ProviderName = ProviderParams['provider']
 
 export type Claim = {
     templateClaimId: number
-    provider: PROVIDER
-    parameters: { [key: string]: string }
-}
+} & ProviderParams
 
 export type Template = {
     id: string
@@ -15,7 +50,7 @@ export type Template = {
     claims: Claim[]
 }
 
-export interface Proof extends Claim{
+export type Proof = {
     onChainClaimId: number
     templateClaimId: number
     ownerPublicKey: string
@@ -24,11 +59,11 @@ export interface Proof extends Claim{
     signatures: string[]
     redactedParameters: string
     chainId: number
-}
+} & Claim
 
 export type RequestClaim = {
-	infoHash: string
-	owner: string
-	timestampS: number
-	claimId: BigNumber
+    infoHash: string
+    owner: string
+    timestampS: number
+    claimId: BigNumber
 }
