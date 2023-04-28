@@ -1,6 +1,6 @@
 {
   "name": "@reclaimprotocol/reclaim-sdk",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Reclaim SDK for integrating Reclaim protocol with third party applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,11 +25,7 @@
   "dependencies": {
     "@creatoros/eslint-config": "github:CreatorOS/eslint-config",
     "@reclaimprotocol/crypto-sdk": "^1.0.3",
-    "@types/lodash": "^4.14.191",
-    "dotenv": "^16.0.3",
     "ethers": "^5.7.2",
-    "firebase": "^9.17.1",
-    "lodash": "^4.17.21",
     "pino": "^8.11.0",
     "uuid": "^9.0.0"
   },
