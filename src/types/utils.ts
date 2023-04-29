@@ -8,7 +8,7 @@ export type KeyOf<T> = T extends (infer U)[]
 	? keyof T
 	: never
 
-    export interface GithubRepository {
+export interface GithubRepository {
         id: number
         node_id: string
         name: string
@@ -96,8 +96,8 @@ export type KeyOf<T> = T extends (infer U)[]
         open_issues: number
         watchers: number
     }
-    
-    export interface License {
+
+export interface License {
         key: string
         name: string
         url: string
@@ -105,8 +105,8 @@ export type KeyOf<T> = T extends (infer U)[]
         node_id: string
         html_url: string
     }
-    
-    export interface Owner {
+
+export interface Owner {
         login: string
         id: number
         node_id: string
@@ -126,22 +126,22 @@ export type KeyOf<T> = T extends (infer U)[]
         type: string
         site_admin: boolean
     }
-    
-    export interface Permissions {
+
+export interface Permissions {
         admin: boolean
         push: boolean
         pull: boolean
     }
-    
-    export interface GithubRepositoryLang {
+
+export interface GithubRepositoryLang {
         [key: string]: number
     }
-    
-    export interface GithubRepositoryTopics {
+
+export interface GithubRepositoryTopics {
         names: string[]
     }
-    
-    export interface GithubCommits {
+
+export interface GithubCommits {
         url: string
         sha: string
         node_id: string
@@ -152,8 +152,8 @@ export type KeyOf<T> = T extends (infer U)[]
         committer: CommitAuthor
         parents: Tree[]
     }
-    
-    export interface CommitAuthor {
+
+export interface CommitAuthor {
         login: string
         id: number
         node_id: string
@@ -173,8 +173,8 @@ export type KeyOf<T> = T extends (infer U)[]
         type: string
         site_admin: boolean
     }
-    
-    export interface Commit {
+
+export interface Commit {
         url: string
         author: CommitAuthorClass
         committer: CommitAuthorClass
@@ -183,26 +183,26 @@ export type KeyOf<T> = T extends (infer U)[]
         comment_count: number
         verification: Verification
     }
-    
-    export interface CommitAuthorClass {
+
+export interface CommitAuthorClass {
         name: string
         email: string
         date: Date
     }
-    
-    export interface Tree {
+
+export interface Tree {
         url: string
         sha: string
     }
-    
-    export interface Verification {
+
+export interface Verification {
         verified: boolean
         reason: string
         signature: null
         payload: null
     }
-    
-    export interface GithubPullRequests {
+
+export interface GithubPullRequests {
         url: string
         id: number
         node_id: string
@@ -240,8 +240,8 @@ export type KeyOf<T> = T extends (infer U)[]
         auto_merge: null
         draft: boolean
     }
-    
-    export interface Links {
+
+export interface Links {
         self: Comments
         html: Comments
         issue: Comments
@@ -251,12 +251,12 @@ export type KeyOf<T> = T extends (infer U)[]
         commits: Comments
         statuses: Comments
     }
-    
-    export interface Comments {
+
+export interface Comments {
         href: string
     }
-    
-    export interface Assignee {
+
+export interface Assignee {
         login: string
         id: number
         node_id: string
@@ -276,16 +276,16 @@ export type KeyOf<T> = T extends (infer U)[]
         type: 'User'
         site_admin: boolean
     }
-    
-    export interface Base {
+
+export interface Base {
         label: string
         ref: string
         sha: string
         user: Assignee
         repo: Repo
     }
-    
-    export interface Repo {
+
+export interface Repo {
         id: number
         node_id: string
         name: string
@@ -373,8 +373,8 @@ export type KeyOf<T> = T extends (infer U)[]
         open_issues: number
         watchers: number
     }
-    
-    export interface License {
+
+export interface License {
         key: string
         name: string
         url: string
@@ -382,14 +382,14 @@ export type KeyOf<T> = T extends (infer U)[]
         node_id: string
         html_url: string
     }
-    
-    export interface Permissions {
+
+export interface Permissions {
         admin: boolean
         push: boolean
         pull: boolean
     }
-    
-    export interface Label {
+
+export interface Label {
         id: number
         node_id: string
         url: string
@@ -398,8 +398,8 @@ export type KeyOf<T> = T extends (infer U)[]
         color: string
         default: boolean
     }
-    
-    export interface Milestone {
+
+export interface Milestone {
         url: string
         html_url: string
         labels_url: string
@@ -417,8 +417,8 @@ export type KeyOf<T> = T extends (infer U)[]
         closed_at: Date
         due_on: Date
     }
-    
-    export interface RequestedTeam {
+
+export interface RequestedTeam {
         id: number
         node_id: string
         url: string
@@ -432,4 +432,3 @@ export type KeyOf<T> = T extends (infer U)[]
         repositories_url: string
         parent: null
     }
-    
