@@ -69,31 +69,31 @@ export type RequestClaim = {
 export type ApiType = keyof GithubApiProvider
 
 export type GithubApi = {
-	'github-topics': GithubRepositoryTopics
-	'github-contributed': GithubRepository[]
-	'github-languages': GithubRepositoryLang
-	'github-commits': GithubCommits[]
-	'github-pullRequests': GithubPullRequests[]
-	'github-issues': GithubPullRequests[]
+    'github-topics': GithubRepositoryTopics
+    'github-contributed': GithubRepository[]
+    'github-languages': GithubRepositoryLang
+    'github-commits': GithubCommits[]
+    'github-pullRequests': GithubPullRequests[]
+    'github-issues': GithubPullRequests[]
 }
 
 export type PartialObj<T> = {
-	readonly [K in keyof T]: T[K] extends Array<infer U> ? Partial<U>[] : T[K]
+    readonly [K in keyof T]: T[K] extends Array<infer U> ? Partial<U>[] : T[K]
 }
 
 export type GithubApiProvider = PartialObj<GithubApi>
 
 export type GithubLoginParams<T extends ApiType> = {
-	/** the github repo in the format `owner/repo` */
-	repo: string
-	/** query string for the path eg: per_page: 100 */
-	qs?: QueryStringObject
-	/** type of the provider eg: `github-commits` */
-	type: T
-	/** the response object to match with the provider */
-	response?: GithubApiProvider[T]
-	/** the array of keys which user wants to verify eg: ['sha', 'node_id'] in case of github-commits `type` */
-	keys: KeyOf<GithubApiProvider[T]>[]
+    /** the github repo in the format `owner/repo` */
+    repo: string
+    /** query string for the path eg: per_page: 100 */
+    qs?: QueryStringObject
+    /** type of the provider eg: `github-commits` */
+    type: T
+    /** the response object to match with the provider */
+    response?: GithubApiProvider[T]
+    /** the array of keys which user wants to verify eg: ['sha', 'node_id'] in case of github-commits `type` */
+    keys: KeyOf<GithubApiProvider[T]>[]
 }
 
 type GithubClaimType = 'issues' | 'commits' | 'repositories'
