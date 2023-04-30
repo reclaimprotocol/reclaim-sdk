@@ -1,68 +1,69 @@
 import { BigNumber } from 'ethers'
 import { GithubCommits, GithubPullRequests, GithubRepository, GithubRepositoryLang, GithubRepositoryTopics, KeyOf, QueryStringObject } from './utils'
 
-export type ProviderParams = {
-    provider: 'google-login',
-    parameters: {}
-} |
-{
-    provider: 'yc-login',
-    parameters: {}
-} |
-
-{
-    provider: 'github-contributed',
-    parameters: GithubLoginParams<"github-contributed">
-}
-  |
-
-{
-    provider: 'github-commits',
-    parameters: GithubLoginParams<"github-commits">
-} |
-{
-    provider: 'github-issues',
-    parameters: GithubLoginParams<"github-issues">
-} |
-
-{
-    provider: 'github-languages',
-    parameters: GithubLoginParams<"github-languages">
-} |
-{
-    provider: 'github-pullRequests',
-    parameters: GithubLoginParams<"github-pullRequests">
-}
+export type ProviderParams =
+	| {
+			provider: 'google-login'
+			parameters: {}
+	  }
+	| {
+			provider: 'yc-login'
+			parameters: {}
+	  }
+	| {
+			provider: 'github-claim'
+			parameters: GithubParams
+	  }
+	| {
+			provider: 'github-contributed'
+			parameters: GithubLoginParams<'github-contributed'>
+	  }
+	| {
+			provider: 'github-commits'
+			parameters: GithubLoginParams<'github-commits'>
+	  }
+	| {
+			provider: 'github-issues'
+			parameters: GithubLoginParams<'github-issues'>
+	  }
+	| {
+			provider: 'github-languages'
+			parameters: GithubLoginParams<'github-languages'>
+	  }
+	| {
+			provider: 'github-pullRequests'
+			parameters: GithubLoginParams<'github-pullRequests'>
+	  }
 
 export type ProviderName = ProviderParams['provider']
 
 export type Claim = {
-    templateClaimId: number
+	templateClaimId: number
 } & ProviderParams
 
 export type Template = {
-    id: string
-    name: string
-    callbackUrl: string
-    claims: Claim[]
+	id: string
+	name: string
+	callbackUrl: string
+	claims: Claim[]
 }
 
 export type Proof = {
-    onChainClaimId: number
-    templateClaimId: number
-    ownerPublicKey: string
-    timestampS: number
-    witnessAddresses: string[]
-    signatures: string[]
-    redactedParameters: string
-    chainId: number
+	onChainClaimId: number
+	templateClaimId: number
+	ownerPublicKey: string
+	timestampS: number
+	witnessAddresses: string[]
+	signatures: string[]
+	redactedParameters: string
+	chainId: number
 } & Claim
 
 export type RequestClaim = {
-    infoHash: string
-    owner: string
-    timestampS: number
-    claimId: BigNumber
+	infoHash: string
+	owner: string
+	timestampS: number
+	claimId: BigNumber
 }
 
 export type ApiType = keyof GithubApiProvider
@@ -95,3 +96,15 @@ export type GithubLoginParams<T extends ApiType> = {
 	keys: KeyOf<GithubApiProvider[T]>[]
 }
 
+type GithubClaimType = 'issues' | 'commits' | 'repositories'
+
+export type GithubParams = {
+	/** github `url` type eg: `commits` */
+	type: GithubClaimType
+
+	/** repository name eg: {owner}/{repo} */
+	repository: string
+
+	/** query string for github search */
+	queryString: string
+}
