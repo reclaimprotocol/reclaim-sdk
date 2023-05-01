@@ -1,6 +1,6 @@
 {
   "name": "@reclaimprotocol/reclaim-sdk",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "Reclaim SDK for integrating Reclaim protocol with third party applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
