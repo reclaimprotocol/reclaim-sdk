@@ -34,6 +34,16 @@ export type ProviderParams =
 			provider: 'github-pullRequests'
 			parameters: GithubLoginParams<'github-pullRequests'>
 	  }
+      | {
+        provider: 'http'
+        parameters: {
+            id: string
+            urlParameters: {
+                [key: string]: string
+            }
+        }
+    }
+
 
 export type ProviderName = ProviderParams['provider']
 
