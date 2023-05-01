@@ -60,7 +60,7 @@ export type Template = {
 
 export type Proof = {
 	onChainClaimId: number
-	templateClaimId: number
+	templateClaimId: string
 	ownerPublicKey: string
 	timestampS: number
 	witnessAddresses: string[]
