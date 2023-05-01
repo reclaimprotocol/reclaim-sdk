@@ -48,7 +48,7 @@ export type ProviderParams =
 export type ProviderName = ProviderParams['provider']
 
 export type Claim = {
-	templateClaimId: number
+	templateClaimId: string
 } & ProviderParams
 
 export type Template = {
@@ -60,7 +60,6 @@ export type Template = {
 
 export type Proof = {
 	onChainClaimId: number
-	templateClaimId: string
 	ownerPublicKey: string
 	timestampS: number
 	witnessAddresses: string[]

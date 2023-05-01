@@ -1,5 +1,6 @@
 import { Reclaim } from '../Reclaim'
 import { Proof } from '../types'
+import { generateUuid } from '../utils'
 
 describe('Verification', () => {
 	it('should pass signature verification', async() => {
@@ -41,7 +42,7 @@ describe('Verification', () => {
 
 const CORRECT_PROOF: Proof = {
 	onChainClaimId: 1560,
-	templateClaimId: 0,
+	templateClaimId: generateUuid(),
 	chainId: 420,
 	provider: 'google-login',
 	parameters: { 'emailAddress': 'swetasunofficial@gmail.com' },
@@ -54,7 +55,7 @@ const CORRECT_PROOF: Proof = {
 
 const INCORRECT_SIGNATURE_PROOF: Proof = {
 	onChainClaimId: 1560,
-	templateClaimId: 0,
+	templateClaimId: generateUuid(),
 	chainId: 420,
 	provider: 'google-login',
 	parameters: { 'emailAddress': 'swetasunofficial@gmail.com' },
@@ -67,7 +68,7 @@ const INCORRECT_SIGNATURE_PROOF: Proof = {
 
 const INCORRECT_OWNER_PUBLIC_KEY_PROOF: Proof = {
 	onChainClaimId: 1560,
-	templateClaimId: 0,
+	templateClaimId: generateUuid(),
 	chainId: 420,
 	provider: 'google-login',
 	parameters: { 'emailAddress': 'swetasunofficial@gmail.com' },
@@ -80,7 +81,7 @@ const INCORRECT_OWNER_PUBLIC_KEY_PROOF: Proof = {
 
 const INCORRECT_TIMESTAMP_PROOF: Proof = {
 	onChainClaimId: 1560,
-	templateClaimId: 0,
+	templateClaimId: generateUuid(),
 	chainId: 420,
 	provider: 'google-login',
 	parameters: { 'emailAddress': 'swetasunofficial@gmail.com' },
@@ -93,7 +94,7 @@ const INCORRECT_TIMESTAMP_PROOF: Proof = {
 
 const INCORRECT_PARAMETER_PROOF: Proof = {
 	onChainClaimId: 1560,
-	templateClaimId: 0,
+	templateClaimId: generateUuid(),
 	chainId: 420,
 	provider: 'google-login',
 	parameters: { 'emailAddress': 'sweta@gmail.com' },
@@ -106,7 +107,7 @@ const INCORRECT_PARAMETER_PROOF: Proof = {
 
 const INCORRECT_CLAIM_ID_PROOF: Proof = {
 	onChainClaimId: 1561,
-	templateClaimId: 0,
+	templateClaimId: generateUuid(),
 	chainId: 420,
 	provider: 'google-login',
 	parameters: { 'emailAddress': 'swetasunofficial@gmail.com' },
