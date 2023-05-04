@@ -55,7 +55,7 @@ export class Reclaim {
 			}
 
 			const decryptedProof: ClaimProof = {
-				parameters: JSON.stringify(proof.parameters),
+				parameters: JSON.stringify(proof.payload),
 				signatures: proof.signatures.map(signature => {
 					return utils.arrayify(signature)
 				})
