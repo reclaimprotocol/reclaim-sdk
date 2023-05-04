@@ -64,7 +64,7 @@ export type RequestClaim = {
 	claimId: BigNumber
 }
 
-type GithubClaimType = 'issues' | 'commits' | 'repositories'
+type GithubClaimType = 'issues' | 'commits' | 'repositories' | 'pullRequests'
 
 export type GithubParams = {
 	/** github `url` type eg: `commits` */
@@ -74,5 +74,5 @@ export type GithubParams = {
 	repository: string
 
 	/** query string for github search */
-	queryString: string
+	searchQuery: string
 }
