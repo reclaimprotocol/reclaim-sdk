@@ -74,5 +74,10 @@ export type GithubParams = {
 	repository: string
 
 	/** query string for github search */
-	searchQuery: string
+	searchQuery: SearchQueryObject
+}
+
+export type SearchQueryObject = {
+	keywords: string[]
+	qualifiers: Record<string, string[]>
 }
