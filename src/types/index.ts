@@ -11,7 +11,7 @@ export type ProviderParams =
 	}
 	| {
 		provider: 'github-claim'
-		payload: GithubParams
+		parameters: GithubParams
 	}
 	| {
 		provider: 'http'
