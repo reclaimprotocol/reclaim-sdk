@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
-import { RequestClaim } from '../types'
+import { Proof, RequestClaim } from '../types'
 import CONTRACTS_CONFIG from '../utils/contracts/config.json'
 import { Reclaim, Reclaim__factory as ReclaimFactory } from '../utils/contracts/types'
 
@@ -51,4 +51,9 @@ export function getContract(chainId: number) {
 	}
 
 	return existingContractsMap[chainKey]
+}
+
+export function getProofsFromRequestBody(requestBody: string) {
+	const proofs: Proof[] = JSON.parse(decodeURIComponent(requestBody)).claims
+	return proofs
 }
