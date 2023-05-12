@@ -55,7 +55,11 @@ export type Proof = {
 	signatures: string[]
 	redactedParameters: string
 	chainId: number
-} & Claim
+	provider: string
+	parameters: {
+		[key: string]: string
+	}
+}
 
 export type RequestClaim = {
 	infoHash: string
