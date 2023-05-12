@@ -32,7 +32,7 @@ export class Reclaim {
      * @param proofs proofs returned by the callback URL
      * @returns {Promise<boolean>} boolean value denotes if the verification was successful or failed
      */
-	verifyCorrectnessOfProof = async(proofs: Proof[]): Promise<boolean> => {
+	verifyCorrectnessOfProofs = async(proofs: Proof[]): Promise<boolean> => {
 		let result: boolean = false
 
 		for(const proof of proofs) {
@@ -55,7 +55,7 @@ export class Reclaim {
 			}
 
 			const decryptedProof: ClaimProof = {
-				parameters: JSON.stringify(proof.payload),
+				parameters: JSON.stringify(proof.parameters),
 				signatures: proof.signatures.map(signature => {
 					return utils.arrayify(signature)
 				})
