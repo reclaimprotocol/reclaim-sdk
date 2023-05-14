@@ -54,6 +54,6 @@ export function getContract(chainId: number) {
 }
 
 export function getProofsFromRequestBody(requestBody: string) {
-	const proofs: Proof[] = JSON.parse(decodeURIComponent(requestBody)).claims
+	const proofs: Proof[] = JSON.parse(decodeURIComponent(requestBody)).proofs
 	return proofs
 }
