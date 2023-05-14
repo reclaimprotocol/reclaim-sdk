@@ -47,6 +47,12 @@ export type Template = {
 	claims: Claim[]
 }
 
+export type ProofClaim = Omit<Claim, 'payload'> & {
+	parameters: {
+		[key: string]: string
+	}
+}
+
 export type Proof = {
 	onChainClaimId: number
 	ownerPublicKey: string
@@ -55,11 +61,7 @@ export type Proof = {
 	signatures: string[]
 	redactedParameters: string
 	chainId: number
-	provider: string
-	parameters: {
-		[key: string]: string
-	}
-}
+} & ProofClaim
 
 export type RequestClaim = {
 	infoHash: string

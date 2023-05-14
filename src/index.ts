@@ -1,3 +1,5 @@
-export * from './Reclaim'
+import * as reclaimprotocol from './reclaim'
+
 export * from './types'
-export * from './utils'
+export { reclaimprotocol }
+export { utils } from './reclaim'
