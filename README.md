@@ -31,7 +31,6 @@ npm i @reclaimprotocol/reclaim-sdk
 To connect to Reclaim Protocol instantiate Reclaim class and call `connect` method to connect your application. The method accepts the application name, the provider that will be used to create the claim and callback URL.
 
 ```
-// callbackUrl is triggered when user submits the claim on Reclaim app
 import { reclaimprotocol } from '@reclaimprotocol/reclaim-sdk'
 
 const reclaim = new reclaimprotocol.Reclaim()
@@ -44,7 +43,7 @@ const connection = reclaim.connect(
       templateClaimId: reclaimprotocol.utils.generateUuid(),
     }
   ],
-  callbackUrl
+  callbackUrl // callbackUrl is triggered when user submits the claim on Reclaim app
 )
 
 ```
