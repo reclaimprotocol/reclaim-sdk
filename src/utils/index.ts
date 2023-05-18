@@ -58,7 +58,7 @@ export function getProofsFromRequestBody(requestBody: string) {
 	return proofs
 }
 
-export function extractValuesFromParameters(responseSelections: responseSelection[], proof: Proof) {
+export function extractParameterValues(responseSelections: responseSelection[], proof: Proof) {
 	// check if correct number of response selections are present
 	if(proof.parameters.responseSelections && (responseSelections.length === proof.parameters.responseSelections.length)) {
 

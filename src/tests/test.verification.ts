@@ -75,7 +75,7 @@ describe('Extract parameters', () => {
 			'signatures':['0xea2b6a7f7183ddea565a0cb569ce4ff2896f3b6f4dcdd2b5da5be1e67f8865086fcff48227336636a3a32c9cbf801d946351b00b411b2e129ad4b005acfb4fed1b'],
 			'redactedParameters':'{"url":"**********************@undefined"}'
 		}
-		const parametersExtracted = reclaimprotocol.utils.extractValuesFromParameters(responseSelection, proof)
+		const parametersExtracted = reclaimprotocol.utils.extractParameterValues(responseSelection, proof)
 
 		expect(Object.keys(parametersExtracted).length).toBe(4)
 		// expect(parametersExtracted['username']).toBe('Hairy-Firefighter')
@@ -107,7 +107,7 @@ describe('Extract parameters', () => {
 			'signatures':['0xea2b6a7f7183ddea565a0cb569ce4ff2896f3b6f4dcdd2b5da5be1e67f8865086fcff48227336636a3a32c9cbf801d946351b00b411b2e129ad4b005acfb4fed1b'],
 			'redactedParameters':'{"url":"**********************@undefined"}'
 		}
-		const parametersExtracted = reclaimprotocol.utils.extractValuesFromParameters(responseSelection, proof)
+		const parametersExtracted = reclaimprotocol.utils.extractParameterValues(responseSelection, proof)
 		expect(Object.keys(parametersExtracted).length).toBe(0)
 	})
 
@@ -138,7 +138,7 @@ describe('Extract parameters', () => {
 			'signatures':['0xea2b6a7f7183ddea565a0cb569ce4ff2896f3b6f4dcdd2b5da5be1e67f8865086fcff48227336636a3a32c9cbf801d946351b00b411b2e129ad4b005acfb4fed1b'],
 			'redactedParameters':'{"url":"**********************@undefined"}'
 		}
-		expect(() => reclaimprotocol.utils.extractValuesFromParameters(responseSelection, proof)).toThrow('Invalid response selections')
+		expect(() => reclaimprotocol.utils.extractParameterValues(responseSelection, proof)).toThrow('Invalid response selections')
 	})
 })
 
