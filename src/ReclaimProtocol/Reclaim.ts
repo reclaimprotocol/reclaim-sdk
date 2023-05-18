@@ -14,9 +14,9 @@ export class Reclaim {
      * Connect to Reclaim
      * @param applicationName - name of the application
      * @param claims - providers to get claims
-     * @returns {Promise<Connection>}
+     * @returns {Connection}
      */
-	connect = async(applicationName: string, claims: TemplateClaim[], callbackUrl: string): Promise<Connection> => {
+	connect = (applicationName: string, claims: TemplateClaim[], callbackUrl: string): Connection => {
 		const template: Template = {
 			id: generateUuid(),
 			name: applicationName,
