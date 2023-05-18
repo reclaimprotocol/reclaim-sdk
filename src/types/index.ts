@@ -53,15 +53,23 @@ export type ProofClaim = Omit<Claim, 'payload'> & {
 	}
 }
 
+export type httpProof = Omit<Claim, 'payload'> & {
+	parameters: {
+		url?: string
+		method?: 'GET' | 'POST'
+		responseSelections?: responseSelection[]
+	}
+}
+
 export type Proof = {
-	onChainClaimId: number
+	onChainClaimId: string
 	ownerPublicKey: string
-	timestampS: number
+	timestampS: string
 	witnessAddresses: string[]
 	signatures: string[]
 	redactedParameters: string
 	chainId: number
-} & ProofClaim
+} & (ProofClaim | httpProof)
 
 export type RequestClaim = {
 	infoHash: string
