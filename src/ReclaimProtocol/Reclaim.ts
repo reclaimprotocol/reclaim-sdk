@@ -37,7 +37,7 @@ export class Reclaim {
 
 		for(const proof of proofs) {
 			// fetch on chain witness address for the claim
-			const witnesses = await getClaimWitnessOnChain(proof.chainId, proof.onChainClaimId)
+			const witnesses = await getClaimWitnessOnChain(proof.chainId, parseInt(proof.onChainClaimId))
 
 			// if no witnesses are present: return false
 			if(!witnesses.length) {
@@ -46,10 +46,10 @@ export class Reclaim {
 			}
 
 			const claim: Claim = {
-				id: proof.onChainClaimId,
+				id: parseInt(proof.onChainClaimId),
 				ownerPublicKey: Buffer.from(proof.ownerPublicKey, 'hex'),
 				provider: proof.provider,
-				timestampS: proof.timestampS,
+				timestampS: parseInt(proof.timestampS),
 				witnessAddresses: witnesses,
 				redactedParameters: proof.redactedParameters
 			}
