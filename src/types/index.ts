@@ -2,37 +2,44 @@ import { BigNumber } from 'ethers'
 
 export type ProviderParams =
 	| {
-		provider: 'google-login'
-		payload: {}
-	}
+			provider: 'google-login'
+			payload: {}
+	  }
 	| {
-		provider: 'yc-login'
-		payload: {}
-	}
+			provider: 'yc-login'
+			payload: {}
+	  }
 	| {
-		provider: 'github-claim'
-		payload: GithubParams
-	}
+			provider: 'github-commits'
+			payload: GithubParams<'github-commits'>
+	  }
 	| {
-		provider: 'http'
-		payload: {
-			metadata: {
-				name: string
-				logoUrl: string
-			}
-			method: 'GET' | 'POST'
-			url: string
-			login: {
+			provider: 'github-issues'
+			payload: GithubParams<'github-issues'>
+	  }
+	| {
+			provider: 'github-pull-requests'
+			payload: GithubParams<'github-pull-requests'>
+	  }
+	| {
+			provider: 'http'
+			payload: {
+				metadata: {
+					name: string
+					logoUrl: string
+				}
+				method: 'GET' | 'POST'
 				url: string
-				checkLoginCookies: string[]
-			}
-			responseSelections: responseSelection[]
-			parameters: {
+				login: {
+					url: string
+					checkLoginCookies: string[]
+				}
+				responseSelections: responseSelection[]
+				parameters: {
 					[key: string]: string
+				}
 			}
-		}
-	}
-
+	  }
 
 export type responseSelection = { responseMatch: string }
 
@@ -78,16 +85,16 @@ export type RequestClaim = {
 	claimId: BigNumber
 }
 
-type GithubClaimType = 'issues' | 'commits' | 'repositories' | 'pullRequests'
+export const CLAIM_TYPE = [
+	'github-issues',
+	'github-commits',
+	'github-pull-requests',
+] as const
+export type GithubClaimType = (typeof CLAIM_TYPE)[number]
 
-export type GithubParams = {
-	/** github `url` type eg: `commits` */
-	type: GithubClaimType
-
-	/** repository name eg: {owner}/{repo} */
+export type GithubParams<T extends GithubClaimType> = {
+	type: T
 	repository: string
-
-	/** query string for github search */
 	searchQuery: SearchQueryObject
 }
 
