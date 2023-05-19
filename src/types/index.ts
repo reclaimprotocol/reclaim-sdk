@@ -11,15 +11,15 @@ export type ProviderParams =
 	  }
 	| {
 			provider: 'github-commits'
-			parameters: GithubParams<'github-commits'>
+			payload: GithubParams<'github-commits'>
 	  }
 	| {
 			provider: 'github-issues'
-			parameters: GithubParams<'github-issues'>
+			payload: GithubParams<'github-issues'>
 	  }
 	| {
 			provider: 'github-pull-requests'
-			parameters: GithubParams<'github-pull-requests'>
+			payload: GithubParams<'github-pull-requests'>
 	  }
 	| {
 			provider: 'http'
