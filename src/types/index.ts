@@ -76,15 +76,15 @@ export const CLAIM_TYPE = [
 	'github-commits',
 	'github-pull-requests',
 ] as const
-type GithubClaimType = (typeof CLAIM_TYPE)[number]
+export type GithubClaimType = (typeof CLAIM_TYPE)[number]
 
-type GithubParams<T extends GithubClaimType> = {
+export type GithubParams<T extends GithubClaimType> = {
 	type: T
 	repository: string
 	searchQuery: SearchQueryObject
 }
 
-type SearchQueryObject = {
+export type SearchQueryObject = {
 	keywords: string[]
 	qualifiers: Record<string, string[]>
 }
