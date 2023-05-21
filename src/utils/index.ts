@@ -58,6 +58,48 @@ export function getProofsFromRequestBody(requestBody: string) {
 	return proofs
 }
 
+function isValidUrl(url: string) {
+	try {
+	  new URL(url)
+	  return true
+	} catch(err) {
+	  return false
+	}
+}
+
+export function generateCallbackUrl(baseUrl: string) {
+	// check if valid url
+	if(!isValidUrl(baseUrl)) {
+		throw new Error('Invalid URL')
+	}
+
+	const id = generateUuid()
+
+	//check for trailing slash
+	if(baseUrl.endsWith('/')) {
+		// remove trailing slash
+		baseUrl = baseUrl.slice(0, -1)
+	}
+
+	return `${baseUrl}?id=${id}`
+}
+
+export function getCallbackIdFromUrl(_url: string): string {
+	// check if valid url
+	if(!isValidUrl(_url)) {
+		throw new Error('Invalid URL')
+	}
+
+	const url = new URL(_url)
+	const urlParams = new URLSearchParams(url.search)
+	const callbackId = urlParams.get('id')
+	if(!callbackId) {
+		throw new Error('Callback Id not found in URL')
+	} else {
+		return callbackId
+	}
+}
+
 export function extractParameterValues(responseSelections: responseSelection[], proof: Proof) {
 	// check if correct number of response selections are present
 	if(proof.parameters.responseSelections && (responseSelections.length === proof.parameters.responseSelections.length)) {
