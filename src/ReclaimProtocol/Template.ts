@@ -1,5 +1,6 @@
 import { RECLAIM_APP_URL } from '../config'
 import { Template } from '../types'
+import { getCallbackIdFromUrl } from '../utils'
 
 /** Template instance */
 export default class TemplateInstance {
@@ -32,6 +33,14 @@ export default class TemplateInstance {
      */
 	get id(): string {
 		return this._template.id
+	}
+
+	/**
+	 * Getter callbackId
+	 * @return {string}
+	 */
+	get callbackId(): string {
+		return getCallbackIdFromUrl(this._template.callbackUrl)
 	}
 
 	/**
