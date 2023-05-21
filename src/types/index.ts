@@ -1,4 +1,21 @@
 import { BigNumber } from 'ethers'
+import { CustomProvider } from '../ReclaimProtocol/CustomProvider'
+import { HttpsProvider } from '../ReclaimProtocol/HttpsProvider'
+
+export type ProofRequest = {
+	title: string
+	baseCallbackUrl: string
+	requestedProofs: (HttpsProvider | CustomProvider)[]
+}
+
+export type HttpsProviderParams = {
+	name: string
+	logoUrl: string
+	url: string
+	loginUrl: string
+	loginCookies: string[]
+	selectionRegex: string
+}
 
 export type ProviderParams =
 	| {
@@ -40,6 +57,7 @@ export type ProviderParams =
 				}
 			}
 	  }
+
 
 export type responseSelection = { responseMatch: string }
 
