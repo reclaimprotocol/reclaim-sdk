@@ -1,7 +1,7 @@
 import { Claim, ClaimProof, hashClaimInfo, verifyWitnessSignature } from '@reclaimprotocol/crypto-sdk'
 import { utils } from 'ethers'
 import P from 'pino'
-import { Proof, ProofRequest, ProviderNames, Template } from '../types'
+import { Proof, ProofRequest, Template } from '../types'
 import { generateCallbackUrl, generateUuid, getClaimWitnessOnChain, getOnChainClaimDataFromRequestId } from '../utils'
 import { CustomProvider } from './CustomProvider'
 import { HttpsProvider } from './HttpsProvider'
