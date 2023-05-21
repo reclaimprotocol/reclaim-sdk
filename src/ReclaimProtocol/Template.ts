@@ -47,7 +47,7 @@ export default class TemplateInstance {
      * Getter template url
      * @return {string}
     */
-	get reclaimUrl(): string {
+	get getReclaimUrl(): string {
 		return RECLAIM_APP_URL + encodeURIComponent(JSON.stringify(this._template))
 	}
 
