@@ -39,7 +39,7 @@ export default class TemplateInstance {
 	 * Getter callbackId
 	 * @return {string}
 	 */
-	get callbackId(): string {
+	get getCallbackId(): string {
 		return getCallbackIdFromUrl(this._template.callbackUrl)
 	}
 
