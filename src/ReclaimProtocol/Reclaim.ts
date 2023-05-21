@@ -1,30 +1,39 @@
 import { Claim, ClaimProof, hashClaimInfo, verifyWitnessSignature } from '@reclaimprotocol/crypto-sdk'
 import { utils } from 'ethers'
 import P from 'pino'
-import { Claim as TemplateClaim, Proof, Template } from '../types'
-import { generateUuid, getClaimWitnessOnChain, getOnChainClaimDataFromRequestId } from '../utils'
-import Connection from './Connection'
+import { Proof, ProofRequest, ProviderNames, Template } from '../types'
+import { generateCallbackUrl, generateUuid, getClaimWitnessOnChain, getOnChainClaimDataFromRequestId } from '../utils'
+import { CustomProvider } from './CustomProvider'
+import { HttpsProvider } from './HttpsProvider'
+import TemplateInstance from './Template'
 
 const logger = P()
 
 /** Reclaim class */
 export class Reclaim {
 
-	/**
-     * Connect to Reclaim
-     * @param applicationName - name of the application
-     * @param claims - providers to get claims
-     * @returns {Connection}
-     */
-	connect = (applicationName: string, claims: TemplateClaim[], callbackUrl: string): Connection => {
+	get HttpsProvider() {
+		return HttpsProvider
+	}
+
+	get CustomProvider() {
+		return CustomProvider
+	}
+
+	requestProofs = (request: ProofRequest) => {
 		const template: Template = {
 			id: generateUuid(),
-			name: applicationName,
-			callbackUrl: callbackUrl,
-			claims: claims,
+			name: request.title,
+			callbackUrl: generateCallbackUrl(request.baseCallbackUrl),
+			claims: request.requestedProofs.map((requestedProof) => {
+				return {
+					templateClaimId: generateUuid(),
+					provider: requestedProof.params.provider as any,
+					payload: requestedProof.params.payload,
+				}
+			})
 		}
-
-		return new Connection(template)
+		return new TemplateInstance(template)
 	}
 
 	/**
