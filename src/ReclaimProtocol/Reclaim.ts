@@ -20,7 +20,12 @@ export class Reclaim {
 		return CustomProvider
 	}
 
-	requestProofs = (request: ProofRequest) => {
+	/**
+	 * function to request proofs from Reclaim
+	 * @param request Proof request
+	 * @returns {TemplateInstance} Template instance
+	 */
+	requestProofs = (request: ProofRequest): TemplateInstance => {
 		const template: Template = {
 			id: generateUuid(),
 			name: request.title,
@@ -28,6 +33,7 @@ export class Reclaim {
 			claims: request.requestedProofs.map((requestedProof) => {
 				return {
 					templateClaimId: generateUuid(),
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 					provider: requestedProof.params.provider as any,
 					payload: requestedProof.params.payload,
 				}
