@@ -14,14 +14,14 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #000000;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: rgb(255, 255, 255);
 }
 
 .App-link {
@@ -125,7 +125,7 @@
   gap: 10px;
 }
 .button {
-  background-color:  #61dafb;
+  background-color:  #f700b5;
   border-radius: 10px;
   font-weight: 500;
   border: none;
@@ -143,7 +143,7 @@
 }
 
 .button:hover {
-  background-color: #61dafb;
+  background-color: #ff55d1;
   color: black;
   opacity: 0.8;
   /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
@@ -156,8 +156,8 @@
   padding: 0 20px;
   font-size: 20px;
   font-weight: 500;
-  color: black;
-  background-color: #61dafb;
+  color: white;
+  background-color: #444444;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   outline: none;
   transition: 0.3s;

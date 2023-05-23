@@ -1,10 +1,10 @@
 import React from 'react';
 import './App.css';
 import axios from 'axios'
-import {QRCodeSVG} from 'qrcode.react';
+import QRCode from 'react-qr-code';
 
 
-const getCallbackUrl = process.env.REACT_APP_BACKEND_BASE_URL + '/home'
+const backendBaseUrl = process.env.REACT_APP_BACKEND_BASE_URL
 const getStatusUrl = process.env.REACT_APP_BACKEND_BASE_URL + '/status'
 
 function App() {
@@ -23,15 +23,14 @@ function App() {
 
   const proveIt = async (e: any) => {
     e.preventDefault();
-    console.log(username)
-    const response = await axios.get(getCallbackUrl + '/' + username)
+    console.log('prove it')
+    const response = await axios.get(backendBaseUrl + '/request')
     console.log(response);
     setCallbackId(response.data.callbackId)
-    setCallbackUrl(response.data.url);
+    setCallbackUrl(response.data.reclaimUrl);
     setLoading(true)
     //window.location.replace(response.data.url)
-    setAppUrl(response.data.url);
-
+    setAppUrl(response.data.reclaimUrl);
   }
 
   React.useEffect(() => {
@@ -48,26 +47,20 @@ function App() {
     <div className="App">
       <header className="App-header">
 
-        <h2>Fill up this form</h2>
-        <p>In the next step, prove that you are a real person owning a google account</p>
+        <h2>DEMO</h2>
+        <h3>Prove that you are a real person owning a Google and Reddit account</h3>
+        <p>[This demo uses HttpsProvider and CustomProvider]</p>
 
 
 
         {!callbackUrl && <div className='actions'>
-
-          <input
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="What is your pet's name?"
-          value={username}
-          className="username-input"
-        />
         
         <button
           className="button"
-          disabled={(!!callbackUrl) || (!username)}
+          disabled={(!!callbackUrl)}
           onClick={proveIt}
         >
-          Prove you have a google account!
+          Prove it!
         </button>
         </div>
           
@@ -93,7 +86,7 @@ function App() {
             <h3>On mobile device?</h3>
             <a href={appUrl} target="_blank" rel="noreferrer" className="App-link" >Click here to open on Reclaim Wallet App</a>
             <h3>On laptop/desktop?</h3>
-            <QRCodeSVG value={appUrl} />
+            <QRCode value={appUrl} />
             <p>or, Copy the link and send to your phone</p>
             <input readOnly value={appUrl} />
           </>:null} 
