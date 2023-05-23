@@ -28,23 +28,34 @@ npm i @reclaimprotocol/reclaim-sdk
 ```
 
 ## Getting started
-To connect to Reclaim Protocol instantiate Reclaim class and call `connect` method to connect your application. The method accepts the application name, the provider that will be used to create the claim and callback URL.
+To connect to Reclaim Protocol instantiate Reclaim class and call `requestProofs` method to request proofs from your users. The method accepts objects of type `ProofRequest` defined [here](src/types/index.ts)
 
 ```
 import { reclaimprotocol } from '@reclaimprotocol/reclaim-sdk'
 
 const reclaim = new reclaimprotocol.Reclaim()
-const connection = reclaim.connect(
-  'Google proof',
-  [
-    {
-      provider: 'google-login',
-      payload: {},
-      templateClaimId: reclaimprotocol.utils.generateUuid(),
-    }
-  ],
-  callbackUrl // callbackUrl is triggered when user submits the claim on Reclaim app
-)
+const request = reclaim.requestProofs(
+  {
+    title: "Prove you're an Acme Corp Alum",
+    baseCallbackUrl: "https://baseurl.com/path",
+    requestedProofs: [
+      new reclaim.HttpsProvider({
+        name: "Acme Corp Emp Id",
+        logoUrl: "https://acmecorp.com/logo.png",
+        url: "https://acmecorp.com/myprofile",
+        loginUrl: "https://acmecorp.com/login",
+        loginCookies: ['authToken', 'ssid'],
+        selectionRegex: "<span id='empid'>{{empid}}</span>",
+    }),
+    new reclaim.CustomProvider({
+	    provider: 'google-login',
+	    payload: {}
+    }),
+    ...
+  ]
+);
+const url = request.reclaimUrl
+const callbackId = request.callbackId()
 
 ```
 ### Check the proofs
@@ -77,13 +88,11 @@ When the user submits the form, create a session and store it in a db. Provide t
 ```
 import { reclaimprotocol } from '@reclaimprotocol/reclaim-sdk'
 
-const uuid = require(uuid);
-
 router.post('/register', async (req, res) => {
-  const sessionId = uuid.v4();
+  const sessionId = reclaimprotocol.utils.generateUuid();
   await db.store({ ...req.body, sessionId });
   const callbackUrl = 'https://myhost.org/callback/'
-  const template = buildTemplate(callbackUrl);
+  const request = createRequest(callbackUrl, sessionId);
   // ... 
 });
 ```
@@ -92,43 +101,24 @@ router.post('/register', async (req, res) => {
 The callback URL is where the user will have to upload the proof once they've generated it. Now let's look at the function buildTemplate this is where we'll define what information we need from Acme Corp's website, along with a tamper resistance proof.
 
 ```
-function buildTemplate(callbackUrl) {
+function createRequest(callbackUrl, sessionId) {
   const reclaim = new reclaimprotocol.Reclaim()
-  const connection = reclaim.connect(
-    "Prove you're a Acme Corp Alum",  // a title that will be shown to the user
-                                      // Good to mention what proof you're seeking
-
-    [                                 // List of proofs you need from the user
-      {
-        provider: 'http',
-        payload: {
-                metadata: {
-                  name: "Your Acme Corp EmpID", // What data you're extracting from the user's profile
-                  logoUrl: "https://acmecorp.com/logo.png" 
-                },
-                url: 'https://acmecorp.com/myprofile', //URL which needs to be opened to extract information from 
-                method: 'GET', // HTTP Method (Allowed : GET/POST)
-                login: {
-                  url: 'https://acmecorp.com/login', // Where should the user be redirected if they're not logged in to access the above mentioned URL
-                  checkLoginCookies: ['authToken', 'ssid'], // Cookies that are set when a user is logged in
-                },
-                responseSelections: [
-                    {
-                        responseMatch:'<span id=\"empid\">{{EMPID}}</span>'
-                    }
-                  ],
-                parameters: { 
-                  EMPID: "<employee id of the user>" // key used is same as the variable used in responseMatch
-                                                     // the value is the data to be proved by the user
-                }
-          },
-      templateClaimId: uuid.v4(), // id for each claim for tracking if relevant proofs have been submitted by the user
-      }
-    ],
-    callbackUrl
-  );
-
-  const template = (await connection).generateTemplate(sessionId);
+  const request = reclaim.requestProofs(
+  {
+    title: "Prove you're an Acme Corp Alum",
+    baseCallbackUrl: "https://baseurl.com/path",
+    requestedProofs: [
+      new reclaim.HttpsProvider({
+        name: "Acme Corp Emp Id",
+        logoUrl: "https://acmecorp.com/logo.png",
+        url: "https://acmecorp.com/myprofile",
+        loginUrl: "https://acmecorp.com/login",
+        loginCookies: ['authToken', 'ssid'],
+        selectionRegex: "<span id='empid'>{{empid}}</span>",
+    }),
+    ...
+  ]
+);
 }
 ```
 
@@ -154,7 +144,8 @@ Trick :
 ```
 router.post('/register', async (req, res) => {
   //...
-  res.render('register', { url: template.url });
+  const callbackId = request.callbackId // store this callbackId with other user information. It will be later used to update proofs for a user
+  res.render('register', { url: request.reclaimUrl });
 });
 ```
 
