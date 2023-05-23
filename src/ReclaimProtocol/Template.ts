@@ -39,7 +39,7 @@ export default class TemplateInstance {
 	 * Getter callbackId
 	 * @return {string}
 	 */
-	get getCallbackId(): string {
+	get callbackId(): string {
 		return getCallbackIdFromUrl(this._template.callbackUrl)
 	}
 
@@ -47,7 +47,7 @@ export default class TemplateInstance {
      * Getter template url
      * @return {string}
     */
-	get getReclaimUrl(): string {
+	get reclaimUrl(): string {
 		return RECLAIM_APP_URL + encodeURIComponent(JSON.stringify(this._template))
 	}
 
