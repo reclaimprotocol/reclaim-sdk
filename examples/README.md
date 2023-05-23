@@ -26,7 +26,7 @@ CALLBACK_URL=http://<ip from ifconfig>:8000
 ```
 npm install
 npm run build
-npm run
+npm start
 ```
 
 ## Run the frontend
