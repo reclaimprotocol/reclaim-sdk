@@ -24,6 +24,11 @@ export class HttpsProvider {
 	}
 
 	constructor(params: HttpsProviderParams) {
+		// check if params are of type HttpsProviderParams
+		if(!params.name || !params.logoUrl || !params.url || !params.loginUrl || !params.loginCookies || !params.selectionRegex) {
+			throw new Error('Invalid parameters passed to HttpsProvider')
+		}
+
 		this._params.payload = {
 			metadata: {
 				name: params.name,
