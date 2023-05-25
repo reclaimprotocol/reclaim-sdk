@@ -155,9 +155,9 @@ The goal of the SDK is to allow you, the developer to easily integrate [Reclaim 
 
     Make sure to adjust the route (`/callback`) and the processing logic inside the endpoint to match your application's requirements and data handling.
 
-That's it! You have now set up the Reclaim SDK in your application and can start requesting proofs from users. 
+That's it! You have now set up the Reclaim SDK in your application and can start requesting proofs from your users. 
 
-    The example code demonstrates how to request proofs for Google ownership. You can customize the requested proofs by using different providers or creating your own **Provider**.
+    The example code demonstrates how to request proofs for ownership of Google account. You can customize the requested proofs by using different providers or creating your own Providers.
 
 ## Providers
 Following are the default providers that you can start using right away:
@@ -195,8 +195,8 @@ app.get("/request-proofs", (req, res) => {
                 }),
             ],
         });
-        // Store the callback Id and Reclaim URL in your database
-        const { callbackId, reclaimUrl } = request;
+        // Store the callback Id, Reclaim URL and expectedProofsInCallback in your database
+        const { callbackId, reclaimUrl, expectedProofsInCallback } = request;
         // ... store the callbackId and reclaimUrl in your database
         res.json({ reclaimUrl });
     }
@@ -214,15 +214,48 @@ In the above code snippet, the HttpsProvider accepts object of `type HttpsProvid
 - `loginUrl`: The URL where the user can log in to access the information. If authentication is required to access the data, the user will be redirected to this URL for login.
 - `loginCookies`: An array of cookie names required for authentication. If the webpage uses cookies for authentication, you can specify the names of those cookies here. These cookies will be passed along with the request to the url.
 - `selectionRegex`: A regular expression to extract specific information from the webpage. If you only need to extract a specific piece of information from the webpage, you can specify a regex pattern here. The SDK will search for this pattern in the HTML of the webpage and extract the matching content.
-### Show the template to the user
-```
-router.post('/register', async (req, res) => {
-  //...
-  const callbackId = request.callbackId // store this callbackId with other user information. It will be later used to update proofs for a user
-  res.render('register', { url: request.reclaimUrl });
-});
-```
 
+The submission of proofs is handled by the callback endpoint as show below. The function `reclaimprotocol.utils.extractParameterValues(expectedProofsInCallback, proofs)` is used to extract the information proved by your user 
+```
+    app.post("/callback/:callbackId", async (req, res) => {
+      try {
+        // Retrieve the callback ID from the URL parameters
+        const { callbackId } = req.params;
+
+        // Retrieve the proofs from the request body
+        const { proofs } = req.body;
+
+        // Verify the correctness of the proofs (optional but recommended)
+        const isProofsCorrect = await reclaim.verifyCorrectnessOfProofs(proofs);
+
+        if (isProofsCorrect) {
+          // Proofs are correct, handle them as needed
+          // ... process the proofs and update your application's data
+          console.log("Proofs submitted:", proofs);
+
+          // Retrieve the expected proofs corresponding to the callbackId from your database
+          // const expectedProofsInCallback = db.get(expectedProofsInCallback, callbackId) 
+          // Please change the above line based on your database implementation
+          const parsedParams = reclaimprotocol.utils.extractParameterValuesFromRegex(expectedProofsInCallback, proofs)
+        
+          // use the parsedParams as needed in your application
+
+          // Respond with a success message
+          res.status(200).json({ parsedParams });
+        } else {
+          // Proofs are not correct or verification failed
+          // ... handle the error accordingly
+          console.error("Proofs verification failed");
+
+          // Respond with an error message
+          res.status(400).json({ error: "Proofs verification failed" });
+        }
+      } catch (error) {
+        console.error("Error processing callback:", error);
+        res.status(500).json({ error: "Failed to process callback" });
+      }
+    });
+```
 ## Using Custom Provider
 Here's an example usage of Custom Provider that uses `github-commits` to request proof of commit to a particular repository:
 ```
