@@ -2,6 +2,7 @@ import { ProviderParams } from '../types'
 
 
 export class CustomProvider {
+	// params for the provider
 	private _params: ProviderParams
 
 	constructor(params: ProviderParams) {
@@ -13,7 +14,12 @@ export class CustomProvider {
 		this._params = params
 	}
 
+	// getters
 	get params(): ProviderParams {
 		return this._params
+	}
+
+	get regex(): string {
+		return ''
 	}
 }

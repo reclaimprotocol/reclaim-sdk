@@ -39,7 +39,10 @@ export class Reclaim {
 				}
 			})
 		}
-		return new TemplateInstance(template)
+		const regexes = request.requestedProofs.map((requestedProof) => {
+			return requestedProof.regex
+		})
+		return new TemplateInstance(template, regexes)
 	}
 
 	/**
