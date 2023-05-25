@@ -67,6 +67,14 @@ function isValidUrl(url: string) {
 	}
 }
 
+export function encodeBase64(str: string[]) {
+	return Buffer.from(JSON.stringify(str)).toString('base64')
+}
+
+export function decodeBase64(str: string) {
+	return JSON.parse(Buffer.from(str, 'base64').toString('utf-8')) as string[]
+}
+
 export function generateCallbackUrl(baseUrl: string) {
 	// check if valid url
 	if(!isValidUrl(baseUrl)) {
@@ -100,20 +108,28 @@ export function getCallbackIdFromUrl(_url: string): string {
 	}
 }
 
-export function extractParameterValues(responseSelections: responseSelection[], proof: Proof) {
+export function extractParameterValuesFromRegex(expectedProofsInCallback: string, proofs: Proof[]) {
+	// parse expectedProofsInCallback
+	const selectionRegexes = decodeBase64(expectedProofsInCallback)
+
 	// check if correct number of response selections are present
-	if(proof.parameters.responseSelections && (responseSelections.length === proof.parameters.responseSelections.length)) {
+	if(selectionRegexes.length !== proofs.length) {
+		throw new Error('Invalid number of proofs')
+	}
 
-		// create object to store parameter values
-		const parameterObj: {[key: string]: string} = {}
+	// create object to store parameter values
+	const parameterObj: {[key: string]: string} = {}
+	proofs.forEach((proof, index) => {
+		// console.log(proof)
+		if(proof.parameters.responseSelections) {
 
-		// iterate over all response selections
-		for(let i = 0; i < responseSelections.length; i++) {
-			const proofResponseSelection = proof.parameters.responseSelections[i] as responseSelection
+			// TODO: support multiple response selections inside each proof
+			// get first response selection since we only support one for now
+			const proofResponseSelection = proof.parameters.responseSelections[0] as responseSelection
 
 			if(proofResponseSelection.responseMatch) {
 				// get regex string from response selection
-				const responseMatchRegex = responseSelections[i].responseMatch
+				const responseMatchRegex = selectionRegexes[index]
 
 				const parameterKeys: string[] = []
 				// replace all {{parameterName}} with (.*?)
@@ -136,9 +152,7 @@ export function extractParameterValues(responseSelections: responseSelection[], 
 				}
 			}
 		}
+	})
 
-		return parameterObj
-	} else {
-		throw new Error('Invalid response selections')
-	}
+	return parameterObj
 }
