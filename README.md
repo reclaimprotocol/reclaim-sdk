@@ -215,6 +215,26 @@ In the above code snippet, the HttpsProvider accepts object of `type HttpsProvid
 - `loginCookies`: An array of cookie names required for authentication. If the webpage uses cookies for authentication, you can specify the names of those cookies here. These cookies will be passed along with the request to the url.
 - `selectionRegex`: A regular expression to extract specific information from the webpage. If you only need to extract a specific piece of information from the webpage, you can specify a regex pattern here. The SDK will search for this pattern in the HTML of the webpage and extract the matching content.
 
+The tricky part is to find the `loginCookies` that need to be set. 
+
+A good way to figure this out is to look at the Application Tab in the Chrome debugger and look for cookies. 
+
+You can also look at the Network calls tab to identify which cookies are really being used. 
+
+This requires a little bit of reverse engineering or trial and error.
+
+Trick : 
+- Open the network tab on chrome
+- Open the URL
+- Login
+- In the network tab "Search" for some string like the empid or username
+- This will give you the network request that contained that information
+- Right click on the network request and copy as curl
+- Paste the curl command in your terminal
+    1. Remove cookies one by one and run the curl
+    2.  If the curl still responds with the correct expected response, repeat 1
+    3. If the curl responds with an access denied error, you should keep this cookie in the checkLoginCookies array and continue removing other cookies one by one.
+
 The submission of proofs is handled by the callback endpoint as show below. The function `reclaimprotocol.utils.extractParameterValues(expectedProofsInCallback, proofs)` is used to extract the information proved by your user 
 ```
     app.post("/callback/:callbackId", async (req, res) => {
