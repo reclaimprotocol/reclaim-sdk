@@ -7,6 +7,6 @@
   * [Building a custom provider](using-the-reclaim-sdk/building-a-custom-provider.md)
   * [Serverless embed](using-the-reclaim-sdk/serverless-embed.md)
   * [Debugging your Providers](using-the-reclaim-sdk/debugging-your-providers.md)
-* [ZK Proofs and Circuits](zk-proofs-and-circuits.md)
 * [Whitepaper & How Reclaim Protocol Works](whitepaper-and-how-reclaim-protocol-works.md)
+* [ZK Proofs and Circuits](zk-proofs-and-circuits.md)
 * [Reach out to us!](reach-out-to-us.md)
