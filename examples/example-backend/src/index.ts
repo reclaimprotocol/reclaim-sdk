@@ -1,135 +1,166 @@
-import express, { Express, Request, Response } from 'express';
-import dotenv from 'dotenv';
-import { Reclaim, generateUuid } from '@questbook/template-client-sdk';
-import cors from 'cors';
+import { reclaimprotocol } from '@reclaimprotocol/reclaim-sdk'
+import cors from 'cors'
+import dotenv from 'dotenv'
+import express, { Express, Request, Response } from 'express'
 import sqlite3, { Database } from 'sqlite3'
-import { open } from 'sqlite'
 
-let singletonDb : Database | undefined = undefined;
+const singletonDb: Database | undefined = undefined
 
 
-const getDb = async () => {
-    if(singletonDb !== undefined)
-      return singletonDb;
-    const db = await open({
-      filename: '/tmp/database.db',
-      driver: sqlite3.cached.Database
-    })
-    await db.exec('CREATE TABLE IF NOT EXISTS submitted_links (callback_id TEXT, status TEXT, username TEXT, template_id TEXT, claims TEXT)');
-    return db;
+const getDb = async() => {
+	if(singletonDb !== undefined) {
+		return singletonDb
+	}
+
+	const db = new sqlite3.Database('/tmp/database.db', (err) => {
+		if(err) {
+			console.log('Could not connect to database.')
+			console.error(err)
+		}
+
+		console.log('Connected to the database.')
+	})
+
+	db.run('CREATE TABLE IF NOT EXISTS reclaim (callback_id TEXT,status TEXT,reclaim_url TEXT,claims TEXT)')
+	return db
 }
 
-// import { verifyEncryptedClaims } from '@questbook/reclaim-crypto-sdk';
+dotenv.config()
 
-dotenv.config();
-
-const app: Express = express();
-const port = process.env.PORT || 8000;
-const callbackUrl = process.env.CALLBACK_URL! + '/callback/'
+const app: Express = express()
+const port = process.env.PORT || 8000
+const callbackUrl = process.env.CALLBACK_URL + '/callback/'
 
 app.use(express.json())
 app.use(cors())
 
+const reclaim = new reclaimprotocol.Reclaim()
 
-const reclaim = new Reclaim(callbackUrl);
-
-const connection = reclaim.getConsent(
-  'Questbook-Employee',
-  [
-    {
-      provider: "google-login",
-      params: { }
-    }
-  ]
+const request = reclaim.requestProofs(
+	{
+		title: 'Prove your reddit and google account',
+		baseCallbackUrl: callbackUrl,
+		requestedProofs: [
+			new reclaim.HttpsProvider({
+				name: 'Reddit',
+				logoUrl: 'https://i.redd.it/snoovatar/avatars/97178518-5ce1-400b-8185-54dcaef96d9c.png',
+				url: 'https://www.reddit.com/',
+				loginUrl: 'https://www.reddit.com/login/?dest=https%3A%2F%2Fwww.reddit.com%2F',
+				loginCookies: ['session', 'reddit_session', 'loid', 'token_v2', 'edgebucket'],
+				selectionRegex: '<span class=\"_2BMnTatQ5gjKGK5OWROgaG\">{{username}}</span>.*?<span>{{karma}} karma</span>'
+			}),
+			new reclaim.CustomProvider({
+				provider: 'google-login',
+				payload: {}
+			})
+		]
+	}
 )
 
-app.get('/home/:username', async (req: Request, res: Response) => {
-  const db = await getDb();
+app.get('/', (req: Request, res: Response) => {
+	res.send('Hello World!')
+})
 
-  const username = req.params.username;
+app.get('/request', async(req: Request, res: Response) => {
+	const db = await getDb()
 
-  const callbackId = 'user-' + generateUuid();
+	const callbackId = request.callbackId
+	const reclaimUrl = request.reclaimUrl
 
-  const template = (await connection).generateTemplate(callbackId);
+	try {
+		db.run('INSERT INTO reclaim(callback_id,status,reclaim_url) VALUES(?,?,?)', [callbackId, 'pending', reclaimUrl], function(err) {
+			if(err) {
+				return console.error(err)
+			  }
 
-  const url = template.url
+			  // get the last insert id
+			  console.log(`A row has been inserted with rowid ${this.lastID}`)
+		})
+	} catch(e) {
+		res.send(`500 - Internal Server Error - ${e}`)
+		return
+	}
 
-  const templateId = template.id
+	res.json({ reclaimUrl, callbackId })
+})
 
-  try {
-    await db.run("INSERT INTO submitted_links (callback_id, status, username, template_id) VALUES (?, ?, ?, ?)", callbackId, "pending", username, templateId)
-  }
-  catch (e){
-    res.send(`500 - Internal Server Error - ${e}`)
-    return
-  }
-  
-  res.json({ url, callbackId });
-});
+app.post('/callback/:id', async(req: Request, res: Response) => {
 
-app.post('/callback/:id', async (req: Request, res: Response) => {
+	console.log('Got callback for id: ' + req.params.id)
 
-  console.log("Got callback for id: " + req.params.id);
+	const db = await getDb()
 
-  const db = await getDb();
+	if(!req.params.id) {
+		res.send('400 - Bad Request: callbackId is required')
+		return
+	}
 
-  if(!req.params.id){
-    res.send(`400 - Bad Request: callbackId is required`)
-    return
-  }
+	if(!req.body.proofs) {
+		res.send('400 - Bad Request: claims are required')
+		return
+	}
 
-  if(!req.body.claims){
-    res.send(`400 - Bad Request: claims are required`)
-    return
-  }
+	const callbackId = req.params.id
 
-  const callbackId = req.params.id;
+	const proofs = { claims: req.body.proofs }
 
-  const claims = { claims: req.body.claims };
+	try {
+		db.run('UPDATE reclaim SET claims=?,status=? WHERE callback_id = ?;', [JSON.stringify(proofs), 'verified', callbackId], function(err) {
+			if(err) {
+				console.log('error', err)
+				return console.error(err)
+			  }
 
-  try {
-    await db.run("UPDATE submitted_links SET claims = ?, status = ? WHERE callback_id = ?;", JSON.stringify(claims), 'verified', callbackId);
-    console.log("updated");
-  }
-  catch (e){
-    console.log("error", e);
-    res.send(`500 - Internal Server Error - ${e}`)
-    return
-  }
+			  // get the last insert id
+			  console.log(`Row(s) updated: ${this.changes}`)
+		})
+		console.log('updated')
+	} catch(e) {
+		console.log('error', e)
+		res.send(`500 - Internal Server Error - ${e}`)
+		return
+	}
 
-  res.send("200 - OK")
+	res.send('200 - OK')
 
-});
+})
 
-app.get('/status/:callbackId', async (req: Request, res: Response) => {
+app.get('/status/:callbackId', async(req: Request, res: Response) => {
 
-  const db = await getDb();
+	const db = await getDb()
 
-  let row;
-  
-  if(!req.params.callbackId){
-    res.send(`400 - Bad Request: callbackId is required`)
-    return
-  }
+	let row
 
-  const callbackId = req.params.callbackId;
+	if(!req.params.callbackId) {
+		res.send('400 - Bad Request: callbackId is required')
+		return
+	}
 
-  try {
-    row = await db.get("SELECT status FROM submitted_links WHERE callback_id = $1", [callbackId])
-  }
-  catch (e){
-    res.send(`500 - Internal Server Error - ${e}`)
-    return
-  }
+	const callbackId = req.params.callbackId
+	console.log('callbackId', callbackId)
+	try {
+		row = db.all('SELECT status status FROM reclaim WHERE callback_id=?', [callbackId], (err, rows) => {
+			if(err) {
+			  throw err
+			}
 
-  res.json({ status: row.status })
+			rows.forEach((row) => {
+			  console.log(row.status)
+			})
+		})
+	} catch(e) {
+		res.send(`500 - Internal Server Error - ${e}`)
+		return
+	}
 
-});
+	res.json({ status: row.get('status') })
 
-process.on('uncaughtException', function (err) {
-  console.log('Caught exception: ', err);
-});
+})
+
+process.on('uncaughtException', (err) => {
+	console.log('Caught exception: ', err)
+})
 
 app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
-});
+	console.log(`Server is running at http://localhost:${port}`)
+})

@@ -12,7 +12,9 @@
     "@types/react-dom": "^18.0.11",
     "axios": "^1.3.4",
     "react": "^18.2.0",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
+    "react-qr-code": "^2.0.11",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
@@ -40,5 +42,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-copy-to-clipboard": "^5.0.4"
   }
 }
