@@ -197,7 +197,7 @@ app.get("/request-proofs", (req, res) => {
         });
         // Store the callback Id, Reclaim URL and expectedProofsInCallback in your database
         const { callbackId, reclaimUrl, expectedProofsInCallback } = request;
-        // ... store the callbackId and reclaimUrl in your database
+        // ... store the callbackId, reclaimUrl and expectedProofsInCallback in your database
         res.json({ reclaimUrl });
     }
     catch (error) {
@@ -217,6 +217,7 @@ In the above code snippet, the HttpsProvider accepts object of `type HttpsProvid
 
 The tricky part is to find the `loginCookies` that need to be set. 
 
+### How to find `loginCookies`?
 A good way to figure this out is to look at the Application Tab in the Chrome debugger and look for cookies. 
 
 You can also look at the Network calls tab to identify which cookies are really being used. 
