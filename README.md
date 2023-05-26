@@ -157,7 +157,7 @@ The goal of the SDK is to allow you, the developer to easily integrate [Reclaim 
 
 That's it! You have now set up the Reclaim SDK in your application and can start requesting proofs from your users. 
 
-    The example code demonstrates how to request proofs for ownership of Google account. You can customize the requested proofs by using different providers or creating your own Providers.
+The example code demonstrates how to request proofs for ownership of Google account. You can customize the requested proofs by using different providers or creating your own Providers.
 
 ## Providers
 Following are the default providers that you can start using right away:
