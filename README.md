@@ -1,6 +1,14 @@
 # Reclaim-SDK
 The Reclaim SDK provides a way to let your users import data from other websites into your app in a secure, privacy preserving manner using zero knowledge proofs. 
 
+## Table of contents:
+1. [Introduction](#introduction)
+2. [Getting started](#getting-started)
+3. [Providers](#providers)
+4. [Using HTTPS Provider](#using-https-provider)
+    - [How to find `loginCookies`](#how-to-find-logincookies)
+5. [Using Custom Provider](#using-custom-provider)
+
 ## Introduction
 The goal of the SDK is to allow you, the developer to easily integrate [Reclaim Protocol](https://questbook.gitbook.io/reclaim-protocol/)
  into your application. For example, you can ask your user for a proof that they have contributed to a GitHub repo, or they are an YC alumni, or they have a certain bank balance in their account without revealing any other PII like their name, physical address, phone number etc.
