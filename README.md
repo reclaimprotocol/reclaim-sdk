@@ -5,7 +5,7 @@ The Reclaim SDK provides a way to let your users import data from other websites
 The goal of the SDK is to allow you, the developer to easily integrate [Reclaim Protocol](https://questbook.gitbook.io/reclaim-protocol/)
  into your application. For example, you can ask your user for a proof that they have contributed to a GitHub repo, or they are an YC alumni, or they have a certain bank balance in their account without revealing any other PII like their name, physical address, phone number etc.
 
- Here's a step-by-step guide to help you get started:
+Here's a step-by-step guide to help you get started:
 
  ## Getting started
 1. Set up a new Node.js project:
