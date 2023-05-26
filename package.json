@@ -11,7 +11,14 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "@reclaimprotocol/crypto-sdk": "^1.0.3",
+    "ethers": "^5.7.2",
+    "pino": "^8.11.0",
+    "uuid": "^9.0.0"
+  },
   "devDependencies": {
+    "@creatoros/eslint-config": "git+https://github.com/CreatorOS/eslint-config",
     "@typechain/ethers-v5": "^10.2.0",
     "@typechain/hardhat": "^6.1.5",
     "@types/jest": "^29.5.1",
@@ -21,13 +28,6 @@
     "ts-jest": "^29.1.0",
     "typechain": "^8.1.1",
     "typescript": "^4.9.5"
-  },
-  "dependencies": {
-    "@creatoros/eslint-config": "github:CreatorOS/eslint-config",
-    "@reclaimprotocol/crypto-sdk": "^1.0.3",
-    "ethers": "^5.7.2",
-    "pino": "^8.11.0",
-    "uuid": "^9.0.0"
   },
   "browser": {
     "fs": false,
