@@ -1,3 +1,7 @@
 examples
 node_modules
 tests
+
+jest.config.js
+.eslintrc.json
+.github
