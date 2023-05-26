@@ -163,7 +163,7 @@ Here's a step-by-step guide to help you get started:
 
     Make sure to adjust the route (`/callback`) and the processing logic inside the endpoint to match your application's requirements and data handling.
 
-That's it! You have now set up the Reclaim SDK in your application and can start requesting proofs from your users. 
+That's it 🎉! You have now set up the Reclaim SDK in your application and can start requesting proofs from your users. 
 
 The example code demonstrates how to request proofs for ownership of Google account. You can customize the requested proofs by using different providers or creating your own Providers.
 
