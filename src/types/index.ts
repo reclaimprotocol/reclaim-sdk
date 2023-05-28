@@ -3,17 +3,48 @@ import { CustomProvider } from '../ReclaimProtocol/CustomProvider'
 import { HttpsProvider } from '../ReclaimProtocol/HttpsProvider'
 
 export type ProofRequest = {
+	/**
+	 * Title of the request
+	 */
 	title: string
+	/**
+	 * Base callback url
+	 */
 	baseCallbackUrl: string
+	/**
+	 * Proofs requested by the application using HTTPsProvider or CustomProvider
+	 */
 	requestedProofs: (HttpsProvider | CustomProvider)[]
+	/**
+	 * Callback id
+	 */
+	callbackId?: string
 }
 
 export type HttpsProviderParams = {
+	/**
+	 * Name of the website to be displayed on the UI
+	 */
 	name: string
+	/**
+	 * Logo url of the website to be displayed on the UI
+	 */
 	logoUrl: string
+	/**
+	 * Url of the website
+	 */
 	url: string
+	/**
+	 * Login url of the website
+	 */
 	loginUrl: string
+	/**
+	 * Login cookies of the website
+	 */
 	loginCookies: string[]
+	/**
+	 * Regex to extract the required data from the response
+	 */
 	selectionRegex: string
 }
 
