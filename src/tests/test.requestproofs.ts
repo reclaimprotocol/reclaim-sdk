@@ -7,6 +7,7 @@ describe('Create proof request', () => {
 			{
 				title: 'Proof of Reddit Karma',
 				baseCallbackUrl: 'https://www.google.com/',
+				callbackId: '1234',
 				requestedProofs: [
 					new reclaim.HttpsProvider({
 						name: 'Reddit',
@@ -27,5 +28,6 @@ describe('Create proof request', () => {
 
 		expect(request.template.name).toBe('Proof of Reddit Karma')
 		expect(request.template.claims.length).toEqual(2)
+		expect(request.callbackId).toBe('1234')
 	})
 })

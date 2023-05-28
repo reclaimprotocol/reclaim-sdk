@@ -75,13 +75,13 @@ export function decodeBase64(str: string) {
 	return JSON.parse(Buffer.from(str, 'base64').toString('utf-8')) as string[]
 }
 
-export function generateCallbackUrl(baseUrl: string) {
+export function generateCallbackUrl(baseUrl: string, callbackId?: string) {
 	// check if valid url
 	if(!isValidUrl(baseUrl)) {
 		throw new Error('Invalid URL')
 	}
 
-	const id = generateUuid()
+	const id = callbackId ? callbackId : generateUuid()
 
 	//check for trailing slash
 	if(baseUrl.endsWith('/')) {
