@@ -1,4 +1,5 @@
 import { Claim, ClaimProof, hashClaimInfo, verifyWitnessSignature } from '@reclaimprotocol/crypto-sdk'
+import crypto from 'crypto'
 import { utils } from 'ethers'
 import P from 'pino'
 import { Proof, ProofRequest, Template } from '../types'
@@ -29,7 +30,7 @@ export class Reclaim {
 		const template: Template = {
 			id: generateUuid(),
 			name: request.title,
-			callbackUrl: generateCallbackUrl(request.baseCallbackUrl),
+			callbackUrl: generateCallbackUrl(request.baseCallbackUrl, request.callbackId), // if callbackId is present, use it, else generate a new callback url
 			claims: request.requestedProofs.map((requestedProof) => {
 				return {
 					templateClaimId: generateUuid(),
@@ -101,6 +102,24 @@ export class Reclaim {
 		}
 
 		return result
+	}
+
+	/**
+	 * function to generate hash of all the onChainClaimIds
+	 * @param proofs
+	 * @returns {string}
+	 */
+	getProofId = (proofs: Proof[]): string => {
+		const onChainClaimIdArray: string[] = []
+		for(const proof of proofs) {
+			const onChainClaimId = proof.onChainClaimId
+			onChainClaimIdArray.push(onChainClaimId)
+		}
+
+		const concatenatedOnChainClaimId = onChainClaimIdArray.join('')
+
+		// create hash of concatenatedClaimId
+		return crypto.createHash('sha256').update(concatenatedOnChainClaimId).digest('hex')
 	}
 }
 
