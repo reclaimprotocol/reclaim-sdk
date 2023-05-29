@@ -109,7 +109,7 @@ export class Reclaim {
 	 * @param proofs
 	 * @returns {string}
 	 */
-	getProofId = (proofs: Proof[]): string => {
+	generateProofId = (proofs: Proof[]): string => {
 		const onChainClaimIdArray: string[] = []
 		for(const proof of proofs) {
 			const onChainClaimId = proof.onChainClaimId
