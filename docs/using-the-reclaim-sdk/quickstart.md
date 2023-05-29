@@ -12,10 +12,7 @@ npm i @reclaimprotocol/reclaim-sdk
 
 To request proofs of your users' credentials using reclaim protocol, generate a `reclaimUrl` using the Reclaim SDK that will be used by your user to generate proofs of their credentials and submit it to your application.
 
-You can generate the `reclaimUrl` by:
-
-This example uses CustomProvider to request proofs
-
+You can generate the `reclaimUrl` by: (This example uses CustomProvider to request proofs)
 ```
 // import reclaimprotocol
 import { reclaimprotocol } from "@reclaimprotocol/reclaim-sdk";
