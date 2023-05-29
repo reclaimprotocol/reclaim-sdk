@@ -1,7 +1,5 @@
 # Quickstart
 
-Test line to test Gitbook sync
-
 In this quickstart guide, we'll show you how to integrate Reclaim SDK in your application! The tutorial assumes that you have a backend server running where you want to integrate the Reclaim SDK.
 
 ## Installation
@@ -16,8 +14,8 @@ To request proofs of your users' credentials using reclaim protocol, generate a 
 
 You can generate the `reclaimUrl` by:
 
-
 This example uses CustomProvider to request proofs
+
 ```
 // import reclaimprotocol
 import { reclaimprotocol } from "@reclaimprotocol/reclaim-sdk";
@@ -51,7 +49,7 @@ Your user opens the reclaimUrl on their mobile phone and gets redirected to the 
 
 ## Handle proof submission
 
-When your user submits proof on the app, a POST request is made to the callback URL `baseCallbackUrl` with `callbackId` as one of the  that you had passed during requesting the proofs.
+When your user submits proof on the app, a POST request is made to the callback URL `baseCallbackUrl` with `callbackId` as one of the that you had passed during requesting the proofs.
 
 To accept the proof submitted by the user through the callback endpoint, you need to implement a route in your application that corresponds to the `baseCallbackUrl` you provided when requesting the proofs. Here's an example of how you can set up the callback endpoint:
 
