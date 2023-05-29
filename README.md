@@ -69,7 +69,7 @@ Here's a step-by-step guide to help you get started:
     const reclaim = new reclaimprotocol.Reclaim()
 
     // Define an endpoint for requesting proofs
-    app.post("/request-proofs", (req, res) => {
+    app.get("/request-proofs", (req, res) => {
     try {
         const request = reclaim.requestProofs({
             title: "Reclaim Protocol",

@@ -3,13 +3,12 @@ description: Let your users import data from other websites into your app
 ---
 
 # Using the Reclaim SDK
+The **Reclaim SDK** provides a way to let your users import data from other websites into your app in a secure, privacy preserving manner using zero knowledge proofs.&#x20;
+
 
 ### Introduction
 
-The **Reclaim SDK** provides a way to let your users import data from other websites into your app in a secure, privacy preserving manner using zero knowledge proofs.&#x20;
-
-The goal of the SDK is to allow you, the developer, to easily integrate Reclaim Protocol into your application and ask users to import data from other websites. \
-
+The goal of the SDK is to allow you, the developer to easily integrate [Reclaim Protocol](https://questbook.gitbook.io/reclaim-protocol/) into your application. For example, you can ask your user for a proof that they have contributed to a GitHub repo, or they are an YC alumni, or they have a certain bank balance in their account without revealing any other PII like their name, physical address, phone number etc.
 
 To import data from a website, we must define a **Provider** for that website.
 
