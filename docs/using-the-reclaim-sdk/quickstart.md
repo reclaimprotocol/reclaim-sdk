@@ -49,8 +49,6 @@ Your user opens the reclaimUrl on their mobile phone and gets redirected to the 
 
 ## Handle proof submission
 
-When your user submits proof on the app, a POST request is made to the callback URL `baseCallbackUrl` with `callbackId` as one of the that you had passed during requesting the proofs.
-
 To accept the proof submitted by the user through the callback endpoint, you need to implement a route in your application that corresponds to the `baseCallbackUrl` you provided when requesting the proofs. Here's an example of how you can set up the callback endpoint:
 
 ```
@@ -96,3 +94,5 @@ app.post("/callback/:callbackId", async (req, res) => {
       }
     });
 ```
+
+That's it 🎉 You have now set up the Reclaim SDK in your application and can start requesting proofs from your users.
