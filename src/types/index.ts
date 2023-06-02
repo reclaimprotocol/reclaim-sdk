@@ -105,7 +105,7 @@ export type Template = {
 
 export type ProofClaim = Omit<Claim, 'payload'> & {
 	parameters: {
-		[key: string]: string
+		[key: string]: string | number
 	}
 }
 
