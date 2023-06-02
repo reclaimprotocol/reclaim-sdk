@@ -1,5 +1,4 @@
 import { Claim, ClaimProof, hashClaimInfo, verifyWitnessSignature } from '@reclaimprotocol/crypto-sdk'
-import crypto from 'crypto'
 import { utils } from 'ethers'
 import P from 'pino'
 import { Proof, ProofRequest, Template } from '../types'
@@ -105,21 +104,18 @@ export class Reclaim {
 	}
 
 	/**
-	 * function to generate hash of all the onChainClaimIds
+	 * function to get the onChainClaimIds from the proofs
 	 * @param proofs
 	 * @returns {string}
 	 */
-	generateProofId = (proofs: Proof[]): string => {
+	getOnChainClaimIdsFromProofs = (proofs: Proof[]): string[] => {
 		const onChainClaimIdArray: string[] = []
 		for(const proof of proofs) {
 			const onChainClaimId = proof.onChainClaimId
 			onChainClaimIdArray.push(onChainClaimId)
 		}
 
-		const concatenatedOnChainClaimId = onChainClaimIdArray.join('')
-
-		// create hash of concatenatedClaimId
-		return crypto.createHash('sha256').update(concatenatedOnChainClaimId).digest('hex')
+		return onChainClaimIdArray
 	}
 }
 
