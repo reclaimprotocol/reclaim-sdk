@@ -156,3 +156,18 @@ export function extractParameterValuesFromRegex(expectedProofsInCallback: string
 
 	return parameterObj
 }
+
+// type guard for proof
+export function isProof(obj: unknown): obj is Proof {
+	return (
+		(obj as Proof).chainId !== undefined &&
+		(obj as Proof).parameters !== undefined &&
+		(obj as Proof).onChainClaimId !== undefined &&
+		(obj as Proof).ownerPublicKey !== undefined &&
+		(obj as Proof).signatures !== undefined &&
+		(obj as Proof).timestampS !== undefined &&
+		(obj as Proof).provider !== undefined &&
+		(obj as Proof).witnessAddresses !== undefined &&
+		(obj as Proof).templateClaimId !== undefined
+	)
+}
