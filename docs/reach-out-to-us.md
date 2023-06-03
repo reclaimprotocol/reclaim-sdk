@@ -1,13 +1,9 @@
 # Reach out to us!
 
-## Discord
+### [Twitter](https://twitter.com/protocolreclaim&#x20;)
 
-Coming soon
 
-## Twitter
 
-https://twitter.com/protocolreclaim&#x20;
+### [Telegram](https://t.me/abhilashinumella)
 
-## Telegram
-
-Coming soon
+### Discord (coming soon..)
