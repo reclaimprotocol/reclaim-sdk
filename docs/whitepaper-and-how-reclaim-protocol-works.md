@@ -41,6 +41,8 @@ The Reclaim Protocol enables users to generate proofs of specific information fr
    * The app assembles the proof, including the provider configuration, request, response, node signatures, zk proofs, and the regex mentioned in the provider configuration.
 8. **Final Proof**: The proof includes a regex match on the plaintext element extracted from the response. It demonstrates the authenticity and integrity of the generated proof, ensuring that the desired information was correctly extracted from the website.
 
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
 \
 
 
