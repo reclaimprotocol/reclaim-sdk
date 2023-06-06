@@ -1,4 +1,4 @@
-# Building a custom provider
+# Integration - Advanced
 
 _Note: Building a custom provider is not available publicly at this point. Please_ [_contact us_](https://t.me/abhilashinumella) _for getting access to the repository to build a custom provider_
 
@@ -6,7 +6,7 @@ _Note: Building a custom provider is not available publicly at this point. Pleas
 
 Use this provider If the data doesn't exist as is in any html element and requires some additional compute, for example counting the number of transactions or summing some values on the page - the logic needs to be embedded in a custom provider.\
 \
-The providers developed using this method are available for other applications to use them as well. They appear on the Reclaim app as one of the default providers.&#x20;
+The providers developed using this method are available for other applications to use them as well. They appear on the Reclaim app as one of the default providers.
 
 ### Getting started
 

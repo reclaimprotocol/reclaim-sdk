@@ -2,10 +2,10 @@
 
 * [What is Reclaim Protocol](README.md)
 * [Installing Reclaim Wallet](installing-reclaim-wallet.md)
-* [Integration - Quick Start](using-the-https-provider/README.md)
+* [Integration - Quick Start](using-the-reclaim-sdk/using-the-https-provider.md)
   * [Testing](using-the-https-provider/testing.md)
   * [Handling Errors](using-the-https-provider/handling-errors.md)
-* [Building a custom provider](building-a-custom-provider.md)
+* [Integration - Advanced](using-the-reclaim-sdk/building-a-custom-provider.md)
 * [Additional Considerations](additional-considerations/README.md)
   * [Data Security](additional-considerations/data-security.md)
   * [UX Considerations](additional-considerations/ux-considerations.md)
