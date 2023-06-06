@@ -8,7 +8,7 @@ Reclaim Protocol is a protocol that facilitates the management of truths on a bl
 
 ## Purpose of Reclaim Protocol
 
-Reclaim Protocol is designed to provide users full control over their truths using blockchain technology and cryptographic proofs. The protocol's purpose in its initial phase is to facilitate users in transitioning their data from websites into their own custody, thereby providing self-sovereignty over their truths. These truths, stored on-chain, can be managed and selectively revealed by users, backed by the unaltered state and guaranteed authenticity of their data. As the protocol advances, it will support a wider array of truths, further empowering users in managing their truths.
+Reclaim Protocol is designed to provide users full control over their truths using cryptographic proofs. The protocol's purpose, in its initial phase, is to facilitate users in transitioning their data from websites into their own custody, thereby providing self-sovereignty over their truths. These truths, stored on-chain, can be managed and selectively revealed by users, backed by the unaltered state and guaranteed authenticity of their data. As the protocol advances, it will support a wider array of truths, further empowering users in managing their truths.
 
 ***
 
@@ -16,10 +16,8 @@ Reclaim Protocol is designed to provide users full control over their truths usi
 
 Today, Reclaim Protocol addresses two key issues:
 
-1. **Data Exportation:** Users can log into a website, generate a zero-knowledge (zk) proof of their user data, and securely share this proof, independent of APIs or OAuth availability on the platform.
+1. **Data Export & Import:** Users can log into a website, generate a zero-knowledge (zk) proof of their user data, and securely share this proof with other users and apps, independent of APIs or OAuth availability on the website.
 2. **On-Chain Data Proofs:** Users can create proofs of their web2 user data for on-chain use, thereby integrating web2 data with decentralized platforms.
-
-As the protocol develops, it will adapt to address a broader range of challenges related to truth management.
 
 ***
 
@@ -29,7 +27,9 @@ Reclaim Protocol is specifically designed for developers and entrepreneurs looki
 
 ### Required Skills and Knowledge Areas
 
-Developers intending to use the Reclaim Protocol should be able to envision the kind of data trapped within websites and figure out how to extract these proofs. This requires a solid understanding of full-stack development in JavaScript/TypeScript and familiarity with web technologies for basic reverse engineering tasks. Understanding the potential applications built upon the availability of such proofs is also crucial.
+Developers intending to use the Reclaim Protocol should be able to identify the kind of data that can be exported using Reclaim Protocol, and what applications can be built using these proofs. A mix of developer thinking and product thinking.&#x20;
+
+On the technical end, this requires a understanding of full-stack development in JavaScript/TypeScript and familiarity with web technologies for basic reverse engineering tasks.&#x20;
 
 ### Application Examples
 
@@ -47,6 +47,8 @@ The Reclaim Protocol can be particularly advantageous in industries and fields s
 * Generative AI
 
 These industries often involve dealing with user data within walled gardens, and the Reclaim Protocol enables more efficient, secure access to and usage of this data.
+
+You can look for inspiration on [what to build here](what-to-build/).
 
 ## Main Features of Reclaim Protocol
 
