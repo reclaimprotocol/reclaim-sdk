@@ -6,7 +6,7 @@ description: ZK Circuits are WIP
 
 ### Why We Use ZK?
 
-1. Reclaim uses TLS KeyUpdate messages to redact (from the witness) arbitrary pieces of text in the user's request to the server. For more details, see the [whitepaper](whitepaper-and-how-reclaim-protocol-works.md).
+1. Reclaim uses TLS KeyUpdate messages to redact (from the witness) arbitrary pieces of text in the user's request to the server. For more details, see the [whitepaper](./).
 2. This KeyUpdate approach does not work for the response sent from the server back to the user, as we cannot control when the server will send a KeyUpdate message to us
 3. This meant that Reclaim could not redact text (from the witness) in the response, and would have to expose the entire TLS response to the witness to generate a claim
    * The above problem would prevent certain use cases where the response contains important information about the claim but simultaneously contains sensitive information that cannot be revealed to anybody else
@@ -17,7 +17,7 @@ To tackle the above problem, we use a ZK circuit that proves the user knows the 
 ### How ZK & Reclaim Work Together
 
 1. The user initiates the protocol via the witness -- makes the request to the server & waits for the response to be complete
-2. The user then selects which slices of the response to actually reveal to the witness.&#x20;
+2. The user then selects which slices of the response to actually reveal to the witness.
    1. For eg.
       1. If the server sends back the JSON: `{"userId":"1234","userSecret":"abcdefghi"}`
       2. The user doesn't want to reveal the key "userSecret" to the witness, instead just wants to send a valid JSON with the secret redacted to prove that they're in possession of some "userId"
@@ -31,7 +31,7 @@ To tackle the above problem, we use a ZK circuit that proves the user knows the 
      1. Assume our encryption scheme uses 8 byte blocks
      2.  Building from the above example, we'd reveal blocks:
 
-         0 =>  `{"userId`
+         0 => `{"userId`
 
          1 => `":"1234"`
 
@@ -46,12 +46,12 @@ To tackle the above problem, we use a ZK circuit that proves the user knows the 
       2. To prevent this secret reveal, we'd redact with a "\*" character
       3. `cret":"a` => `cret":"*`
       4. `We apply this transformation to the ciphertext as well, in preparation to input the ZK circuit`
-   2.  One question that may arise is that a modified (due to redaction) ciphertext, when decrypted will lead to a garbage plaintext rather than a redacted one.&#x20;
+   2.  One question that may arise is that a modified (due to redaction) ciphertext, when decrypted will lead to a garbage plaintext rather than a redacted one.
 
        1. This is correct for many encryption schemes but not for a [CBC](https://en.wikipedia.org/wiki/Block\_cipher\_mode\_of\_operation) based scheme -- which we use with TLS.
        2. In this scheme, we can modify portions of the ciphertext without leading to a completely non-sensical plaintext as the ciphertext is obtained by XORing a plaintext with a counter block.
 
-       <figure><img src=".gitbook/assets/1000px-GCM-Galois_Counter_Mode_with_IV.svg.png" alt="" width="375"><figcaption></figcaption></figure>
+       <figure><img src="../.gitbook/assets/1000px-GCM-Galois_Counter_Mode_with_IV.svg.png" alt="" width="375"><figcaption></figcaption></figure>
 
        1. For eg.
           1. if the ciphertext is originally some `qewojdja`
@@ -74,7 +74,7 @@ To tackle the above problem, we use a ZK circuit that proves the user knows the 
 
 ### Usage in HTTP Provider
 
-Most of Reclaim's use cases centre around proving an HTTP server returned a  response with some specific data. This is essentially:
+Most of Reclaim's use cases centre around proving an HTTP server returned a response with some specific data. This is essentially:
 
 * Authenticated API request via cookies or token
 * Checking response contains a certain value at a certain JSON path or even x-path
@@ -91,8 +91,6 @@ For eg. someone may want to prove that they contributed to a GitHub repository -
    5. Response match -> how to verify that the portions redacted actually match the expected value of the claim
 2. Compiling this into a typescript schema, we get the following:
    1.  public parameters
-
-
 
        ```typescript
        type HTTPProviderParams = {
@@ -123,8 +121,6 @@ For eg. someone may want to prove that they contributed to a GitHub repository -
        ```
    2.  secret parameters (only visible on user's side)
 
-
-
        ```typescript
        type HTTPProviderSecretParams = {
            /** cookie string for authorisation. Will be redacted from witness */
@@ -134,8 +130,6 @@ For eg. someone may want to prove that they contributed to a GitHub repository -
        }
        ```
 3.  Let's see how this could be used to make a GitHub claim:
-
-
 
     ```json
     {
