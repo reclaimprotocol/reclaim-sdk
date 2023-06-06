@@ -12,4 +12,5 @@
   * [Trust Assumptions](additional-considerations/trust-assumptions.md)
   * [ZK Proofs and Circuits](zk-proofs-and-circuits.md)
   * [Running a node](whitepaper-and-how-reclaim-protocol-works/running-a-node.md)
+* [What to build?](what-to-build.md)
 * [Reach out to us!](reach-out-to-us.md)
