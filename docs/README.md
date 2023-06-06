@@ -2,15 +2,7 @@
 
 ## Introduction to Reclaim Protocol
 
-Reclaim Protocol is a protocol that facilitates the management of truths on a blockchain. Users have the ability to store their truths, which can be revealed to selected parties. The protocol provides functionalities to commit, store, retrieve, reveal, and verify these truths, ensuring the data remains resilient against censorship. While the initial phase focuses on generating proofs from websites using HTTPS, future phases will encompass a broader range of truths.
-
-***
-
-## Purpose of Reclaim Protocol
-
-Reclaim Protocol is designed to provide users full control over their truths using cryptographic proofs. The protocol's purpose, in its initial phase, is to facilitate users in transitioning their data from websites into their own custody, thereby providing self-sovereignty over their truths. These truths, stored on-chain, can be managed and selectively revealed by users, backed by the unaltered state and guaranteed authenticity of their data. As the protocol advances, it will support a wider array of truths, further empowering users in managing their truths.
-
-***
+Reclaim protocol lets users generate proofs of user data from any website. These proofs are stored on chain with primitives for storing, retrieving, selectively revealing the proofs. Thus providing self sovereignty over user data. These proofs are guarantees of integrity and authenticity of user data. It requires no change from existing websites for Reclaim Protocol to allow users to create these proofs.
 
 ## Problem-Solving with Reclaim Protocol
 
