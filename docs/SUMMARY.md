@@ -6,6 +6,7 @@
   * [Testing](using-the-https-provider/testing.md)
   * [Handling Errors](using-the-https-provider/handling-errors.md)
 * [Integration - Advanced](using-the-reclaim-sdk/building-a-custom-provider.md)
+* [Troubleshooting](troubleshooting.md)
 * [How Reclaim Protocol Works](whitepaper-and-how-reclaim-protocol-works.md)
   * [Data Security](additional-considerations/data-security.md)
   * [UX Considerations](additional-considerations/ux-considerations.md)
