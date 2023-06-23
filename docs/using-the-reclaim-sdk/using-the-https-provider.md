@@ -92,9 +92,11 @@ app.post("/callback/:callbackId", async (req, res) => {
     const { callbackId } = req.params;
     const { proofs } = req.body;
 
-    const proofId = reclaim.generateProofId(proofs)
+    const onChainClaimIds = reclaim.getOnChainClaimIdsFromProofs(proofs)
 
-    const results = db.get(proofId)
+    // check if onChainClaimIds have been submitted in the database before
+    const results = db.find({{ valueField: { $in: valuesArray } }; // Replace 'valueField' with the field name in your database
+
     if(results){
         res.status(400).json({ error: "Proofs already submitted" });
     } else {
@@ -102,6 +104,7 @@ app.post("/callback/:callbackId", async (req, res) => {
 
         if (isProofsCorrect) {
             console.log("Proofs submitted:", proofs);
+            // store proofs in your backend for future use
             res.json({ success: true });
         } else {
             console.error("Proofs verification failed");
