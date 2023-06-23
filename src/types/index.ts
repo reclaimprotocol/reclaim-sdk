@@ -2,6 +2,7 @@ import { BigNumber } from 'ethers'
 import { CustomProvider } from '../ReclaimProtocol/CustomProvider'
 import { HttpsProvider } from '../ReclaimProtocol/HttpsProvider'
 
+
 export type ProofRequest = {
 	/**
 	 * Title of the request
@@ -49,45 +50,74 @@ export type HttpsProviderParams = {
 }
 
 export type ProviderParams =
+	{
+		provider: 'google-login'
+		payload: {}
+	}
 	| {
-			provider: 'google-login'
-			payload: {}
-	  }
+		provider: 'yc-login'
+		payload: {}
+	}
 	| {
-			provider: 'yc-login'
-			payload: {}
-	  }
+		provider: 'github-commits'
+		payload: GithubParams<'github-commits'>
+	}
 	| {
-			provider: 'github-commits'
-			payload: GithubParams<'github-commits'>
-	  }
+		provider: 'github-issues'
+		payload: GithubParams<'github-issues'>
+	}
 	| {
-			provider: 'github-issues'
-			payload: GithubParams<'github-issues'>
-	  }
+		provider: 'github-pull-requests'
+		payload: GithubParams<'github-pull-requests'>
+	}
+	| { provider: 'outlook-login', payload: {} }
+	| { provider: 'codeforces-rating', payload: {} }
+	| { provider: 'dunzo-last-order', payload: {} }
+	| { provider: 'tinder-match-count', payload: {} }
+	| { provider: 'mastodon-user', payload: {} }
+	| { provider: 'spotify-premium', payload: {} }
+	| { provider: 'spotify-account-type', payload: {} }
+	| { provider: 'spotify-username', payload: {} }
+	| { provider: 'spotify-email', payload: {} }
+	| { provider: 'tumblr-follower', payload: {} }
+	| { provider: 'swiggy-total-count', payload: {} }
+	| { provider: 'wikipedia-user', payload: {} }
+	| { provider: 'facebook-friends-count', payload: {} }
+	| { provider: 'binance-asset-balance', payload: {} }
+	| { provider: 'ebay-user', payload: {} }
+	| { provider: 'flickr-user', payload: {} }
+	| { provider: 'instagram-user', payload: {} }
+	| { provider: 'blind-user', payload: {} }
+	| { provider: 'chess-user', payload: {} }
+	| { provider: 'codechef-rating', payload: {} }
+	| { provider: 'bybit-balance', payload: {} }
+	| { provider: 'groww-stock-balance', payload: {} }
+	| { provider: 'devfolio-hackathon-count', payload: {} }
+	| { provider: 'quora-user', payload: {} }
+	| { provider: 'medium-followers-count', payload: {} }
+	| { provider: 'lichess-username', payload: {} }
+	| { provider: 'proton-mail', payload: {} }
+	| { provider: 'soundcloud-username', payload: {} }
+	| { provider: 'letterboxd-user', payload: {} }
 	| {
-			provider: 'github-pull-requests'
-			payload: GithubParams<'github-pull-requests'>
-	  }
-	| {
-			provider: 'http'
-			payload: {
-				metadata: {
-					name: string
-					logoUrl: string
-				}
-				method: 'GET' | 'POST'
-				url: string
-				login: {
-					url: string
-					checkLoginCookies: string[]
-				}
-				responseSelections: responseSelection[]
-				parameters: {
-					[key: string]: string
-				}
+		provider: 'http'
+		payload: {
+			metadata: {
+				name: string
+				logoUrl: string
 			}
-	  }
+			method: 'GET' | 'POST'
+			url: string
+			login: {
+				url: string
+				checkLoginCookies: string[]
+			}
+			responseSelections: responseSelection[]
+			parameters: {
+				[key: string]: string
+			}
+		}
+	}
 
 
 export type responseSelection = { responseMatch: string }
