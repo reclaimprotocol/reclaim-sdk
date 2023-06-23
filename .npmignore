@@ -1,7 +1,11 @@
 examples
 node_modules
 tests
+docs
 
 jest.config.js
 .eslintrc.json
+
 .github
+.gitbook
+.gitbook.yaml
