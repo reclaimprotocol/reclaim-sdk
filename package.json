@@ -1,10 +1,11 @@
 {
   "name": "@reclaimprotocol/reclaim-sdk",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "description": "Reclaim SDK for integrating Reclaim protocol with third party applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "prepublishOnly": "npm run build",
     "test": "jest",
     "build": "tsc"
   },
