@@ -99,6 +99,7 @@ export type ProviderParams =
 	| { provider: 'proton-mail', payload: {} }
 	| { provider: 'soundcloud-username', payload: {} }
 	| { provider: 'letterboxd-user', payload: {} }
+	| { provider: 'uidai-aadhar', payload: {} }
 	| {
 		provider: 'http'
 		payload: {
