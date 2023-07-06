@@ -21,7 +21,7 @@ export default class TemplateInstance {
      * Constructor
      * @param {Template} template
     */
-	constructor(template: Template, regexes: string[]) {
+	constructor(template: Template, regexes: string[][]) {
 		this._template = template
 		this._regexes = encodeBase64(regexes)
 	}
