@@ -46,7 +46,7 @@ export type HttpsProviderParams = {
 	/**
 	 * Regex to extract the required data from the response
 	 */
-	selectionRegex: string
+	responseSelection: responseSelection[]
 }
 
 export type ProviderParams =
@@ -121,7 +121,11 @@ export type ProviderParams =
 	}
 
 
-export type responseSelection = { responseMatch: string }
+export type responseSelection = {
+	jsonPath?: string
+	xPath?: string
+	responseMatch: string
+}
 
 export type Claim = {
 	templateClaimId: string
