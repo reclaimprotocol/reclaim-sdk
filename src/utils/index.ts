@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
-import { Proof, RequestClaim, responseSelection } from '../types'
+import {Proof, ProofParameters, RequestClaim} from '../types'
 import CONTRACTS_CONFIG from '../utils/contracts/config.json'
 import { Reclaim, Reclaim__factory as ReclaimFactory } from '../utils/contracts/types'
 
@@ -31,8 +31,7 @@ export async function getOnChainClaimDataFromRequestId(
 
 export async function getClaimWitnessOnChain(chainId: number, claimId: number) {
 	const contract = getContract(chainId)
-	const witnesses = await contract.getClaimWitnesses(claimId)
-	return witnesses
+	return await contract.getClaimWitnesses(claimId)
 }
 
 export function getContract(chainId: number) {
@@ -72,7 +71,7 @@ export function encodeBase64(str: string[][]) {
 }
 
 export function decodeBase64(str: string) {
-	return JSON.parse(Buffer.from(str, 'base64').toString('utf-8')) as string[]
+	return JSON.parse(Buffer.from(str, 'base64').toString('utf-8')) as string[][]
 }
 
 export function generateCallbackUrl(baseUrl: string, callbackId?: string) {
@@ -108,53 +107,54 @@ export function getCallbackIdFromUrl(_url: string): string {
 	}
 }
 
-export function extractParameterValuesFromRegex(expectedProofsInCallback: string, proofs: Proof[]) {
+export function validateParameterValuesFromRegex(expectedProofsInCallback: string, proofs: Proof[], params:ProofParameters) {
 	// parse expectedProofsInCallback
 	const selectionRegexes = decodeBase64(expectedProofsInCallback)
 
-	// check if correct number of response selections are present
-	if(selectionRegexes.length !== proofs.length) {
-		throw new Error('Invalid number of proofs')
-	}
+	let paramsClone = { ...params };
 
-	// create object to store parameter values
-	const parameterObj: {[key: string]: string} = {}
-	proofs.forEach((proof, index) => {
-		// console.log(proof)
-		if(proof.parameters.responseSelections) {
-
-			// TODO: support multiple response selections inside each proof
-			// get first response selection since we only support one for now
-			const proofResponseSelection = proof.parameters.responseSelections[0] as responseSelection
-
-			if(proofResponseSelection.responseMatch) {
-				// get regex string from response selection
-				const responseMatchRegex = selectionRegexes[index]
-
-				const parameterKeys: string[] = []
-				// replace all {{parameterName}} with (.*?)
-				const regexString = responseMatchRegex.replace(/{{(.*?)}}/g, (_, parameterName) => {
-					parameterKeys.push(parameterName)
-					return '(.*?)'
-				})
-
-				// create regex from string
-				const regex = new RegExp(regexString, 'g')
-
-				const regexStringWithValues = proofResponseSelection.responseMatch
-				const regexValues = regex.exec(regexStringWithValues)
-				if(regexValues !== null) {
-					for(let i = 0; i < parameterKeys.length; i++) {
-						const parameterKey = parameterKeys[i]
-						const parameterValue = regexValues[i + 1]
-						parameterObj[parameterKey] = parameterValue
-					}
+	//replace placeholders with params
+	const updatedSelectionRegexes: Set<string>[] = [];
+	selectionRegexes.forEach(regexes => {
+		const rxs: Set<string> = new Set<string>();
+		regexes.forEach(rx => {
+			let updatedRegex = rx
+			for (let paramsKey in params) {
+				const m = `{{${paramsKey}}}`
+				if (updatedRegex.includes(m)){
+					updatedRegex = updatedRegex.replace(m,params[paramsKey])
+					delete paramsClone[paramsKey]
 				}
 			}
+			rxs.add(updatedRegex)
+		})
+		updatedSelectionRegexes.push(rxs)
+	})
+
+
+	if (Object.keys(paramsClone).length > 0){
+		throw new Error("Not all parameters were used in response selections")
+	}
+
+	if(updatedSelectionRegexes.length !== proofs.length) {
+		throw new Error('Number of proofs does not match number of response selections')
+	}
+
+	proofs.forEach((proof, index) => {
+		//console.log(proof)
+		if(proof.parameters.responseSelections && Array.isArray(proof.parameters.responseSelections)) {
+			proof.parameters.responseSelections.forEach((selection) => {
+				if (!selection.responseMatch){
+					throw new Error('Response match cannot be empty')
+				}
+				if (!updatedSelectionRegexes[index].has(selection.responseMatch)){
+					throw new Error('Response match not found')
+				}
+			})
+
 		}
 	})
 
-	return parameterObj
 }
 
 // type guard for proof
