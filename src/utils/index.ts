@@ -67,7 +67,7 @@ function isValidUrl(url: string) {
 	}
 }
 
-export function encodeBase64(str: string[]) {
+export function encodeBase64(str: string[][]) {
 	return Buffer.from(JSON.stringify(str)).toString('base64')
 }
 
