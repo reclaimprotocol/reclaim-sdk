@@ -140,12 +140,14 @@ export type Template = {
 
 export type ProofClaim = Omit<Claim, 'payload'> & {
 	parameters: {
+		sessionId: string
 		[key: string]: string | number
 	}
 }
 
 export type httpProof = Omit<Claim, 'payload'> & {
 	parameters: {
+		sessionId: string
 		url?: string
 		method?: 'GET' | 'POST'
 		responseSelections?: responseSelection[]
@@ -187,6 +189,6 @@ export type SearchQueryObject = {
 	qualifiers: Record<string, string[]>
 }
 
-export type ProofParameters =  {
+export type ProofParameters = {
 	[key: string]: string
 }

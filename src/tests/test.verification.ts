@@ -5,43 +5,43 @@ import { reclaimprotocol } from '../'
 describe('Verification', () => {
 	it('should pass signature verification', async() => {
 		const reclaim = new reclaimprotocol.Reclaim()
-		const result = await reclaim.verifyCorrectnessOfProofs([CORRECT_PROOF])
+		const result = await reclaim.verifyCorrectnessOfProofs(EXPECTED_SESSION_ID, [CORRECT_PROOF])
 		expect(result).toBe(true)
 	})
 
 	it('should fail signature verification for incorrect signature', async() => {
 		const reclaim = new reclaimprotocol.Reclaim()
-		const result = await reclaim.verifyCorrectnessOfProofs([INCORRECT_SIGNATURE_PROOF])
+		const result = await reclaim.verifyCorrectnessOfProofs(EXPECTED_SESSION_ID, [INCORRECT_SIGNATURE_PROOF])
 		expect(result).toBe(false)
 	})
 
 	it('should fail signature verification for incorrect owner public key', async() => {
 		const reclaim = new reclaimprotocol.Reclaim()
-		const result = await reclaim.verifyCorrectnessOfProofs([INCORRECT_OWNER_PUBLIC_KEY_PROOF])
+		const result = await reclaim.verifyCorrectnessOfProofs(EXPECTED_SESSION_ID, [INCORRECT_OWNER_PUBLIC_KEY_PROOF])
 		expect(result).toBe(false)
 	})
 
 	it('should fail signature verification for incorrect timestamp', async() => {
 		const reclaim = new reclaimprotocol.Reclaim()
-		const result = await reclaim.verifyCorrectnessOfProofs([INCORRECT_TIMESTAMP_PROOF])
+		const result = await reclaim.verifyCorrectnessOfProofs(EXPECTED_SESSION_ID, [INCORRECT_TIMESTAMP_PROOF])
 		expect(result).toBe(false)
 	})
 
 	it('should fail signature verification for incorrect parameter', async() => {
 		const reclaim = new reclaimprotocol.Reclaim()
-		const result = await reclaim.verifyCorrectnessOfProofs([INCORRECT_PARAMETER_PROOF])
+		const result = await reclaim.verifyCorrectnessOfProofs(EXPECTED_SESSION_ID, [INCORRECT_PARAMETER_PROOF])
 		expect(result).toBe(false)
 	})
 
 	it('should fail signature verification for incorrect claim id', async() => {
 		const reclaim = new reclaimprotocol.Reclaim()
-		const result = await reclaim.verifyCorrectnessOfProofs([INCORRECT_CLAIM_ID_PROOF])
+		const result = await reclaim.verifyCorrectnessOfProofs(EXPECTED_SESSION_ID, [INCORRECT_CLAIM_ID_PROOF])
 		expect(result).toBe(false)
 	})
 
 	it('should fail for incorrect provider', async() => {
 		const reclaim = new reclaimprotocol.Reclaim()
-		const result = await reclaim.verifyCorrectnessOfProofs([INCORRECT_PROVIDER_PROOF])
+		const result = await reclaim.verifyCorrectnessOfProofs(EXPECTED_SESSION_ID, [INCORRECT_PROVIDER_PROOF])
 		expect(result).toBe(false)
 	})
 })
@@ -102,12 +102,17 @@ describe('Verification', () => {
 // 	'witnessAddresses': ['reclaim-node.questbook.app']
 // }
 
+const EXPECTED_SESSION_ID = '0' // TODO: update this with valid session id once the app integrates it into the proof
+
 const CORRECT_PROOF: Proof = {
 	onChainClaimId: '1560',
 	templateClaimId: generateUuid(),
 	chainId: 420,
 	provider: 'google-login',
-	parameters: { 'emailAddress': 'swetasunofficial@gmail.com' },
+	parameters: {
+		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
+		'emailAddress': 'swetasunofficial@gmail.com'
+	},
 	ownerPublicKey: '039549ccde10c559c979eb826075e9274ed8d9439e299e46f752fc8e9cd1e0647f',
 	timestampS: '1681968148',
 	witnessAddresses: ['reclaim-node.questbook.app'],
@@ -132,7 +137,10 @@ const INCORRECT_TIMESTAMP_PROOF: Proof = {
 
 const INCORRECT_PARAMETER_PROOF: Proof = {
 	...CORRECT_PROOF,
-	parameters: { 'emailAddress': 'sweta@gmail.com' },
+	parameters: {
+		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
+		'emailAddress': 'sweta@gmail.com'
+	},
 }
 
 const INCORRECT_CLAIM_ID_PROOF: Proof = {

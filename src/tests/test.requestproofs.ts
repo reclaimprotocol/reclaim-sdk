@@ -1,6 +1,21 @@
 import { reclaimprotocol } from '..'
 
-describe('Create proof request', () => {
+describe('Create proof request without xpath', () => {
+	it('should correctly create proof request', () => {
+		const reclaim = new reclaimprotocol.Reclaim()
+		const request = reclaim.requestProofs(
+			REQUEST_PROOF_WITHOUT_XPATH
+		)
+
+		// console.log(request.reclaimUrl)
+
+		expect(request.template.name).toBe('YC')
+		expect(request.template.claims.length).toEqual(2)
+		// expect(request.callbackId).toBe('1234')
+	})
+})
+
+describe('Create proof request with xpath', () => {
 	it('should correctly create proof request', () => {
 		const reclaim = new reclaimprotocol.Reclaim()
 		const request = reclaim.requestProofs(
@@ -14,6 +29,7 @@ describe('Create proof request', () => {
 		// expect(request.callbackId).toBe('1234')
 	})
 })
+
 
 const reclaim = new reclaimprotocol.Reclaim()
 

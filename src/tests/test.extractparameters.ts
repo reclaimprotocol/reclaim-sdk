@@ -1,35 +1,35 @@
-import {Proof, ProofParameters} from '../types'
+import { Proof, ProofParameters } from '../types'
 import { encodeBase64 } from '../utils'
 import { reclaimprotocol } from '..'
 
 describe('Extract parameters', () => {
 	it('should extract parameters', () => {
 		const selectionRegex = encodeBase64(CORRECT_REGEXES)
-		expect(()=>reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITHOUT_XPATH, REGEX_PARAMS)).not.toThrowError()
+		expect(() => reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITHOUT_XPATH, REGEX_PARAMS)).not.toThrowError()
 
 	})
 
 	it('should extract parameters with xPath', () => {
 		const selectionRegex = encodeBase64(CORRECT_XPATH_REGEXES)
-		expect(()=>reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITH_XPATH, REGEX_XPATH_PARAMS)).not.toThrowError()
+		expect(() => reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITH_XPATH, REGEX_XPATH_PARAMS)).not.toThrowError()
 
 	})
 
 	it('should throw error with bad parameters with xPath', () => {
 		const selectionRegex = encodeBase64(CORRECT_XPATH_REGEXES)
-		expect(()=>reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITH_XPATH, INCORRECT_REGEX_XPATH_PARAMS)).toThrowError()
+		expect(() => reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITH_XPATH, INCORRECT_REGEX_XPATH_PARAMS)).toThrowError()
 
 	})
 
 	it('should throw error with bad parameters with xPath', () => {
 		const selectionRegex = encodeBase64(CORRECT_XPATH_REGEXES)
-		expect(()=>reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITH_XPATH, INCORRECT_REGEX_XPATH_PARAMS_1)).toThrowError()
+		expect(() => reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITH_XPATH, INCORRECT_REGEX_XPATH_PARAMS_1)).toThrowError()
 
 	})
 
 	it('should return one parameter instead of two for incorrect regex', () => {
 		const selectionRegex = encodeBase64(INCORRECT_REGEXES)
-		expect(()=>reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITHOUT_XPATH, REGEX_PARAMS)).toThrowError("Response match not found")
+		expect(() => reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITHOUT_XPATH, REGEX_PARAMS)).toThrowError('Response match not found')
 	})
 
 	it('should throw error for inconsistent regexes passed through the proof', () => {
@@ -44,9 +44,9 @@ const CORRECT_REGEXES = [
 	["<span id='empid'>{{qb-empid}}</span>"]
 ]
 
-const REGEX_PARAMS:ProofParameters = {
-	"creatoros-empid":"128356",
-	"qb-empid":"9845",
+const REGEX_PARAMS: ProofParameters = {
+	'creatoros-empid':'128356',
+	'qb-empid':'9845',
 }
 
 const INCORRECT_REGEXES = [
@@ -60,17 +60,17 @@ const CORRECT_XPATH_REGEXES = [
 		'"hasBookface":true'],
 ]
 
-const REGEX_XPATH_PARAMS:ProofParameters = {
-	"YC_USER_ID":"182853",
+const REGEX_XPATH_PARAMS: ProofParameters = {
+	'YC_USER_ID':'182853',
 }
 
-const INCORRECT_REGEX_XPATH_PARAMS:ProofParameters = {
-	"YC_USER_ID":"182854",
+const INCORRECT_REGEX_XPATH_PARAMS: ProofParameters = {
+	'YC_USER_ID':'182854',
 }
 
-const INCORRECT_REGEX_XPATH_PARAMS_1:ProofParameters = {
-	"YC_USER_ID":"182853",
-	"hasBookface":"true"
+const INCORRECT_REGEX_XPATH_PARAMS_1: ProofParameters = {
+	'YC_USER_ID':'182853',
+	'hasBookface':'true'
 }
 
 // const selectionRegex = 'WyI8c3BhbiBpZD0nZW1waWQnPnt7Y3JlYXRvcm9zLWVtcGlkfX08L3NwYW4+IiwiIiwiPHNwYW4gaWQ9J2VtcGlkJz57e3FiLWVtcGlkfX08L3NwYW4+Il0='
@@ -80,6 +80,7 @@ const PROOFS_WITHOUT_XPATH: Proof[] = [
 		'templateClaimId': '0',
 		'provider': 'http',
 		'parameters': {
+			'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 			'url': 'https://www.reddit.com',
 			'method': 'GET',
 			'responseSelections': [
@@ -97,7 +98,10 @@ const PROOFS_WITHOUT_XPATH: Proof[] = [
 		'onChainClaimId': '2617',
 		'templateClaimId': '0',
 		'provider': 'http',
-		'parameters': { 'emailAddress': 'abc@gmail.com' },
+		'parameters': {
+			'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
+			 'emailAddress': 'abc@gmail.com',
+		},
 		'chainId': 420,
 		'ownerPublicKey': '03057dd1b36d108cc0d9bced0565b6363ed910bc6522aa937092e1dc344614ddde',
 		'timestampS': '1684343138',
@@ -110,6 +114,7 @@ const PROOFS_WITHOUT_XPATH: Proof[] = [
 		'templateClaimId': '0',
 		'provider': 'http',
 		'parameters': {
+			'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 			'url': 'https://www.reddit.com',
 			'method': 'GET',
 			'responseSelections': [
@@ -143,6 +148,7 @@ const PROOFS_WITH_XPATH: Proof[] = [
 					'responseMatch': '"hasBookface":true',
 					'xPath': "//script[@data-component-name='BookfaceCsrApp']"
 				}],
+			'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 			'url': 'https://bookface.ycombinator.com/home'
 		},
 		'provider': 'http',

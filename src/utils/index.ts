@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
-import {Proof, ProofParameters, RequestClaim} from '../types'
+import { Proof, ProofParameters, RequestClaim } from '../types'
 import CONTRACTS_CONFIG from '../utils/contracts/config.json'
 import { Reclaim, Reclaim__factory as ReclaimFactory } from '../utils/contracts/types'
 
@@ -107,33 +107,34 @@ export function getCallbackIdFromUrl(_url: string): string {
 	}
 }
 
-export function validateParameterValuesFromRegex(expectedProofsInCallback: string, proofs: Proof[], params:ProofParameters) {
+export function validateParameterValuesFromRegex(expectedProofsInCallback: string, proofs: Proof[], params: ProofParameters) {
 	// parse expectedProofsInCallback
 	const selectionRegexes = decodeBase64(expectedProofsInCallback)
 
-	let paramsClone = { ...params };
+	const paramsClone = { ...params }
 
 	//replace placeholders with params
-	const updatedSelectionRegexes: Set<string>[] = [];
+	const updatedSelectionRegexes: Set<string>[] = []
 	selectionRegexes.forEach(regexes => {
-		const rxs: Set<string> = new Set<string>();
+		const rxs: Set<string> = new Set<string>()
 		regexes.forEach(rx => {
 			let updatedRegex = rx
-			for (let paramsKey in params) {
+			for(const paramsKey in params) {
 				const m = `{{${paramsKey}}}`
-				if (updatedRegex.includes(m)){
-					updatedRegex = updatedRegex.replace(m,params[paramsKey])
+				if(updatedRegex.includes(m)) {
+					updatedRegex = updatedRegex.replace(m, params[paramsKey])
 					delete paramsClone[paramsKey]
 				}
 			}
+
 			rxs.add(updatedRegex)
 		})
 		updatedSelectionRegexes.push(rxs)
 	})
 
 
-	if (Object.keys(paramsClone).length > 0){
-		throw new Error("Not all parameters were used in response selections")
+	if(Object.keys(paramsClone).length > 0) {
+		throw new Error('Not all parameters were used in response selections')
 	}
 
 	if(updatedSelectionRegexes.length !== proofs.length) {
@@ -144,10 +145,11 @@ export function validateParameterValuesFromRegex(expectedProofsInCallback: strin
 		//console.log(proof)
 		if(proof.parameters.responseSelections && Array.isArray(proof.parameters.responseSelections)) {
 			proof.parameters.responseSelections.forEach((selection) => {
-				if (!selection.responseMatch){
+				if(!selection.responseMatch) {
 					throw new Error('Response match cannot be empty')
 				}
-				if (!updatedSelectionRegexes[index].has(selection.responseMatch)){
+
+				if(!updatedSelectionRegexes[index].has(selection.responseMatch)) {
 					throw new Error('Response match not found')
 				}
 			})

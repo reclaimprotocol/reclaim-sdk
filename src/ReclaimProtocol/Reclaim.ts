@@ -50,7 +50,7 @@ export class Reclaim {
      * @param proofs proofs returned by the callback URL
      * @returns {Promise<boolean>} boolean value denotes if the verification was successful or failed
      */
-	verifyCorrectnessOfProofs = async(proofs: Proof[]): Promise<boolean> => {
+	verifyCorrectnessOfProofs = async(expectedSessionId: string, proofs: Proof[]): Promise<boolean> => {
 		let result: boolean = false
 
 		for(const proof of proofs) {
@@ -63,6 +63,11 @@ export class Reclaim {
 				return result
 			}
 
+			if(proof.parameters.sessionId !== expectedSessionId) {
+				logger.error('Session id mismatch')
+				return result
+			}
+
 			const claim: Claim = {
 				id: parseInt(proof.onChainClaimId),
 				ownerPublicKey: Buffer.from(proof.ownerPublicKey, 'hex'),
@@ -72,8 +77,18 @@ export class Reclaim {
 				redactedParameters: proof.redactedParameters
 			}
 
+			// replace the session id with the expected session id
+			// done to prevent replay attacks
+			const updatedProofWithExpectedSessionId: Proof = {
+				...proof,
+				parameters: {
+					...proof.parameters,
+					sessionId: expectedSessionId
+				}
+			}
+
 			const decryptedProof: ClaimProof = {
-				parameters: JSON.stringify(proof.parameters),
+				parameters: JSON.stringify(updatedProofWithExpectedSessionId.parameters),
 				signatures: proof.signatures.map(signature => {
 					return utils.arrayify(signature)
 				})
