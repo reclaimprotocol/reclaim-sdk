@@ -109,14 +109,14 @@ export function getCallbackIdFromUrl(_url: string): string {
 
 export function validateParameterValuesFromRegex(expectedProofsInCallback: string, proofs: Proof[], params:ProofParameters) {
 	// parse expectedProofsInCallback
-	const selectionRegexes = decodeBase64(expectedProofsInCallback)
+	const templateRegexes = decodeBase64(expectedProofsInCallback)
 
 	let paramsClone = { ...params };
 
 	//replace placeholders with params
-	const updatedSelectionRegexes: Set<string>[] = [];
-	selectionRegexes.forEach(regexes => {
-		const rxs: Set<string> = new Set<string>();
+	const selectionRegexes: string[][] = [];
+	templateRegexes.forEach(regexes => {
+		const rxs:string[] = [];
 		regexes.forEach(rx => {
 			let updatedRegex = rx
 			for (let paramsKey in params) {
@@ -126,9 +126,9 @@ export function validateParameterValuesFromRegex(expectedProofsInCallback: strin
 					delete paramsClone[paramsKey]
 				}
 			}
-			rxs.add(updatedRegex)
+			rxs.push(updatedRegex)
 		})
-		updatedSelectionRegexes.push(rxs)
+		selectionRegexes.push(rxs)
 	})
 
 
@@ -136,25 +136,44 @@ export function validateParameterValuesFromRegex(expectedProofsInCallback: strin
 		throw new Error("Not all parameters were used in response selections")
 	}
 
-	if(updatedSelectionRegexes.length !== proofs.length) {
+	if(selectionRegexes.length !== proofs.length) {
 		throw new Error('Number of proofs does not match number of response selections')
 	}
 
-	proofs.forEach((proof, index) => {
-		//console.log(proof)
-		if(proof.parameters.responseSelections && Array.isArray(proof.parameters.responseSelections)) {
-			proof.parameters.responseSelections.forEach((selection) => {
-				if (!selection.responseMatch){
-					throw new Error('Response match cannot be empty')
-				}
-				if (!updatedSelectionRegexes[index].has(selection.responseMatch)){
-					throw new Error('Response match not found')
-				}
-			})
-
-		}
+	//get all responseMatches from all proofs
+	const proofSelections = proofs.map(proof => {
+		if(Array.isArray(proof.parameters.responseSelections)){
+			return new Set<string>(proof.parameters.responseSelections.map(selection =>{
+				return selection.responseMatch
+			}))
+		} else
+			return new Set<string>([""])
 	})
 
+	// make sure that ALL selectionRegexes are proven
+
+	selectionRegexes.forEach(rxs =>{
+		//go through all proofs
+		let found = false
+		for (let ps of proofSelections) {
+			let ok = false
+			// try only those proofs which have same number of elements
+			if (ps.size === rxs.length){
+				ok = true
+				// try to find match for each selection regex
+				rxs.forEach( rx => {
+					ok = ok && ps.has(rx)
+				})
+			}
+			if (ok){
+				found = true
+				break
+			}
+		}
+		if (!found){
+			throw new Error("Response match not found")
+		}
+	})
 }
 
 // type guard for proof
