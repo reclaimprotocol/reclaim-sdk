@@ -1,35 +1,35 @@
-import {Proof, ProofParameters} from '../types'
+import { Proof, ProofParameters } from '../types'
 import { encodeBase64 } from '../utils'
 import { reclaimprotocol } from '..'
 
 describe('Validate parameters', () => {
 	it('should validate parameters', () => {
 		const selectionRegex = encodeBase64(CORRECT_REGEXES)
-		expect(()=>reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITHOUT_XPATH, REGEX_PARAMS)).not.toThrowError()
+		expect(() => reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITHOUT_XPATH, REGEX_PARAMS)).not.toThrowError()
 
 	})
 
 	it('should validate parameters with xPath', () => {
 		const selectionRegex = encodeBase64(CORRECT_XPATH_REGEXES)
-		expect(()=>reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITH_XPATH, REGEX_XPATH_PARAMS)).not.toThrowError()
+		expect(() => reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITH_XPATH, REGEX_XPATH_PARAMS)).not.toThrowError()
 
 	})
 
 	it('should throw error with bad parameters with xPath', () => {
 		const selectionRegex = encodeBase64(CORRECT_XPATH_REGEXES)
-		expect(()=>reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITH_XPATH, INCORRECT_REGEX_XPATH_PARAMS)).toThrowError()
+		expect(() => reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITH_XPATH, INCORRECT_REGEX_XPATH_PARAMS)).toThrowError()
 
 	})
 
 	it('should throw error with bad parameters with xPath', () => {
 		const selectionRegex = encodeBase64(CORRECT_XPATH_REGEXES)
-		expect(()=>reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITH_XPATH, INCORRECT_REGEX_XPATH_PARAMS_1)).toThrowError()
+		expect(() => reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITH_XPATH, INCORRECT_REGEX_XPATH_PARAMS_1)).toThrowError()
 
 	})
 
 	it('should not find match', () => {
 		const selectionRegex = encodeBase64(INCORRECT_REGEXES)
-		expect(()=>reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITHOUT_XPATH, REGEX_PARAMS)).toThrowError("Response match not found")
+		expect(() => reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITHOUT_XPATH, REGEX_PARAMS)).toThrowError('Response match not found')
 	})
 
 	it('should throw error for inconsistent regexes passed through the proof', () => {
@@ -39,19 +39,19 @@ describe('Validate parameters', () => {
 })
 
 const CORRECT_REGEXES = [
-	["<div>abc{{some_value}}def</div>", "<span id='empid'>{{creatoros-empid}}</span>"],
+	['<div>abc{{some_value}}def</div>', "<span id='empid'>{{creatoros-empid}}</span>"],
 	[''],
 	["<span id='empid'>{{qb-empid}}</span>"]
 ]
 
-const REGEX_PARAMS:ProofParameters = {
-	"creatoros-empid":"128356",
-	"qb-empid":"9845",
-	"some_value":"123",
+const REGEX_PARAMS: ProofParameters = {
+	'creatoros-empid':'128356',
+	'qb-empid':'9845',
+	'some_value':'123',
 }
 
 const INCORRECT_REGEXES = [
-	["<span id='empid'>{{creatoros-empid}}</span>", "<div>abc{{some_value}}deg</div>"],
+	["<span id='empid'>{{creatoros-empid}}</span>", '<div>abc{{some_value}}deg</div>'],
 	[''],
 	["<span id='no-empid'>{{qb-empid}}</span>"]
 ]
@@ -61,17 +61,17 @@ const CORRECT_XPATH_REGEXES = [
 		'"hasBookface":true'],
 ]
 
-const REGEX_XPATH_PARAMS:ProofParameters = {
-	"YC_USER_ID":"182853",
+const REGEX_XPATH_PARAMS: ProofParameters = {
+	'YC_USER_ID':'182853',
 }
 
-const INCORRECT_REGEX_XPATH_PARAMS:ProofParameters = {
-	"YC_USER_ID":"182854",
+const INCORRECT_REGEX_XPATH_PARAMS: ProofParameters = {
+	'YC_USER_ID':'182854',
 }
 
-const INCORRECT_REGEX_XPATH_PARAMS_1:ProofParameters = {
-	"YC_USER_ID":"182853",
-	"hasBookface":"true" // there is no parameter "hasBookface" in regex match
+const INCORRECT_REGEX_XPATH_PARAMS_1: ProofParameters = {
+	'YC_USER_ID':'182853',
+	'hasBookface':'true' // there is no parameter "hasBookface" in regex match
 }
 
 // const selectionRegex = 'WyI8c3BhbiBpZD0nZW1waWQnPnt7Y3JlYXRvcm9zLWVtcGlkfX08L3NwYW4+IiwiIiwiPHNwYW4gaWQ9J2VtcGlkJz57e3FiLWVtcGlkfX08L3NwYW4+Il0='
@@ -102,7 +102,7 @@ const PROOFS_WITHOUT_XPATH: Proof[] = [
 			'url': 'https://www.reddit.com',
 			'method': 'GET',
 			'responseSelections': [
-				{ 'responseMatch': "<div>abc123def</div>" },
+				{ 'responseMatch': '<div>abc123def</div>' },
 				{ 'responseMatch': "<span id='empid'>128356</span>" },
 
 			]

@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
-import {Proof, ProofParameters, RequestClaim} from '../types'
+import { Proof, ProofParameters, RequestClaim } from '../types'
 import CONTRACTS_CONFIG from '../utils/contracts/config.json'
 import { Reclaim, Reclaim__factory as ReclaimFactory } from '../utils/contracts/types'
 
@@ -107,33 +107,34 @@ export function getCallbackIdFromUrl(_url: string): string {
 	}
 }
 
-export function validateParameterValuesFromRegex(expectedProofsInCallback: string, proofs: Proof[], params:ProofParameters) {
+export function validateParameterValuesFromRegex(expectedProofsInCallback: string, proofs: Proof[], params: ProofParameters) {
 	// parse expectedProofsInCallback
 	const templateRegexes = decodeBase64(expectedProofsInCallback)
 
-	let paramsClone = { ...params };
+	const paramsClone = { ...params }
 
 	//replace placeholders with params
-	const selectionRegexes: string[][] = [];
+	const selectionRegexes: string[][] = []
 	templateRegexes.forEach(regexes => {
-		const rxs:string[] = [];
+		const rxs: string[] = []
 		regexes.forEach(rx => {
 			let updatedRegex = rx
-			for (let paramsKey in params) {
+			for(const paramsKey in params) {
 				const m = `{{${paramsKey}}}`
-				if (updatedRegex.includes(m)){
-					updatedRegex = updatedRegex.replace(m,params[paramsKey])
+				if(updatedRegex.includes(m)) {
+					updatedRegex = updatedRegex.replace(m, params[paramsKey])
 					delete paramsClone[paramsKey]
 				}
 			}
+
 			rxs.push(updatedRegex)
 		})
 		selectionRegexes.push(rxs)
 	})
 
 
-	if (Object.keys(paramsClone).length > 0){
-		throw new Error("Not all parameters were used in response selections")
+	if(Object.keys(paramsClone).length > 0) {
+		throw new Error('Not all parameters were used in response selections')
 	}
 
 	if(selectionRegexes.length !== proofs.length) {
@@ -142,36 +143,39 @@ export function validateParameterValuesFromRegex(expectedProofsInCallback: strin
 
 	//get all responseMatches from all proofs
 	const proofSelections = proofs.map(proof => {
-		if(Array.isArray(proof.parameters.responseSelections)){
-			return new Set<string>(proof.parameters.responseSelections.map(selection =>{
+		if(Array.isArray(proof.parameters.responseSelections)) {
+			return new Set<string>(proof.parameters.responseSelections.map(selection => {
 				return selection.responseMatch
 			}))
-		} else
-			return new Set<string>([""])
+		} else {
+			return new Set<string>([''])
+		}
 	})
 
 	// make sure that ALL selectionRegexes are proven
 
-	selectionRegexes.forEach(rxs =>{
+	selectionRegexes.forEach(rxs => {
 		//go through all proofs
 		let found = false
-		for (let ps of proofSelections) {
+		for(const ps of proofSelections) {
 			let ok = false
 			// try only those proofs which have same number of elements
-			if (ps.size === rxs.length){
+			if(ps.size === rxs.length) {
 				ok = true
 				// try to find match for each selection regex
-				rxs.forEach( rx => {
+				rxs.forEach(rx => {
 					ok = ok && ps.has(rx)
 				})
 			}
-			if (ok){
+
+			if(ok) {
 				found = true
 				break
 			}
 		}
-		if (!found){
-			throw new Error("Response match not found")
+
+		if(!found) {
+			throw new Error('Response match not found')
 		}
 	})
 }
