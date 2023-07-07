@@ -204,7 +204,8 @@ app.get("/request-proofs", (req, res) => {
             ],
         });
         // Store the callback Id, Reclaim URL and expectedProofsInCallback in your database
-        const { callbackId, reclaimUrl, expectedProofsInCallback } = request;
+        const { callbackId, expectedProofsInCallback } = request;
+        const reclaimUrl = await request.getReclaimUrl()
         // ... store the callbackId, reclaimUrl and expectedProofsInCallback in your database
         res.json({ reclaimUrl });
     }
@@ -246,10 +247,10 @@ Trick :
 
 The submission of proofs is handled by the callback endpoint as show below. The function `reclaimprotocol.utils.extractParameterValues(expectedProofsInCallback, proofs)` is used to extract the information proved by your user 
 ```
-    app.post("/callback/:callbackId", async (req, res) => {
+    app.post("/callback", async (req, res) => {
       try {
         // Retrieve the callback ID from the URL parameters
-        const { callbackId } = req.params;
+        const { id } = req.query;
 
         // Retrieve the proofs from the request body
         const { proofs } = req.body;
