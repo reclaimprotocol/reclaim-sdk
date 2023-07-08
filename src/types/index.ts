@@ -140,14 +140,12 @@ export type Template = {
 
 export type ProofClaim = Omit<Claim, 'payload'> & {
 	parameters: {
-		sessionId: string
 		[key: string]: string | number
 	}
 }
 
 export type httpProof = Omit<Claim, 'payload'> & {
 	parameters: {
-		sessionId: string
 		url?: string
 		method?: 'GET' | 'POST'
 		responseSelections?: responseSelection[]
@@ -156,6 +154,7 @@ export type httpProof = Omit<Claim, 'payload'> & {
 
 export type Proof = {
 	onChainClaimId: string
+	sessionId: string
 	ownerPublicKey: string
 	timestampS: string
 	witnessAddresses: string[]
