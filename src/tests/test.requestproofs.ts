@@ -28,6 +28,19 @@ describe('Create proof request with xpath', () => {
 		expect(request.template.claims.length).toEqual(2)
 		// expect(request.callbackId).toBe('1234')
 	})
+
+	it('should correctly create proof request without xPath', () => {
+		const reclaim = new reclaimprotocol.Reclaim()
+		const request = reclaim.requestProofs(
+			REQUEST_PROOF_WITHOUT_XPATH
+		)
+
+		// console.log(request.reclaimUrl)
+
+		expect(request.template.name).toBe('Proof of Reddit Karma')
+		expect(request.template.claims.length).toEqual(2)
+		// expect(request.callbackId).toBe('1234')
+	})
 })
 
 
