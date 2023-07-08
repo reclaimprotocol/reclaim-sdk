@@ -9,7 +9,7 @@ describe('Create proof request without xpath', () => {
 
 		// console.log(request.reclaimUrl)
 
-		expect(request.template.name).toBe('YC')
+		expect(request.template.name).toBe('Proof of Reddit Karma')
 		expect(request.template.claims.length).toEqual(2)
 		// expect(request.callbackId).toBe('1234')
 	})
