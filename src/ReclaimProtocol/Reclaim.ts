@@ -63,7 +63,8 @@ export class Reclaim {
 				return result
 			}
 
-			if(proof.parameters.sessionId !== expectedSessionId) {
+			// if the session id is not same: return false
+			if(proof.sessionId !== expectedSessionId) {
 				logger.error('Session id mismatch')
 				return result
 			}
@@ -77,18 +78,8 @@ export class Reclaim {
 				redactedParameters: proof.redactedParameters
 			}
 
-			// replace the session id with the expected session id
-			// done to prevent replay attacks
-			const updatedProofWithExpectedSessionId: Proof = {
-				...proof,
-				parameters: {
-					...proof.parameters,
-					sessionId: expectedSessionId
-				}
-			}
-
 			const decryptedProof: ClaimProof = {
-				parameters: JSON.stringify(updatedProofWithExpectedSessionId.parameters),
+				parameters: JSON.stringify(proof.parameters),
 				signatures: proof.signatures.map(signature => {
 					return utils.arrayify(signature)
 				})
@@ -96,7 +87,7 @@ export class Reclaim {
 			// fetch on chain claim data from the request id
 			const claimData = await getOnChainClaimDataFromRequestId(proof.chainId, proof.onChainClaimId)
 			const onChainInfoHash = claimData.infoHash
-			const calculatedInfoHash = hashClaimInfo({ parameters: decryptedProof.parameters, provider: proof.provider, context: '' }) //TODO: pass context from the app
+			const calculatedInfoHash = hashClaimInfo({ parameters: decryptedProof.parameters, provider: proof.provider, context: '', sessionId: expectedSessionId }) //TODO: pass context from the app
 
 			// if the info hash is not same: return false
 			if(onChainInfoHash.toLowerCase() !== calculatedInfoHash.toLowerCase()) {
