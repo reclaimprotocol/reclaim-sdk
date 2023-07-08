@@ -106,11 +106,11 @@ const EXPECTED_SESSION_ID = '0' // TODO: update this with valid session id once 
 
 const CORRECT_PROOF: Proof = {
 	onChainClaimId: '1560',
+	sessionId: '0', // TODO: update this once the app integrates sessionId into the proof
 	templateClaimId: generateUuid(),
 	chainId: 420,
 	provider: 'google-login',
 	parameters: {
-		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 		'emailAddress': 'swetasunofficial@gmail.com'
 	},
 	ownerPublicKey: '039549ccde10c559c979eb826075e9274ed8d9439e299e46f752fc8e9cd1e0647f',
@@ -138,7 +138,6 @@ const INCORRECT_TIMESTAMP_PROOF: Proof = {
 const INCORRECT_PARAMETER_PROOF: Proof = {
 	...CORRECT_PROOF,
 	parameters: {
-		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 		'emailAddress': 'sweta@gmail.com'
 	},
 }

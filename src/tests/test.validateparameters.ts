@@ -78,10 +78,10 @@ const INCORRECT_REGEX_XPATH_PARAMS_1: ProofParameters = {
 const PROOFS_WITHOUT_XPATH: Proof[] = [
 	{
 		'onChainClaimId': '2617',
+		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 		'templateClaimId': '0',
 		'provider': 'http',
 		'parameters': {
-			'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 			'url': 'https://www.reddit.com',
 			'method': 'GET',
 			'responseSelections': [
@@ -97,10 +97,10 @@ const PROOFS_WITHOUT_XPATH: Proof[] = [
 	},
 	{
 		'onChainClaimId': '2617',
+		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 		'templateClaimId': '0',
 		'provider': 'http',
 		'parameters': {
-			'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 			'url': 'https://www.reddit.com',
 			'method': 'GET',
 			'responseSelections': [
@@ -118,10 +118,10 @@ const PROOFS_WITHOUT_XPATH: Proof[] = [
 	},
 	{
 		'onChainClaimId': '2617',
+		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 		'templateClaimId': '0',
 		'provider': 'http',
 		'parameters': {
-			'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 			'emailAddress': 'abc@gmail.com'
 		},
 		'chainId': 420,
@@ -137,6 +137,7 @@ const PROOFS_WITHOUT_XPATH: Proof[] = [
 const PROOFS_WITH_XPATH: Proof[] = [
 	{
 		'chainId': 420,
+		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 		'onChainClaimId': '6607',
 		'ownerPublicKey': '0217aff403993ec235b028c89e7148927a971fc1b6bcdc01d276ca48659f76b404',
 		'parameters': {
