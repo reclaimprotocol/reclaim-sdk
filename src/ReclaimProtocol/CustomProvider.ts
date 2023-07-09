@@ -19,7 +19,7 @@ export class CustomProvider {
 		return this._params
 	}
 
-	get regex(): string {
-		return ''
+	get regex(): string[] {
+		return ['']
 	}
 }

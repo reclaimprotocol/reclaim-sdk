@@ -17,7 +17,9 @@ export class HttpsProvider {
 				url: '',
 				checkLoginCookies: ['']
 			},
-			responseSelections:  [{
+			responseSelections: [{
+				jsonPath: '',
+				xPath: '',
 				responseMatch: ''
 			}],
 			parameters: {},
@@ -25,16 +27,17 @@ export class HttpsProvider {
 	}
 
 	// regex to match the response
-	private _regex: string
+	private _regex: string[]
 
 	constructor(params: HttpsProviderParams) {
 		// check if params are of type HttpsProviderParams
-		if(!params.name || !params.logoUrl || !params.url || !params.loginUrl || !params.loginCookies || !params.selectionRegex) {
+		if(!params.name || !params.logoUrl || !params.url || !params.loginUrl || !params.loginCookies || !params.responseSelection) {
 			throw new Error('Invalid parameters passed to HttpsProvider')
 		}
 
 		// set params
 		this._params.payload = {
+			...this._params,
 			metadata: {
 				name: params.name,
 				logoUrl: params.logoUrl
@@ -44,14 +47,14 @@ export class HttpsProvider {
 				url: params.loginUrl,
 				checkLoginCookies: params.loginCookies
 			},
-			responseSelections:  [
-				 { responseMatch: params.selectionRegex }
-			],
+			responseSelections: params.responseSelection,
 			parameters: {},
 		}
 
 		// set regex
-		this._regex = params.selectionRegex
+		this._regex = params.responseSelection.map((selection) => {
+			return selection.responseMatch
+		})
 	}
 
 	// getters
@@ -59,7 +62,7 @@ export class HttpsProvider {
 		return this._params
 	}
 
-	get regex(): string {
+	get regex(): string[] {
 		return this._regex
 	}
 }
