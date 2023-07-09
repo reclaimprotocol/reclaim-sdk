@@ -69,7 +69,7 @@ Here's a step-by-step guide to help you get started:
     const reclaim = new reclaimprotocol.Reclaim()
 
     // Define an endpoint for requesting proofs
-    app.get("/request-proofs", (req, res) => {
+    app.get("/request-proofs", async(req, res) => {
     try {
         const request = reclaim.requestProofs({
             title: "Reclaim Protocol",
@@ -83,6 +83,7 @@ Here's a step-by-step guide to help you get started:
         });
         // Store the callback Id and Reclaim URL in your database
         const { callbackId, reclaimUrl } = request;
+        const reclaimUrl = await request.getReclaimUrl();
         // ... store the callbackId and reclaimUrl in your database
         res.json({ reclaimUrl });
     }
@@ -187,7 +188,7 @@ But if your application require a certain Provider that is not listed above. You
 ```
 import { reclaimprotocol } from '@reclaimprotocol/reclaim-sdk'
 
-app.get("/request-proofs", (req, res) => {
+app.get("/request-proofs", async(req, res) => {
     try {
         const request = reclaim.requestProofs({
             title: "Reclaim Protocol",
@@ -204,7 +205,8 @@ app.get("/request-proofs", (req, res) => {
             ],
         });
         // Store the callback Id, Reclaim URL and expectedProofsInCallback in your database
-        const { callbackId, reclaimUrl, expectedProofsInCallback } = request;
+        const { callbackId, expectedProofsInCallback } = request;
+        const reclaimUrl = await request.getReclaimUrl()
         // ... store the callbackId, reclaimUrl and expectedProofsInCallback in your database
         res.json({ reclaimUrl });
     }
@@ -246,10 +248,10 @@ Trick :
 
 The submission of proofs is handled by the callback endpoint as show below. The function `reclaimprotocol.utils.extractParameterValues(expectedProofsInCallback, proofs)` is used to extract the information proved by your user 
 ```
-    app.post("/callback/:callbackId", async (req, res) => {
+    app.post("/callback", async (req, res) => {
       try {
         // Retrieve the callback ID from the URL parameters
-        const { callbackId } = req.params;
+        const { id } = req.query;
 
         // Retrieve the proofs from the request body
         const { proofs } = req.body;
