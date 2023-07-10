@@ -31,7 +31,7 @@ export class Reclaim {
 			id: generateUuid(),
 			name: request.title,
 			callbackUrl,
-			contextMessage: request.contextMessage ? request.contextMessage : callbackUrl,
+			contextMessage: request.contextMessage ? request.contextMessage : request.baseCallbackUrl,
 			contextAddress: request.contextAddress ? request.contextAddress : '0x00',
 			claims: request.requestedProofs.map((requestedProof) => {
 				return {
