@@ -26,10 +26,13 @@ export class Reclaim {
 	 * @returns {TemplateInstance} Template instance
 	 */
 	requestProofs = (request: ProofRequest): TemplateInstance => {
+		const callbackUrl = generateCallbackUrl(request.baseCallbackUrl, request.callbackId)
 		const template: Template = {
 			id: generateUuid(),
 			name: request.title,
-			callbackUrl: generateCallbackUrl(request.baseCallbackUrl, request.callbackId), // if callbackId is present, use it, else generate a new callback url
+			callbackUrl,
+			contextMessage: request.contextMessage ? request.contextMessage : callbackUrl,
+			contextAddress: request.contextAddress ? request.contextAddress : '0x00',
 			claims: request.requestedProofs.map((requestedProof) => {
 				return {
 					templateClaimId: generateUuid(),

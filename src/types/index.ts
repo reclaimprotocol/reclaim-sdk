@@ -20,6 +20,8 @@ export type ProofRequest = {
 	 * Callback id
 	 */
 	callbackId?: string
+	contextMessage?: string
+	contextAddress?: string
 }
 
 export type HttpsProviderParams = {
@@ -136,6 +138,8 @@ export type Template = {
 	name: string
 	callbackUrl: string
 	claims: Claim[]
+	contextMessage: string
+	contextAddress: string
 }
 
 export type ProofClaim = Omit<Claim, 'payload'> & {
