@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@reclaimprotocol/crypto-sdk": "^1.0.3",
+    "@reclaimprotocol/crypto-sdk": "^1.1.1",
     "ethers": "^5.7.2",
     "pino": "^8.11.0",
     "uuid": "^9.0.0"
