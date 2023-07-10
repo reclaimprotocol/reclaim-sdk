@@ -20,7 +20,14 @@ export type ProofRequest = {
 	 * Callback id
 	 */
 	callbackId?: string
+	/**
+	 * Context message for the proof request
+	 */
 	contextMessage?: string
+	/**
+	 * Context address for the proof request
+	 * This is your users' ethereum wallet address
+	 */
 	contextAddress?: string
 }
 
