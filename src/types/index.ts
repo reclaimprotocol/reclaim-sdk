@@ -154,7 +154,6 @@ export type httpProof = Omit<Claim, 'payload'> & {
 
 export type Proof = {
 	onChainClaimId: string
-	sessionId: string
 	ownerPublicKey: string
 	timestampS: string
 	witnessAddresses: string[]

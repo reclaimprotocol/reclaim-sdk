@@ -50,7 +50,7 @@ export class Reclaim {
      * @param proofs proofs returned by the callback URL
      * @returns {Promise<boolean>} boolean value denotes if the verification was successful or failed
      */
-	verifyCorrectnessOfProofs = async(expectedSessionId: string, proofs: Proof[]): Promise<boolean> => {
+	verifyCorrectnessOfProofs = async(proofs: Proof[]): Promise<boolean> => {
 		let result: boolean = false
 
 		for(const proof of proofs) {
@@ -60,12 +60,6 @@ export class Reclaim {
 			// if no witnesses are present: return false
 			if(!witnesses.length) {
 				logger.error('No witnesses found on chain')
-				return result
-			}
-
-			// if the session id is not same: return false
-			if(proof.sessionId !== expectedSessionId) {
-				logger.error('Session id mismatch')
 				return result
 			}
 
@@ -87,7 +81,7 @@ export class Reclaim {
 			// fetch on chain claim data from the request id
 			const claimData = await getOnChainClaimDataFromRequestId(proof.chainId, proof.onChainClaimId)
 			const onChainInfoHash = claimData.infoHash
-			const calculatedInfoHash = hashClaimInfo({ parameters: decryptedProof.parameters, provider: proof.provider, context: '', sessionId: expectedSessionId }) //TODO: pass context from the app
+			const calculatedInfoHash = hashClaimInfo({ parameters: decryptedProof.parameters, provider: proof.provider, context: '' }) //TODO: pass context from the app
 
 			// if the info hash is not same: return false
 			if(onChainInfoHash.toLowerCase() !== calculatedInfoHash.toLowerCase()) {
