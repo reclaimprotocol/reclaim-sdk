@@ -138,6 +138,7 @@ export type responseSelection = {
 
 export type Claim = {
 	templateClaimId: string
+	context: string
 } & ProviderParams
 
 export type Template = {
@@ -145,8 +146,6 @@ export type Template = {
 	name: string
 	callbackUrl: string
 	claims: Claim[]
-	contextMessage: string
-	contextAddress: string
 }
 
 export type ProofClaim = Omit<Claim, 'payload'> & {
