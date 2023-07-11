@@ -107,6 +107,7 @@ const EXPECTED_SESSION_ID = '0' // TODO: update this with valid session id once 
 const CORRECT_PROOF: Proof = {
 	onChainClaimId: '1560',
 	sessionId: '0', // TODO: update this once the app integrates sessionId into the proof
+	context: '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0', // TODO: update this once the app integrates context into the proof
 	templateClaimId: generateUuid(),
 	chainId: 420,
 	provider: 'google-login',
