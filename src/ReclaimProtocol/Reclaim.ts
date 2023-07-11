@@ -26,16 +26,20 @@ export class Reclaim {
 	 * @returns {TemplateInstance} Template instance
 	 */
 	requestProofs = (request: ProofRequest): TemplateInstance => {
+		const callbackUrl = generateCallbackUrl(request.baseCallbackUrl, request.callbackId)
+		const contextMessage = request.contextMessage ? request.contextMessage : request.baseCallbackUrl
+		const contextAddress = request.contextAddress ? request.contextAddress : '0x0'
 		const template: Template = {
 			id: generateUuid(),
 			name: request.title,
-			callbackUrl: generateCallbackUrl(request.baseCallbackUrl, request.callbackId), // if callbackId is present, use it, else generate a new callback url
+			callbackUrl,
 			claims: request.requestedProofs.map((requestedProof) => {
 				return {
 					templateClaimId: generateUuid(),
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 					provider: requestedProof.params.provider as any,
 					payload: requestedProof.params.payload,
+					context: utils.keccak256(utils.toUtf8Bytes(contextMessage)) + '' + contextAddress,
 				}
 			})
 		}

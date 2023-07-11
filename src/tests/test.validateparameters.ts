@@ -88,6 +88,7 @@ const PROOFS_WITHOUT_XPATH: Proof[] = [
 				{ 'responseMatch': "<span id='empid'>9845</span>" },
 			]
 		},
+		'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
 		'chainId': 420,
 		'ownerPublicKey': '03057dd1b36d108cc0d9bced0565b6363ed910bc6522aa937092e1dc344614ddde',
 		'timestampS': '1684343138',
@@ -99,6 +100,7 @@ const PROOFS_WITHOUT_XPATH: Proof[] = [
 		'onChainClaimId': '2617',
 		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 		'templateClaimId': '0',
+		'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
 		'provider': 'http',
 		'parameters': {
 			'url': 'https://www.reddit.com',
@@ -120,6 +122,7 @@ const PROOFS_WITHOUT_XPATH: Proof[] = [
 		'onChainClaimId': '2617',
 		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 		'templateClaimId': '0',
+		'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
 		'provider': 'http',
 		'parameters': {
 			'emailAddress': 'abc@gmail.com'
@@ -138,6 +141,7 @@ const PROOFS_WITH_XPATH: Proof[] = [
 	{
 		'chainId': 420,
 		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
+		'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
 		'onChainClaimId': '6607',
 		'ownerPublicKey': '0217aff403993ec235b028c89e7148927a971fc1b6bcdc01d276ca48659f76b404',
 		'parameters': {
