@@ -1,9 +1,8 @@
 # Integration - Quick Start
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/reclaimprotocol/one-step-deploy-provider)
-
-Follow along the guide and build your own server or you can directly deploy the following provider example to Vercel with a single click. This process automatically creates a fork in your GitHub repository, allowing you to jump straight into the action. By editing the code directly on Github, you can conveniently modify and tailor the application to your specific use case.
-
+Follow along the guide and build your own server or you can directly deploy the following provider example to Vercel with a single click [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/reclaimprotocol/one-step-deploy-provider) or just start tinkering with code sandbox environment right in on Replit <a href="https://replit.com/@AkshayNarisett1/Reclaim-SDK">
+    <img src="https://reclaimprotocol.s3.ap-south-1.amazonaws.com/Tinker-modified.png" alt="Tinker Inside Sandbox" width="90px" height="30px"/>
+</a>.
 
 ## Integrating Reclaim Protocol via HTTPS Provider
 
