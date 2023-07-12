@@ -114,6 +114,11 @@ app.post("/callback/", async (req, res) => {
     }
 });
 ```
-<div style="left: 0; width: 100%; height: 0; position: relative; padding-bottom: 50%;"><iframe src="https://codesandbox.io/embed/express-js-f7rid?fontsize=14" style="top: 0; left: 0; width: 100%; height: 100%; position: absolute; border: 0;" allowfullscreen></iframe></div>
+<iframe src="https://codesandbox.io/embed/project-name?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="project-name"
+     allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+     sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin">
+</iframe> this
 
 In this code snippet, the callback first generates a unique proof ID and checks if proofs have been submitted for this ID. If they have, it responds with an error.
