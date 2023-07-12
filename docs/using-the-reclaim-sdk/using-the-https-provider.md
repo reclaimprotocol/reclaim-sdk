@@ -61,6 +61,8 @@ const app = express()
 const reclaim = new reclaimprotocol.Reclaim()
 const port = 3000
 
+app.use(express.text({ type: "*/*" }));
+
 app.get("/request-proofs", async(req, res) => {
     const request = reclaim.requestProofs({
         title: "Reclaim Protocol",
@@ -120,7 +122,7 @@ To verify the proofs returned by the Reclaim Protocol, you'll need to set up a c
 /* index.js */
 app.post("/callback/", async (req, res) => {
     const { id } = req.query;
-    const { proofs } = req.body;
+    const { proofs } = JSON.parse(decodeURIComponent(req.body));
 
     const onChainClaimIds = reclaim.getOnChainClaimIdsFromProofs(proofs)
 
