@@ -114,7 +114,6 @@ app.post("/callback/", async (req, res) => {
     }
 });
 ```
+<div style="left: 0; width: 100%; height: 0; position: relative; padding-bottom: 50%;"><iframe src="https://codesandbox.io/embed/express-js-f7rid" style="top: 0; left: 0; width: 100%; height: 100%; position: absolute; border: 0;" allowfullscreen></iframe></div>
 
 In this code snippet, the callback first generates a unique proof ID and checks if proofs have been submitted for this ID. If they have, it responds with an error.
-
-<div style="left: 0; width: 100%; height: 0; position: relative; padding-bottom: 50%;"><iframe src="https://codesandbox.io/embed/express-js-f7rid" style="top: 0; left: 0; width: 100%; height: 100%; position: absolute; border: 0;" allowfullscreen></iframe></div>
