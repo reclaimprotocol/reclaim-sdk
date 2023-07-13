@@ -100,6 +100,10 @@ export type ProviderParams =
 	| { provider: 'soundcloud-username', payload: {} }
 	| { provider: 'letterboxd-user', payload: {} }
 	| { provider: 'uidai-aadhar', payload: {} }
+	| { provider: 'uidai-dob', payload: {} }
+	| { provider: 'uidai-address', payload: {} }
+	| { provider: 'twitter-followers-count', payload: {} }
+	| { provider: 'twitter-username', payload: {} }
 	| {
 		provider: 'http'
 		payload: {
