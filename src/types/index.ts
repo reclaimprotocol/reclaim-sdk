@@ -20,6 +20,15 @@ export type ProofRequest = {
 	 * Callback id
 	 */
 	callbackId?: string
+	/**
+	 * Context message for the proof request
+	 */
+	contextMessage?: string
+	/**
+	 * Context address for the proof request
+	 * This is your users' ethereum wallet address
+	 */
+	contextAddress?: string
 }
 
 export type HttpsProviderParams = {
@@ -129,6 +138,7 @@ export type responseSelection = {
 
 export type Claim = {
 	templateClaimId: string
+	context: string
 } & ProviderParams
 
 export type Template = {

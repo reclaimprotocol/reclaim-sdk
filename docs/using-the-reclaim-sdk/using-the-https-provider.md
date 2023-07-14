@@ -41,6 +41,8 @@ app.get("/request-proofs", (req, res) => {
     const request = reclaim.requestProofs({
         title: "Reclaim Protocol",
         baseCallbackUrl: "https://yourdomain.com/callback",
+        contextMessage: "Airdrop for Reclaim claimants", //optional: context message for the proof request
+        contextAddress: "0x5d96Cb97F8499d4dEa814cEa2F8448A0AF1A2bC2" //optional: your users' Ethereum wallet 
         requestedProofs: [
             new reclaim.HttpsProvider({
                 name: "Reddit Karma",
@@ -53,7 +55,8 @@ app.get("/request-proofs", (req, res) => {
         ],
     });
 
-    const { callbackId, reclaimUrl, expectedProofsInCallback } = request;
+    const { callbackId, expectedProofsInCallback } = request;
+    const reclaimUrl = await request.getReclaimUrl();
     // Save the callbackId, reclaimUrl, and expectedProofsInCallback for future use
     // ...
     res.json({ reclaimUrl });
