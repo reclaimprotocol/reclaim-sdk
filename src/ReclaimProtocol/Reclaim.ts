@@ -1,4 +1,5 @@
-import { Claim, ClaimProof, hashClaimInfo, verifyWitnessSignature } from '@reclaimprotocol/crypto-sdk'
+import { assertValidSignedClaim, hashClaimInfo, signatures, SignedClaim } from '@reclaimprotocol/crypto-sdk'
+import serialize from 'canonicalize'
 import { utils } from 'ethers'
 import P from 'pino'
 import { Proof, ProofRequest, Template } from '../types'
@@ -28,9 +29,10 @@ export class Reclaim {
 	requestProofs = (request: ProofRequest): TemplateInstance => {
 		const callbackUrl = generateCallbackUrl(request.baseCallbackUrl, request.callbackId)
 		const sessionId = getCallbackIdFromUrl(callbackUrl)
-		const callbackUrl = generateCallbackUrl(request.baseCallbackUrl, request.callbackId)
+
 		const contextMessage = request.contextMessage ? request.contextMessage : request.baseCallbackUrl
 		const contextAddress = request.contextAddress ? request.contextAddress : '0x0'
+
 		const template: Template = {
 			id: generateUuid(),
 			sessionId,
@@ -76,25 +78,24 @@ export class Reclaim {
 				return result
 			}
 
-			const claim: Claim = {
-				id: parseInt(proof.onChainClaimId),
-				ownerPublicKey: Buffer.from(proof.ownerPublicKey, 'hex'),
-				provider: proof.provider,
-				timestampS: parseInt(proof.timestampS),
-				witnessAddresses: witnesses,
-				redactedParameters: proof.redactedParameters
-			}
-
-			const decryptedProof: ClaimProof = {
-				parameters: JSON.stringify(proof.parameters),
+			const claim: SignedClaim = {
+				claim: { claimId: parseInt(proof.onChainClaimId),
+					owner: signatures.getAddress(Buffer.from(proof.ownerPublicKey, 'hex')),
+					provider: proof.provider,
+					timestampS: parseInt(proof.timestampS),
+					context: proof.context,
+					sessionId: proof.sessionId,
+					parameters: serialize(proof.parameters)!,
+				},
 				signatures: proof.signatures.map(signature => {
 					return utils.arrayify(signature)
 				})
 			}
+
 			// fetch on chain claim data from the request id
 			const claimData = await getOnChainClaimDataFromRequestId(proof.chainId, proof.onChainClaimId)
 			const onChainInfoHash = claimData.infoHash
-			const calculatedInfoHash = hashClaimInfo({ parameters: decryptedProof.parameters, provider: proof.provider, context: '', sessionId: expectedSessionId }) //TODO: pass context from the app
+			const calculatedInfoHash = hashClaimInfo({ parameters: serialize(proof.parameters)!, provider: proof.provider, context: proof.context, sessionId: expectedSessionId }) //TODO: pass context from the app
 
 			// if the info hash is not same: return false
 			if(onChainInfoHash.toLowerCase() !== calculatedInfoHash.toLowerCase()) {
@@ -104,8 +105,9 @@ export class Reclaim {
 
 			try {
 				// verify the witness signature
-				result = verifyWitnessSignature(claim, decryptedProof)
+				assertValidSignedClaim(claim, witnesses)
 				logger.info(`isCorrectProof: ${result}`)
+				result = true
 			} catch(error) {
 				// if the witness signature is not valid: return false
 				logger.error(`${error}`)
