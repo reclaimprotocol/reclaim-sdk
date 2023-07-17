@@ -137,7 +137,7 @@ export function validateParameterValuesFromRegex(expectedProofsInCallback: strin
 
 
 	if(unusedParams.size > 0) {
-		throw new Error(`Not all parameters were used in response selections: ${unusedParams}`)
+		throw new Error(`Not all parameters were used in response selections: ${JSON.stringify(Object.fromEntries(unusedParams))}`)
 	}
 
 	if(selectionRegexes.length !== proofs.length) {

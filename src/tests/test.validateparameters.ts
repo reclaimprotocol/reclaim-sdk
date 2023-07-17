@@ -17,13 +17,13 @@ describe('Validate parameters', () => {
 
 	it('should throw error with bad parameters with xPath', () => {
 		const selectionRegex = encodeBase64(CORRECT_XPATH_REGEXES)
-		expect(() => reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITH_XPATH_2)).toThrowError()
+		expect(() => reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITH_XPATH_2)).toThrowError('Response match not found')
 
 	})
 
 	it('should throw error with bad parameters with xPath', () => {
 		const selectionRegex = encodeBase64(CORRECT_XPATH_REGEXES)
-		expect(() => reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITH_XPATH_3)).toThrowError()
+		expect(() => reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITH_XPATH_3)).toThrowError(`Not all parameters were used in response selections: {\"hasBookface\":\"true\"}`)
 
 	})
 
