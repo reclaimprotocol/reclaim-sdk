@@ -57,8 +57,10 @@ const INCORRECT_REGEXES = [
 ]
 
 const CORRECT_XPATH_REGEXES = [
+	['\\{"id":{{YC_USER_ID}},.*?waas_admin.*?:{.*?}.*?:\\{.*?}.*?(?:full_name|first_name).*?}'],
+	['"hasBookface":true'],
 	['\\{"id":{{YC_USER_ID}},.*?waas_admin.*?:{.*?}.*?:\\{.*?}.*?(?:full_name|first_name).*?}',
-		'"hasBookface":true'],
+		'"hasBookface":true']
 ]
 
 const REGEX_XPATH_PARAMS = {
@@ -154,7 +156,57 @@ const PROOFS_WITH_XPATH_1: Proof[] = [
 					'jsonPath': '$.currentUser',
 					'responseMatch': '\\{"id":182853,.*?waas_admin.*?:{.*?}.*?:\\{.*?}.*?(?:full_name|first_name).*?}',
 					'xPath': "//script[@id='js-react-on-rails-context']"
+				}],
+			'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
+			'url': 'https://bookface.ycombinator.com/home'
+		},
+		'provider': 'http',
+		'redactedParameters': "{\"url\":\"*************************************\",\"method\":\"GET\",\"responseSelections\":[{\"jsonPath\":\"$.currentUser\",\"responseMatch\":\"\\\\{\\\"id\\\":182853,.*?waas_admin.*?:{.*?}.*?:\\\\{.*?}.*?(?:full_name|first_name).*?}\",\"xPath\":\"//script[@id='js-react-on-rails-context']\"},{\"jsonPath\":\"$.hasBookface\",\"responseMatch\":\"\\\"hasBookface\\\":true\",\"xPath\":\"//script[@data-component-name='BookfaceCsrApp']\"}]}",
+		'signatures': ['0xcb039fd715e58d08ee4f03aa3705fc8bf7a3cbef414456703a3940a2bee2703546de577e976bfadcfa4e26cab25d647d5913042d95ff5a336eba74d5ee6007851b'],
+		'templateClaimId': '0',
+		'timestampS': '1688383636',
+		'witnessAddresses': ['reclaim - node.questbook.app'],
+		'extractedParameterValues':REGEX_XPATH_PARAMS
+	},
+	{
+		'chainId': 420,
+		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
+		'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
+		'onChainClaimId': '6607',
+		'ownerPublicKey': '0217aff403993ec235b028c89e7148927a971fc1b6bcdc01d276ca48659f76b404',
+		'parameters': {
+			'method': 'GET',
+			'responseSelections': [
+				{
+					'jsonPath': '$.hasBookface',
+					'responseMatch': '"hasBookface":true',
+					'xPath': "//script[@data-component-name='BookfaceCsrApp']"
 				},
+				{
+					'jsonPath': '$.currentUser',
+					'responseMatch': '\\{"id":182853,.*?waas_admin.*?:{.*?}.*?:\\{.*?}.*?(?:full_name|first_name).*?}',
+					'xPath': "//script[@id='js-react-on-rails-context']"
+				}],
+			'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
+			'url': 'https://bookface.ycombinator.com/home'
+		},
+		'provider': 'http',
+		'redactedParameters': "{\"url\":\"*************************************\",\"method\":\"GET\",\"responseSelections\":[{\"jsonPath\":\"$.currentUser\",\"responseMatch\":\"\\\\{\\\"id\\\":182853,.*?waas_admin.*?:{.*?}.*?:\\\\{.*?}.*?(?:full_name|first_name).*?}\",\"xPath\":\"//script[@id='js-react-on-rails-context']\"},{\"jsonPath\":\"$.hasBookface\",\"responseMatch\":\"\\\"hasBookface\\\":true\",\"xPath\":\"//script[@data-component-name='BookfaceCsrApp']\"}]}",
+		'signatures': ['0xcb039fd715e58d08ee4f03aa3705fc8bf7a3cbef414456703a3940a2bee2703546de577e976bfadcfa4e26cab25d647d5913042d95ff5a336eba74d5ee6007851b'],
+		'templateClaimId': '0',
+		'timestampS': '1688383636',
+		'witnessAddresses': ['reclaim - node.questbook.app'],
+		'extractedParameterValues':REGEX_XPATH_PARAMS
+	},
+	{
+		'chainId': 420,
+		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
+		'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
+		'onChainClaimId': '6607',
+		'ownerPublicKey': '0217aff403993ec235b028c89e7148927a971fc1b6bcdc01d276ca48659f76b404',
+		'parameters': {
+			'method': 'GET',
+			'responseSelections': [
 				{
 					'jsonPath': '$.hasBookface',
 					'responseMatch': '"hasBookface":true',
@@ -171,9 +223,70 @@ const PROOFS_WITH_XPATH_1: Proof[] = [
 		'witnessAddresses': ['reclaim - node.questbook.app'],
 		'extractedParameterValues':REGEX_XPATH_PARAMS
 	},
+
 ]
 
 const PROOFS_WITH_XPATH_2: Proof[] = [
+	{
+		'chainId': 420,
+		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
+		'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
+		'onChainClaimId': '6607',
+		'ownerPublicKey': '0217aff403993ec235b028c89e7148927a971fc1b6bcdc01d276ca48659f76b404',
+		'parameters': {
+			'method': 'GET',
+			'responseSelections': [
+				{
+					'jsonPath': '$.currentUser',
+					'responseMatch': '\\{"id":182853,.*?waas_admin.*?:{.*?}.*?:\\{.*?}.*?(?:full_name|first_name).*?}',
+					'xPath': "//script[@id='js-react-on-rails-context']"
+				},
+				{
+					'jsonPath': '$.hasBookface',
+					'responseMatch': '"hasBookface":true',
+					'xPath': "//script[@data-component-name='BookfaceCsrApp']"
+				}],
+			'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
+			'url': 'https://bookface.ycombinator.com/home'
+		},
+		'provider': 'http',
+		'redactedParameters': "{\"url\":\"*************************************\",\"method\":\"GET\",\"responseSelections\":[{\"jsonPath\":\"$.currentUser\",\"responseMatch\":\"\\\\{\\\"id\\\":182853,.*?waas_admin.*?:{.*?}.*?:\\\\{.*?}.*?(?:full_name|first_name).*?}\",\"xPath\":\"//script[@id='js-react-on-rails-context']\"},{\"jsonPath\":\"$.hasBookface\",\"responseMatch\":\"\\\"hasBookface\\\":true\",\"xPath\":\"//script[@data-component-name='BookfaceCsrApp']\"}]}",
+		'signatures': ['0xcb039fd715e58d08ee4f03aa3705fc8bf7a3cbef414456703a3940a2bee2703546de577e976bfadcfa4e26cab25d647d5913042d95ff5a336eba74d5ee6007851b'],
+		'templateClaimId': '0',
+		'timestampS': '1688383636',
+		'witnessAddresses': ['reclaim - node.questbook.app'],
+		'extractedParameterValues':INCORRECT_REGEX_XPATH_PARAMS
+	},
+	{
+		'chainId': 420,
+		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
+		'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
+		'onChainClaimId': '6607',
+		'ownerPublicKey': '0217aff403993ec235b028c89e7148927a971fc1b6bcdc01d276ca48659f76b404',
+		'parameters': {
+			'method': 'GET',
+			'responseSelections': [
+				{
+					'jsonPath': '$.currentUser',
+					'responseMatch': '\\{"id":182853,.*?waas_admin.*?:{.*?}.*?:\\{.*?}.*?(?:full_name|first_name).*?}',
+					'xPath': "//script[@id='js-react-on-rails-context']"
+				},
+				{
+					'jsonPath': '$.hasBookface',
+					'responseMatch': '"hasBookface":true',
+					'xPath': "//script[@data-component-name='BookfaceCsrApp']"
+				}],
+			'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
+			'url': 'https://bookface.ycombinator.com/home'
+		},
+		'provider': 'http',
+		'redactedParameters': "{\"url\":\"*************************************\",\"method\":\"GET\",\"responseSelections\":[{\"jsonPath\":\"$.currentUser\",\"responseMatch\":\"\\\\{\\\"id\\\":182853,.*?waas_admin.*?:{.*?}.*?:\\\\{.*?}.*?(?:full_name|first_name).*?}\",\"xPath\":\"//script[@id='js-react-on-rails-context']\"},{\"jsonPath\":\"$.hasBookface\",\"responseMatch\":\"\\\"hasBookface\\\":true\",\"xPath\":\"//script[@data-component-name='BookfaceCsrApp']\"}]}",
+		'signatures': ['0xcb039fd715e58d08ee4f03aa3705fc8bf7a3cbef414456703a3940a2bee2703546de577e976bfadcfa4e26cab25d647d5913042d95ff5a336eba74d5ee6007851b'],
+		'templateClaimId': '0',
+		'timestampS': '1688383636',
+		'witnessAddresses': ['reclaim - node.questbook.app'],
+		'extractedParameterValues':INCORRECT_REGEX_XPATH_PARAMS
+	},
 	{
 		'chainId': 420,
 		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
