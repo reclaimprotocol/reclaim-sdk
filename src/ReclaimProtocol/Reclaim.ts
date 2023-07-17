@@ -2,7 +2,7 @@ import { Claim, ClaimProof, hashClaimInfo, verifyWitnessSignature } from '@recla
 import { utils } from 'ethers'
 import P from 'pino'
 import { Proof, ProofRequest, Template } from '../types'
-import { generateCallbackUrl, generateUuid, getClaimWitnessOnChain, getOnChainClaimDataFromRequestId } from '../utils'
+import { generateCallbackUrl, generateUuid, getCallbackIdFromUrl, getClaimWitnessOnChain, getOnChainClaimDataFromRequestId } from '../utils'
 import { CustomProvider } from './CustomProvider'
 import { HttpsProvider } from './HttpsProvider'
 import TemplateInstance from './Template'
@@ -27,10 +27,13 @@ export class Reclaim {
 	 */
 	requestProofs = (request: ProofRequest): TemplateInstance => {
 		const callbackUrl = generateCallbackUrl(request.baseCallbackUrl, request.callbackId)
+		const sessionId = getCallbackIdFromUrl(callbackUrl)
+		const callbackUrl = generateCallbackUrl(request.baseCallbackUrl, request.callbackId)
 		const contextMessage = request.contextMessage ? request.contextMessage : request.baseCallbackUrl
 		const contextAddress = request.contextAddress ? request.contextAddress : '0x0'
 		const template: Template = {
 			id: generateUuid(),
+			sessionId,
 			name: request.title,
 			callbackUrl,
 			claims: request.requestedProofs.map((requestedProof) => {

@@ -143,6 +143,7 @@ export type Claim = {
 
 export type Template = {
 	id: string
+	sessionId: string
 	name: string
 	callbackUrl: string
 	claims: Claim[]
