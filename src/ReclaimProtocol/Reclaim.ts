@@ -55,10 +55,10 @@ export class Reclaim {
 	}
 
 	/**
-     * function to verify the witness signatures
-     * @param proofs proofs returned by the callback URL
-     * @returns {Promise<boolean>} boolean value denotes if the verification was successful or failed
-     */
+	 * function to verify the witness signatures
+	 * @param proofs proofs returned by the callback URL
+	 * @returns {Promise<boolean>} boolean value denotes if the verification was successful or failed
+	 */
 	verifyCorrectnessOfProofs = async(expectedSessionId: string, proofs: Proof[]): Promise<boolean> => {
 		let result: boolean = false
 
@@ -78,32 +78,34 @@ export class Reclaim {
 				return result
 			}
 
-			const claim: SignedClaim = {
-				claim: { claimId: parseInt(proof.onChainClaimId),
-					owner: signatures.getAddress(Buffer.from(proof.ownerPublicKey, 'hex')),
-					provider: proof.provider,
-					timestampS: parseInt(proof.timestampS),
-					context: proof.context,
-					sessionId: proof.sessionId,
-					parameters: serialize(proof.parameters)!,
-				},
-				signatures: proof.signatures.map(signature => {
-					return utils.arrayify(signature)
-				})
-			}
-
-			// fetch on chain claim data from the request id
-			const claimData = await getOnChainClaimDataFromRequestId(proof.chainId, proof.onChainClaimId)
-			const onChainInfoHash = claimData.infoHash
-			const calculatedInfoHash = hashClaimInfo({ parameters: serialize(proof.parameters)!, provider: proof.provider, context: proof.context, sessionId: expectedSessionId }) //TODO: pass context from the app
-
-			// if the info hash is not same: return false
-			if(onChainInfoHash.toLowerCase() !== calculatedInfoHash.toLowerCase()) {
-				logger.error('Info hash mismatch')
-				return result
-			}
-
 			try {
+				const claim: SignedClaim = {
+					claim: {
+						claimId: parseInt(proof.onChainClaimId),
+						owner: signatures.getAddress(Buffer.from(proof.ownerPublicKey, 'hex')),
+						provider: proof.provider,
+						timestampS: parseInt(proof.timestampS),
+						context: proof.context,
+						sessionId: proof.sessionId,
+						parameters: serialize(proof.parameters)!,
+					},
+					signatures: proof.signatures.map(signature => {
+						return utils.arrayify(signature)
+					})
+				}
+
+				// fetch on chain claim data from the request id
+				const claimData = await getOnChainClaimDataFromRequestId(proof.chainId, proof.onChainClaimId)
+				const onChainInfoHash = claimData.infoHash
+				const calculatedInfoHash = hashClaimInfo({ parameters: serialize(proof.parameters)!, provider: proof.provider, context: proof.context, sessionId: expectedSessionId }) //TODO: pass context from the app
+
+
+				// if the info hash is not same: return false
+				if(onChainInfoHash.toLowerCase() !== calculatedInfoHash.toLowerCase()) {
+					logger.error('Info hash mismatch')
+					return result
+				}
+
 				// verify the witness signature
 				assertValidSignedClaim(claim, witnesses)
 				logger.info(`isCorrectProof: ${result}`)
