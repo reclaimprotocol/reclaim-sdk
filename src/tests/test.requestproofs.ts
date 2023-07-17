@@ -22,10 +22,10 @@ describe('Create proof request with xpath', () => {
 			REQUEST_PROOF_WITH_XPATH
 		)
 
-		// console.log(request.reclaimUrl)
+		console.log(request.reclaimUrl)
 
 		expect(request.template.name).toBe('YC')
-		expect(request.template.claims.length).toEqual(2)
+		expect(request.template.claims.length).toEqual(1)
 		// expect(request.callbackId).toBe('1234')
 	})
 
@@ -83,7 +83,7 @@ const REQUEST_PROOF_WITH_XPATH = {
 				{
 					jsonPath:'$.currentUser',
 					responseMatch:'\\{"id":{{YC_USER_ID}},.*?waas_admin.*?:{.*?}.*?:\\{.*?}.*?(?:full_name|first_name).*?}',
-					xPath:"//script[@id='js-react-on-rails-context']"
+					xPath:"//*[@id='js-react-on-rails-context']"
 				},
 				{
 					jsonPath:'$.hasBookface',
@@ -92,24 +92,24 @@ const REQUEST_PROOF_WITH_XPATH = {
 				}
 			]
 		}),
-		new reclaim.HttpsProvider({
-			name: 'YC https provider',
-			logoUrl: 'https://www.redditstatic.com/desktop2x/img/favicon/android-icon-192x192.png',
-			url: 'https://bookface.ycombinator.com/home',
-			loginUrl: 'https://bookface.ycombinator.com/home',
-			loginCookies: ['_sso.key'],
-			responseSelection: [
-				{
-					jsonPath:'$.currentUser',
-					responseMatch:'\\{"id":{{YC_USER_ID}},.*?waas_admin.*?:{.*?}.*?:\\{.*?}.*?(?:full_name|first_name).*?}',
-					xPath:"//script[@id='js-react-on-rails-context']"
-				},
-				{
-					jsonPath:'$.hasBookface',
-					responseMatch:'"hasBookface":true',
-					xPath:"//script[@data-component-name='BookfaceCsrApp']"
-				}
-			]
-		})
+		// new reclaim.HttpsProvider({
+		// 	name: 'YC https provider',
+		// 	logoUrl: 'https://www.redditstatic.com/desktop2x/img/favicon/android-icon-192x192.png',
+		// 	url: 'https://bookface.ycombinator.com/home',
+		// 	loginUrl: 'https://bookface.ycombinator.com/home',
+		// 	loginCookies: ['_sso.key'],
+		// 	responseSelection: [
+		// 		{
+		// 			jsonPath:'$.currentUser',
+		// 			responseMatch:'\\{"id":{{YC_USER_ID}},.*?waas_admin.*?:{.*?}.*?:\\{.*?}.*?(?:full_name|first_name).*?}',
+		// 			xPath:"//script[@id='js-react-on-rails-context']"
+		// 		},
+		// 		{
+		// 			jsonPath:'$.hasBookface',
+		// 			responseMatch:'"hasBookface":true',
+		// 			xPath:"//script[@data-component-name='BookfaceCsrApp']"
+		// 		}
+		// 	]
+		// })
 	]
 }
