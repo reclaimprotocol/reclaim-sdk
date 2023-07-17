@@ -1,52 +1,79 @@
 import { Proof } from '../types'
-import { generateUuid } from '../utils'
 import { reclaimprotocol } from '../'
 
-jest.setTimeout(10000)
+jest.setTimeout(15000)
 
 describe('Verification', () => {
 	it('should pass signature verification', async() => {
 		const reclaim = new reclaimprotocol.Reclaim()
-		const result = await reclaim.verifyCorrectnessOfProofs([CORRECT_PROOF])
+		const result = await reclaim.verifyCorrectnessOfProofs(EXPECTED_SESSION_ID, [CORRECT_PROOF])
 		expect(result).toBe(true)
 	})
 
 	it('should fail signature verification for incorrect signature', async() => {
 		const reclaim = new reclaimprotocol.Reclaim()
-		const result = await reclaim.verifyCorrectnessOfProofs([INCORRECT_SIGNATURE_PROOF])
+		const result = await reclaim.verifyCorrectnessOfProofs(EXPECTED_SESSION_ID, [INCORRECT_SIGNATURE_PROOF])
 		expect(result).toBe(false)
 	})
 
 	it('should fail signature verification for incorrect owner public key', async() => {
 		const reclaim = new reclaimprotocol.Reclaim()
-		const result = await reclaim.verifyCorrectnessOfProofs([INCORRECT_OWNER_PUBLIC_KEY_PROOF])
+		const result = await reclaim.verifyCorrectnessOfProofs(EXPECTED_SESSION_ID, [INCORRECT_OWNER_PUBLIC_KEY_PROOF])
 		expect(result).toBe(false)
 	})
 
 	it('should fail signature verification for incorrect timestamp', async() => {
 		const reclaim = new reclaimprotocol.Reclaim()
-		const result = await reclaim.verifyCorrectnessOfProofs([INCORRECT_TIMESTAMP_PROOF])
+		const result = await reclaim.verifyCorrectnessOfProofs(EXPECTED_SESSION_ID, [INCORRECT_TIMESTAMP_PROOF])
 		expect(result).toBe(false)
 	})
 
 	it('should fail signature verification for incorrect parameter', async() => {
 		const reclaim = new reclaimprotocol.Reclaim()
-		const result = await reclaim.verifyCorrectnessOfProofs([INCORRECT_PARAMETER_PROOF])
+		const result = await reclaim.verifyCorrectnessOfProofs(EXPECTED_SESSION_ID, [INCORRECT_PARAMETER_PROOF])
 		expect(result).toBe(false)
 	})
 
 	it('should fail signature verification for incorrect claim id', async() => {
 		const reclaim = new reclaimprotocol.Reclaim()
-		const result = await reclaim.verifyCorrectnessOfProofs([INCORRECT_CLAIM_ID_PROOF])
+		const result = await reclaim.verifyCorrectnessOfProofs(EXPECTED_SESSION_ID, [INCORRECT_CLAIM_ID_PROOF])
 		expect(result).toBe(false)
 	})
 
 	it('should fail for incorrect provider', async() => {
 		const reclaim = new reclaimprotocol.Reclaim()
-		const result = await reclaim.verifyCorrectnessOfProofs([INCORRECT_PROVIDER_PROOF])
+		const result = await reclaim.verifyCorrectnessOfProofs(EXPECTED_SESSION_ID, [INCORRECT_PROVIDER_PROOF])
 		expect(result).toBe(false)
 	})
 })
+const EXPECTED_SESSION_ID = '9a927b04-6443-4db9-94fc-9077f766b74b' // TODO: update this with valid session id once the app integrates it into the proof
+const CORRECT_PROOF: Proof = {
+	'chainId': 420,
+	'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
+	'extractedParameterValues': {
+	  'YC_USER_ID': '182853'
+	},
+	'onChainClaimId': '7492',
+	'ownerPublicKey': '03f9d34be41e082528d5e8541cf1d77bc88a1727612479b16e29e80810a1c8e1be',
+	'parameters': JSON.parse("{\"method\":\"GET\",\"responseSelections\":[{\"jsonPath\":\"$.currentUser\",\"responseMatch\":\"\\\\{\\\"id\\\":182853,.*?waas_admin.*?:{.*?}.*?:\\\\{.*?}.*?(?:full_name|first_name).*?}\",\"xPath\":\"//*[@id='js-react-on-rails-context']\"},{\"jsonPath\":\"$.hasBookface\",\"responseMatch\":\"\\\"hasBookface\\\":true\",\"xPath\":\"//script[@data-component-name='BookfaceCsrApp']\"}],\"url\":\"https://bookface.ycombinator.com/home\"}"),
+	'provider': 'http',
+	'redactedParameters': "{\"method\":\"***\",\"responseSelections\":[{\"jsonPath\":\"$.currentUser\",\"responseMatch\":\"\\\\{\\\"id\\\":182853,.*?waas_admin.*?:{.*?}.*?:\\\\{.*?}.*?(?:full_name|first_name).*?}\",\"xPath\":\"//*[@id='js-react-on-rails-context']\"},{\"jsonPath\":\"$.hasBookface\",\"responseMatch\":\"\\\"hasBookface\\\":true\",\"xPath\":\"//script[@data-component-name='BookfaceCsrApp']\"}],\"url\":\"https://bookface.ycombinator.com/home\"}",
+	'sessionId': '9a927b04-6443-4db9-94fc-9077f766b74b',
+	'signatures': [
+	  '0x7005795aedaf2c092efc9f8af8dc3c37ebd3acec59ae3b91a450f525125f528c56ff16351ab4aee308e3c6b66f202bfe643a2024963b69ac86b2a4165eb39bed1c'
+	],
+	'templateClaimId': '0',
+	'timestampS': '1689564494',
+	'witnessAddresses': [
+	  'reclaim-node.questbook.app'
+	]
+}
+
+// const CORRECT_PROOF_1: Proof = {
+// 	'onChainClaimId': '7485',
+// 	'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
+// 	'owner': '0x24d68478e8568c27b72ded794d55338a115234b4',
+// 	'parameters': "{\"method\":\"GET\",\"responseSelections\":[{\"jsonPath\":\"$.currentUser\",\"responseMatch\":\"\\\\{\\\"id\\\":182853,.*?waas_admin.*?:{.*?}.*?:\\\\{.*?}.*?(?:full_name|first_name).*?}\",\"xPath\":\"//*[@id='js-react-on-rails-context']\"},{\"jsonPath\":\"$.hasBookface\",\"responseMatch\":\"\\\"hasBookface\\\":true\",\"xPath\":\"//script[@data-component-name='BookfaceCsrApp']\"}],\"url\":\"https://bookface.ycombinator.com/home\"}", 'provider': 'http', 'timestampS': 1689502428 }
 
 // const CORRECT_PROOF: Proof = {
 // 	'chainId': 420,
@@ -91,19 +118,6 @@ describe('Verification', () => {
 // 	'witnessAddresses': ['reclaim-node.questbook.app']
 // }
 
-const CORRECT_PROOF: Proof = {
-	'chainId': 420,
-	'onChainClaimId': '6317',
-	'ownerPublicKey': '0313764ff3a1d897d57c6a64d8f45c715ddf9d17ceb6077bf882164f3657ec8409',
-	'parameters': { 'emailAddress': 'sweta@creatoros.co' },
-	'provider': 'google-login',
-	'redactedParameters': '{"emailAddress":"*****@creatoros.co"}',
-	'signatures': ['0x472b6e8777229377af2f3d14582fff3d941bef773cd4b98b567d86b652f664a0509f6682128137615d2103260f8217b96b4fbfa8b543c4c4bd4e2f3c711bec331b'],
-	'templateClaimId': '0',
-	'timestampS': '1688050096',
-	'witnessAddresses': ['reclaim-node.questbook.app']
-}
-
 // const CORRECT_PROOF: Proof = {
 // 	onChainClaimId: '1560',
 // 	templateClaimId: generateUuid(),
@@ -134,7 +148,9 @@ const INCORRECT_TIMESTAMP_PROOF: Proof = {
 
 const INCORRECT_PARAMETER_PROOF: Proof = {
 	...CORRECT_PROOF,
-	parameters: { 'emailAddress': 'sweta@gmail.com' },
+	parameters: {
+		'emailAddress': 'sweta@gmail.com'
+	},
 }
 
 const INCORRECT_CLAIM_ID_PROOF: Proof = {

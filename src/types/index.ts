@@ -20,6 +20,15 @@ export type ProofRequest = {
 	 * Callback id
 	 */
 	callbackId?: string
+	/**
+	 * Context message for the proof request
+	 */
+	contextMessage?: string
+	/**
+	 * Context address for the proof request
+	 * This is your users' ethereum wallet address
+	 */
+	contextAddress?: string
 }
 
 export type HttpsProviderParams = {
@@ -133,10 +142,12 @@ export type responseSelection = {
 
 export type Claim = {
 	templateClaimId: string
+	context: string
 } & ProviderParams
 
 export type Template = {
 	id: string
+	sessionId: string
 	name: string
 	callbackUrl: string
 	claims: Claim[]
@@ -158,12 +169,16 @@ export type httpProof = Omit<Claim, 'payload'> & {
 
 export type Proof = {
 	onChainClaimId: string
+	sessionId: string
 	ownerPublicKey: string
 	timestampS: string
 	witnessAddresses: string[]
 	signatures: string[]
 	redactedParameters: string
 	chainId: number
+	extractedParameterValues?: {
+		[key: string]: string | number
+	}
 } & (ProofClaim | httpProof)
 
 export type RequestClaim = {

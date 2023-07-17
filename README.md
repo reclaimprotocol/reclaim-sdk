@@ -73,7 +73,9 @@ Here's a step-by-step guide to help you get started:
     try {
         const request = reclaim.requestProofs({
             title: "Reclaim Protocol",
-            baseCallbackUrl: "https://reclaim.app/callback",
+            baseCallbackUrl: "https://reclaim.app/callback", 
+            contextMessage: "Airdrop for Reclaim claimants", //optional: context message for the proof request
+            contextAddress: "0x5d96Cb97F8499d4dEa814cEa2F8448A0AF1A2bC2" //optional: your users' Ethereum wallet address
             requestedProofs: [
                 new reclaim.CustomProvider({
                     provider: 'google-login',
@@ -82,7 +84,7 @@ Here's a step-by-step guide to help you get started:
             ],
         });
         // Store the callback Id and Reclaim URL in your database
-        const { callbackId, reclaimUrl } = request;
+        const { callbackId } = request;
         const reclaimUrl = await request.getReclaimUrl();
         // ... store the callbackId and reclaimUrl in your database
         res.json({ reclaimUrl });

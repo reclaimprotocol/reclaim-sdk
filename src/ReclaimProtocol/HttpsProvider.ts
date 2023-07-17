@@ -37,7 +37,7 @@ export class HttpsProvider {
 
 		// set params
 		this._params.payload = {
-			...this._params,
+			...this._params.payload,
 			metadata: {
 				name: params.name,
 				logoUrl: params.logoUrl
