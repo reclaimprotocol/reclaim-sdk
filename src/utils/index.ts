@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
-import { Proof, ProofParameters, RequestClaim } from '../types'
+import { Proof, RequestClaim } from '../types'
 import CONTRACTS_CONFIG from '../utils/contracts/config.json'
 import { Reclaim, Reclaim__factory as ReclaimFactory } from '../utils/contracts/types'
 
@@ -108,11 +108,13 @@ export function getCallbackIdFromUrl(_url: string): string {
 	}
 }
 
-export function validateParameterValuesFromRegex(expectedProofsInCallback: string, proofs: Proof[], params: ProofParameters) {
+export function validateParameterValuesFromRegex(expectedProofsInCallback: string, proofs: Proof[]) {
 	// parse expectedProofsInCallback
 	const templateRegexes = decodeBase64(expectedProofsInCallback)
 
-	const paramsClone = { ...params }
+	const proofsParams = proofs.map(p => Object.entries(p?.extractedParameterValues ?? {}))
+	const params = new Map<string, string|number>(...proofsParams)
+	const unusedParams = new Map(params)
 
 	//replace placeholders with params
 	const selectionRegexes: string[][] = []
@@ -120,11 +122,11 @@ export function validateParameterValuesFromRegex(expectedProofsInCallback: strin
 		const rxs: string[] = []
 		regexes.forEach(rx => {
 			let updatedRegex = rx
-			for(const paramsKey in params) {
+			for(const [paramsKey, paramsValue] of params) {
 				const m = `{{${paramsKey}}}`
 				if(updatedRegex.includes(m)) {
-					updatedRegex = updatedRegex.replace(m, params[paramsKey])
-					delete paramsClone[paramsKey]
+					updatedRegex = updatedRegex.replace(m, paramsValue.toString())
+					unusedParams.delete(paramsKey)
 				}
 			}
 
@@ -134,12 +136,12 @@ export function validateParameterValuesFromRegex(expectedProofsInCallback: strin
 	})
 
 
-	if(Object.keys(paramsClone).length > 0) {
-		throw new Error('Not all parameters were used in response selections')
+	if(unusedParams.size > 0) {
+		throw new Error(`Not all parameters were used in response selections: ${JSON.stringify(Object.fromEntries(unusedParams))}`)
 	}
 
 	if(selectionRegexes.length !== proofs.length) {
-		throw new Error('Number of proofs does not match number of response selections')
+		throw new Error(`Number of proofs (${proofs.length}) does not match number of response selections (${selectionRegexes.length})`)
 	}
 
 	//get all responseMatches from all proofs
