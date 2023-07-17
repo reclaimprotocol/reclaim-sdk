@@ -181,6 +181,21 @@ export function validateParameterValuesFromRegex(expectedProofsInCallback: strin
 	})
 }
 
+export async function getShortenedUrl(url: string) {
+	const headers = new Headers()
+	headers.append('Content-Type', 'application/json')
+	const response = await fetch('https://rclm.link/short', {
+		method: 'POST',
+		headers,
+		body: JSON.stringify({
+			fullUrl: url
+		})
+	})
+	const res = await response.json()
+	const shortenedVerificationUrl = res.shortUrl
+	return shortenedVerificationUrl
+}
+
 // type guard for proof
 export function isProof(obj: unknown): obj is Proof {
 	return (

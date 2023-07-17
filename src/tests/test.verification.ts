@@ -119,28 +119,11 @@ const CORRECT_PROOF: Proof = {
 // }
 
 // const CORRECT_PROOF: Proof = {
-// 	'chainId': 420,
-// 	'onChainClaimId': '6317',
-// 	'ownerPublicKey': '0313764ff3a1d897d57c6a64d8f45c715ddf9d17ceb6077bf882164f3657ec8409',
-// 	'parameters': { 'emailAddress': 'sweta@creatoros.co' },
-// 	'provider': 'google-login',
-// 	'redactedParameters': '{"emailAddress":"*****@creatoros.co"}',
-// 	'signatures': ['0x472b6e8777229377af2f3d14582fff3d941bef773cd4b98b567d86b652f664a0509f6682128137615d2103260f8217b96b4fbfa8b543c4c4bd4e2f3c711bec331b'],
-// 	'templateClaimId': '0',
-// 	'timestampS': '1688050096',
-// 	'witnessAddresses': ['reclaim-node.questbook.app']
-// }
-
-// const CORRECT_PROOF: Proof = {
 // 	onChainClaimId: '1560',
-// 	sessionId: '0', // TODO: update this once the app integrates sessionId into the proof
-// 	context: '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0', // TODO: update this once the app integrates context into the proof
 // 	templateClaimId: generateUuid(),
 // 	chainId: 420,
 // 	provider: 'google-login',
-// 	parameters: {
-// 		'emailAddress': 'swetasunofficial@gmail.com'
-// 	},
+// 	parameters: { 'emailAddress': 'swetasunofficial@gmail.com' },
 // 	ownerPublicKey: '039549ccde10c559c979eb826075e9274ed8d9439e299e46f752fc8e9cd1e0647f',
 // 	timestampS: '1681968148',
 // 	witnessAddresses: ['reclaim-node.questbook.app'],

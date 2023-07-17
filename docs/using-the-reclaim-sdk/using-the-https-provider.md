@@ -91,8 +91,8 @@ By following these steps, you can figure out which cookies are required for the 
 To verify the proofs returned by the Reclaim Protocol, you'll need to set up a callback endpoint in your application. This callback verifies the correctness of the proofs and processes them accordingly.
 
 ```javascript
-app.post("/callback/:callbackId", async (req, res) => {
-    const { callbackId } = req.params;
+app.post("/callback/", async (req, res) => {
+    const { id } = req.query;
     const { proofs } = req.body;
 
     const onChainClaimIds = reclaim.getOnChainClaimIdsFromProofs(proofs)
