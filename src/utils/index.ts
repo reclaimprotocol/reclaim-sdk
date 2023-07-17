@@ -31,7 +31,8 @@ export async function getOnChainClaimDataFromRequestId(
 
 export async function getClaimWitnessOnChain(chainId: number, claimId: number) {
 	const contract = getContract(chainId)
-	return await contract.getClaimWitnesses(claimId)
+	const witnesses = await contract.getClaimWitnesses(claimId)
+	return witnesses.map(w => w.toLowerCase())
 }
 
 export function getContract(chainId: number) {
