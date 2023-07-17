@@ -172,6 +172,9 @@ export type Proof = {
 	signatures: string[]
 	redactedParameters: string
 	chainId: number
+	extractedParameterValues?: {
+		[key: string]: string | number
+	}
 } & (ProofClaim | httpProof)
 
 export type RequestClaim = {
