@@ -112,7 +112,7 @@ export function validateParameterValuesFromRegex(expectedProofsInCallback: strin
 	// parse expectedProofsInCallback
 	const templateRegexes = decodeBase64(expectedProofsInCallback)
 
-	const proofsParams = proofs.map(p=>Object.entries(p?.extractedParameterValues ?? {}))
+	const proofsParams = proofs.map(p => Object.entries(p?.extractedParameterValues ?? {}))
 	const params = new Map<string, string|number>(...proofsParams)
 	const unusedParams = new Map(params)
 
@@ -122,7 +122,7 @@ export function validateParameterValuesFromRegex(expectedProofsInCallback: strin
 		const rxs: string[] = []
 		regexes.forEach(rx => {
 			let updatedRegex = rx
-			for(let [paramsKey, paramsValue] of params) {
+			for(const [paramsKey, paramsValue] of params) {
 				const m = `{{${paramsKey}}}`
 				if(updatedRegex.includes(m)) {
 					updatedRegex = updatedRegex.replace(m, paramsValue.toString())

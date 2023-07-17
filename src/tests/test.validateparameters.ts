@@ -23,7 +23,7 @@ describe('Validate parameters', () => {
 
 	it('should throw error with bad parameters with xPath', () => {
 		const selectionRegex = encodeBase64(CORRECT_XPATH_REGEXES)
-		expect(() => reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITH_XPATH_3)).toThrowError(`Not all parameters were used in response selections: {\"hasBookface\":\"true\"}`)
+		expect(() => reclaimprotocol.utils.validateParameterValuesFromRegex(selectionRegex, PROOFS_WITH_XPATH_3)).toThrowError('Not all parameters were used in response selections: {\"hasBookface\":\"true\"}')
 
 	})
 
@@ -44,7 +44,7 @@ const CORRECT_REGEXES = [
 	["<span id='empid'>{{qb-empid}}</span>"]
 ]
 
-const REGEX_PARAMS  = {
+const REGEX_PARAMS = {
 	'creatoros-empid':'128356',
 	'qb-empid':'9845',
 	'some_value':'123',
