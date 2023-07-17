@@ -206,6 +206,3 @@ export type SearchQueryObject = {
 	qualifiers: Record<string, string[]>
 }
 
-export type ProofParameters = {
-	[key: string]: string
-}
