@@ -114,7 +114,7 @@ export function validateParameterValuesFromRegex(expectedProofsInCallback: strin
 
 	const proofsParams = proofs.map(p=>Object.entries(p?.extractedParameterValues ?? {}))
 	const params = new Map<string, string|number>(...proofsParams)
-	const paramsClone = new Map(params)
+	const unusedParams = new Map(params)
 
 	//replace placeholders with params
 	const selectionRegexes: string[][] = []
@@ -126,7 +126,7 @@ export function validateParameterValuesFromRegex(expectedProofsInCallback: strin
 				const m = `{{${paramsKey}}}`
 				if(updatedRegex.includes(m)) {
 					updatedRegex = updatedRegex.replace(m, paramsValue.toString())
-					paramsClone.delete(paramsKey)
+					unusedParams.delete(paramsKey)
 				}
 			}
 
@@ -136,12 +136,12 @@ export function validateParameterValuesFromRegex(expectedProofsInCallback: strin
 	})
 
 
-	if(paramsClone.size > 0) {
-		throw new Error('Not all parameters were used in response selections')
+	if(unusedParams.size > 0) {
+		throw new Error(`Not all parameters were used in response selections: ${unusedParams}`)
 	}
 
 	if(selectionRegexes.length !== proofs.length) {
-		throw new Error('Number of proofs does not match number of response selections')
+		throw new Error(`Number of proofs (${proofs.length}) does not match number of response selections (${selectionRegexes.length})`)
 	}
 
 	//get all responseMatches from all proofs
