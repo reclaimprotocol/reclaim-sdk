@@ -7,7 +7,7 @@ describe('Create proof request without xpath', () => {
 			REQUEST_PROOF_WITHOUT_XPATH
 		)
 
-		// console.log(request.reclaimUrl)
+		// console.log(await request.getReclaimUrl())
 
 		expect(request.template.name).toBe('Proof of Reddit Karma')
 		expect(request.template.claims.length).toEqual(2)
@@ -33,7 +33,7 @@ describe('Create proof request with xpath', () => {
 			REQUEST_PROOF_WITHOUT_XPATH
 		)
 
-		// console.log(request.reclaimUrl)
+		// console.log(await request.getReclaimUrl())
 
 		expect(request.template.name).toBe('Proof of Reddit Karma')
 		expect(request.template.claims.length).toEqual(2)
