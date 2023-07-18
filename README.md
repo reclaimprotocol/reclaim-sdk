@@ -16,6 +16,10 @@ The goal of the SDK is to allow you, the developer to easily integrate [Reclaim 
 Here's a step-by-step guide to help you get started:
 
  ## Getting started
+ [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/reclaimprotocol/one-step-deploy-provider)
+
+Follow along the guide and build your own server or you can directly deploy the following provider example to Vercel with a single click. This process automatically creates a fork in your GitHub repository, allowing you to jump straight into the action. By editing the code directly on Github, you can conveniently modify and tailor the application to your specific use case.
+
 1. Set up a new Node.js project:
      ```
     mkdir my-reclaim-app
