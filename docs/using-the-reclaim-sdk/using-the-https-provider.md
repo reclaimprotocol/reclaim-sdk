@@ -13,17 +13,36 @@ The HTTPS provider is the simplest way to integrate Reclaim Protocol into your p
 To start a new project in Express.js, navigate to the desired directory and run the following commands:
 
 ```bash
-express my-project
+mkdir my-project
 cd my-project
-npm install
+npm init -y
+touch index.js
+```
+Add ```"type": "module"``` to your package.json, your package.json will now look something like this
+
+```json
+{ 
+  "name": "your-package-name",
+  "version": "1.0.0",
+  "description": "Package description",
+  "main": "index.js",
+  "type": "module",  // Enables ESM syntax
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+  }
+}
 ```
 
 ### Installing Reclaim SDK
 
-Next, install the Reclaim SDK in your project using the following command:
+Next, install the Reclaim SDK and Express in your project using the following command:
 
 ```bash
-npm i @reclaimprotocol/reclaim-sdk
+npm i @reclaimprotocol/reclaim-sdk express
 ```
 
 ### Creating an Endpoint to Request Proofs
@@ -35,13 +54,20 @@ Here are some important things to note:
 * `baseCallbackUrl`:  Reclaim SDK will append a unique identifier (UUID) to this base URL, creating a unique callback URL for each proof request. The proofs will be uploaded to this callback URL by the Reclaim Wallet App.
 * `title`, `name`, and `logoUrl`: These parameters will be displayed to the user in the Reclaim app. The `title` is used as the title of the proof request, the `name` is used as the name of the provider (e.g., the name of the website the user is logging into), and the `logoUrl` is the URL of the logo to display. These details can be used to provide the user with context about what proofs they're creating and why.
 
-\
 
 
 ```javascript
+/* index.js */
+import express from 'express'
 import { reclaimprotocol } from '@reclaimprotocol/reclaim-sdk'
 
-app.get("/request-proofs", (req, res) => {
+const app = express()
+const reclaim = new reclaimprotocol.Reclaim()
+const port = 3000
+
+app.use(express.text({ type: "*/*" }));
+
+app.get("/request-proofs", async(req, res) => {
     const request = reclaim.requestProofs({
         title: "Reclaim Protocol",
         baseCallbackUrl: "https://yourdomain.com/callback",
@@ -65,6 +91,10 @@ app.get("/request-proofs", (req, res) => {
     // ...
     res.json({ reclaimUrl });
 })
+
+app.listen(port, () => {
+  console.log(`App listening at http://localhost:${port}`);
+});
 ```
 
 ### Extracting Login Cookies
@@ -95,14 +125,15 @@ By following these steps, you can figure out which cookies are required for the 
 To verify the proofs returned by the Reclaim Protocol, you'll need to set up a callback endpoint in your application. This callback verifies the correctness of the proofs and processes them accordingly.
 
 ```javascript
+/* index.js */
 app.post("/callback/", async (req, res) => {
     const { id } = req.query;
-    const { proofs } = req.body;
+    const { proofs } = JSON.parse(decodeURIComponent(req.body));
 
     const onChainClaimIds = reclaim.getOnChainClaimIdsFromProofs(proofs)
 
     // check if onChainClaimIds have been submitted in the database before
-    const results = db.find({{ valueField: { $in: valuesArray } }; // Replace 'valueField' with the field name in your database
+    const results = db.find({{ valueField: { $in: valuesArray } }}); // Replace 'valueField' with the field name in your database
 
     if(results){
         res.status(400).json({ error: "Proofs already submitted" });
@@ -121,4 +152,11 @@ app.post("/callback/", async (req, res) => {
 });
 ```
 
-In this code snippet, the callback first generates a unique proof ID and checks if proofs have been submitted for this ID. If they have, it responds with an error.
+In this code snippet, the callback first generates a unique proof ID and checks if proofs have been submitted for this ID. If they have, it responds with an error. The db.find() function is a placeholder indicating that at this point, you should interact with your database to check for the existence of the onChainClaimIds. Replace this placeholder with your actual database command.
+
+### Running the Example
+
+```bash
+node index.js
+```
+
