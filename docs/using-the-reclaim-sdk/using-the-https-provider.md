@@ -77,10 +77,21 @@ app.get("/request-proofs", async(req, res) => {
             new reclaim.HttpsProvider({
                 name: "Reddit Karma",
                 logoUrl: "https://i.redd.it/snoovatar/avatars/97178518-5ce1-400b-8185-54dcaef96d9c.png",
-                url: "https://www.reddit.com",
-                loginUrl: "https://reddit.com/login",
-                loginCookies: ['session', 'reddit_session', 'loid', 'token_v2', 'edgebucket'],
-                selectionRegex: '<span class=\"_2BMnTatQ5gjKGK5OWROgaG\">{{username}}</span>.*?<span>{{karma}} karma</span>',
+                url: "https://bookface.ycombinator.com/home",
+                loginUrl: "https://bookface.ycombinator.com/home",
+                loginCookies: ['_sso.key'],
+                responseSelections: [
+                    {
+                        "xPath": "//*[@id='js-react-on-rails-context']",
+                        "jsonPath": "$.currentUser",
+                        "responseMatch": "\\{\"id\":{{YC_USER_ID}},.*?waas_admin.*?:{.*?}.*?:\\{.*?}.*?(?:full_name|first_name).*?}"
+                    },
+                    {
+                        "xPath": "//script[@data-component-name='BookfaceCsrApp']",
+                        "jsonPath": "$.hasBookface",
+                        "responseMatch": "\"hasBookface\":true"
+                    }
+            ],
             }),
         ],
     });
@@ -138,7 +149,7 @@ app.post("/callback/", async (req, res) => {
     if(results){
         res.status(400).json({ error: "Proofs already submitted" });
     } else {
-        const isProofsCorrect = await reclaim.verifyCorrectnessOfProofs(proofs);
+        const isProofsCorrect = await reclaim.verifyCorrectnessOfProofs(id, proofs);
 
         if (isProofsCorrect) {
             console.log("Proofs submitted:", proofs);
