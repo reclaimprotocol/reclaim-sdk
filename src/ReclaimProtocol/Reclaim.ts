@@ -2,8 +2,8 @@ import { assertValidSignedClaim, hashClaimInfo, signatures, SignedClaim } from '
 import serialize from 'canonicalize'
 import { utils } from 'ethers'
 import P from 'pino'
-import { Proof, ProofRequest, Template } from '../types'
-import { generateCallbackUrl, generateUuid, getCallbackIdFromUrl, getClaimWitnessOnChain, getOnChainClaimDataFromRequestId } from '../utils'
+import { Proof, ProofRequest, SubmittedProof, Template } from '../types'
+import { generateCallbackUrl, generateUuid, getCallbackIdFromUrl, getClaimWitnessOnChain, getOnChainClaimDataFromRequestId, transformProofsToverify } from '../utils'
 import { CustomProvider } from './CustomProvider'
 import { HttpsProvider } from './HttpsProvider'
 import TemplateInstance from './Template'
@@ -59,9 +59,9 @@ export class Reclaim {
 	 * @param proofs proofs returned by the callback URL
 	 * @returns {Promise<boolean>} boolean value denotes if the verification was successful or failed
 	 */
-	verifyCorrectnessOfProofs = async(expectedSessionId: string, proofs: Proof[]): Promise<boolean> => {
+	verifyCorrectnessOfProofs = async(expectedSessionId: string, sproofs: SubmittedProof[]): Promise<boolean> => {
 		let result: boolean = false
-
+		const proofs = transformProofsToverify(sproofs)
 		for(const proof of proofs) {
 			// fetch on chain witness address for the claim
 			const witnesses = await getClaimWitnessOnChain(proof.chainId, parseInt(proof.onChainClaimId))

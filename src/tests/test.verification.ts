@@ -1,4 +1,4 @@
-import { Proof } from '../types'
+import { SubmittedProof } from '../types'
 import { reclaimprotocol } from '../'
 
 jest.setTimeout(15000)
@@ -47,7 +47,7 @@ describe('Verification', () => {
 	})
 })
 const EXPECTED_SESSION_ID = '9a927b04-6443-4db9-94fc-9077f766b74b' // TODO: update this with valid session id once the app integrates it into the proof
-const CORRECT_PROOF: Proof = {
+const CORRECT_PROOF: SubmittedProof = {
 	'chainId': 420,
 	'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
 	'extractedParameterValues': {
@@ -55,7 +55,7 @@ const CORRECT_PROOF: Proof = {
 	},
 	'onChainClaimId': '7492',
 	'ownerPublicKey': '03f9d34be41e082528d5e8541cf1d77bc88a1727612479b16e29e80810a1c8e1be',
-	'parameters': JSON.parse("{\"method\":\"GET\",\"responseSelections\":[{\"jsonPath\":\"$.currentUser\",\"responseMatch\":\"\\\\{\\\"id\\\":182853,.*?waas_admin.*?:{.*?}.*?:\\\\{.*?}.*?(?:full_name|first_name).*?}\",\"xPath\":\"//*[@id='js-react-on-rails-context']\"},{\"jsonPath\":\"$.hasBookface\",\"responseMatch\":\"\\\"hasBookface\\\":true\",\"xPath\":\"//script[@data-component-name='BookfaceCsrApp']\"}],\"url\":\"https://bookface.ycombinator.com/home\"}"),
+	'parameters': "{\"method\":\"GET\",\"responseSelections\":[{\"jsonPath\":\"$.currentUser\",\"responseMatch\":\"\\\\{\\\"id\\\":182853,.*?waas_admin.*?:{.*?}.*?:\\\\{.*?}.*?(?:full_name|first_name).*?}\",\"xPath\":\"//*[@id='js-react-on-rails-context']\"},{\"jsonPath\":\"$.hasBookface\",\"responseMatch\":\"\\\"hasBookface\\\":true\",\"xPath\":\"//script[@data-component-name='BookfaceCsrApp']\"}],\"url\":\"https://bookface.ycombinator.com/home\"}",
 	'provider': 'http',
 	'redactedParameters': "{\"method\":\"***\",\"responseSelections\":[{\"jsonPath\":\"$.currentUser\",\"responseMatch\":\"\\\\{\\\"id\\\":182853,.*?waas_admin.*?:{.*?}.*?:\\\\{.*?}.*?(?:full_name|first_name).*?}\",\"xPath\":\"//*[@id='js-react-on-rails-context']\"},{\"jsonPath\":\"$.hasBookface\",\"responseMatch\":\"\\\"hasBookface\\\":true\",\"xPath\":\"//script[@data-component-name='BookfaceCsrApp']\"}],\"url\":\"https://bookface.ycombinator.com/home\"}",
 	'sessionId': '9a927b04-6443-4db9-94fc-9077f766b74b',
@@ -131,34 +131,32 @@ const CORRECT_PROOF: Proof = {
 // 	redactedParameters: '{"emailAddress":"****************@gmail.com"}'
 // }
 
-const INCORRECT_SIGNATURE_PROOF: Proof = {
+const INCORRECT_SIGNATURE_PROOF: SubmittedProof = {
 	...CORRECT_PROOF,
 	signatures: ['0x86846dc92c08f27c646f87b9e58e3abd20005621c9113ae9c3718a6f71d882511b43b3f373b4e941d7d5636106dfdcf9807496d6b9f1a5be8320fe2a1afebf521c'],
 }
 
-const INCORRECT_OWNER_PUBLIC_KEY_PROOF: Proof = {
+const INCORRECT_OWNER_PUBLIC_KEY_PROOF: SubmittedProof = {
 	...CORRECT_PROOF,
 	ownerPublicKey: '038549ccde10c559c979eb826075e9274ed8d9439e299e46f752fc8e9cd1e0647f',
 }
 
-const INCORRECT_TIMESTAMP_PROOF: Proof = {
+const INCORRECT_TIMESTAMP_PROOF: SubmittedProof = {
 	...CORRECT_PROOF,
 	timestampS: '1681968149',
 }
 
-const INCORRECT_PARAMETER_PROOF: Proof = {
+const INCORRECT_PARAMETER_PROOF: SubmittedProof = {
 	...CORRECT_PROOF,
-	parameters: {
-		'emailAddress': 'sweta@gmail.com'
-	},
+	parameters: '{"emailAddress": "sweta@gmail.com"}',
 }
 
-const INCORRECT_CLAIM_ID_PROOF: Proof = {
+const INCORRECT_CLAIM_ID_PROOF: SubmittedProof = {
 	...CORRECT_PROOF,
 	onChainClaimId: '1561',
 }
 
-const INCORRECT_PROVIDER_PROOF: Proof = {
+const INCORRECT_PROVIDER_PROOF: SubmittedProof = {
 	...CORRECT_PROOF,
 	provider: 'yc-login',
 }

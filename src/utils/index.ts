@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
-import { Proof, RequestClaim } from '../types'
+import { Proof, RequestClaim, SubmittedProof } from '../types'
 import CONTRACTS_CONFIG from '../utils/contracts/config.json'
 import { Reclaim, Reclaim__factory as ReclaimFactory } from '../utils/contracts/types'
 
@@ -56,6 +56,15 @@ export function getContract(chainId: number) {
 export function getProofsFromRequestBody(requestBody: string) {
 	const proofs: Proof[] = JSON.parse(decodeURIComponent(requestBody)).proofs
 	return proofs
+}
+
+export function transformProofsToverify(proofs: SubmittedProof[]) {
+	return proofs.map(p => {
+		return {
+			...p,
+			parameters: JSON.parse(p.parameters)
+		}
+	})
 }
 
 function isValidUrl(url: string) {

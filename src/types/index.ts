@@ -181,6 +181,10 @@ export type Proof = {
 	}
 } & (ProofClaim | httpProof)
 
+export type SubmittedProof = {
+	parameters: string
+} & Proof
+
 export type RequestClaim = {
 	infoHash: string
 	owner: string
