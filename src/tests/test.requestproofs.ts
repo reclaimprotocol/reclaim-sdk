@@ -1,4 +1,6 @@
-import { reclaimprotocol } from '..'
+import { ProofRequest, reclaimprotocol } from '..'
+
+jest.setTimeout(15000)
 
 describe('Create proof request without xpath', () => {
 	it('should correctly create proof request', () => {
@@ -16,7 +18,7 @@ describe('Create proof request without xpath', () => {
 })
 
 describe('Create proof request with xpath', () => {
-	it('should correctly create proof request', () => {
+	it('should correctly create proof request', async() => {
 		const reclaim = new reclaimprotocol.Reclaim()
 		const request = reclaim.requestProofs(
 			REQUEST_PROOF_WITH_XPATH
@@ -44,7 +46,7 @@ describe('Create proof request with xpath', () => {
 
 const reclaim = new reclaimprotocol.Reclaim()
 
-const REQUEST_PROOF_WITHOUT_XPATH = {
+const REQUEST_PROOF_WITHOUT_XPATH: ProofRequest = {
 	title: 'Proof of Reddit Karma',
 	baseCallbackUrl: 'https://www.google.com/',
 	callbackId: '1234',
