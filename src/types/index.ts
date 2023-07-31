@@ -176,6 +176,8 @@ export type Proof = {
 	signatures: string[]
 	redactedParameters: string
 	chainId: number
+	epoch?: number
+	identifier?: string
 	extractedParameterValues?: {
 		[key: string]: string | number
 	}

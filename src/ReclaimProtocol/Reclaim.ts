@@ -3,7 +3,7 @@ import serialize from 'canonicalize'
 import { utils } from 'ethers'
 import P from 'pino'
 import { Proof, ProofRequest, SubmittedProof, Template } from '../types'
-import { generateCallbackUrl, generateUuid, getCallbackIdFromUrl, getClaimWitnessOnChain, getOnChainClaimDataFromRequestId, transformProofsToverify } from '../utils'
+import { generateCallbackUrl, generateUuid, getCallbackIdFromUrl, getClaimWitnessesFromEpoch, getClaimWitnessOnChain, getOnChainClaimDataFromRequestId, transformProofsToverify } from '../utils'
 import { CustomProvider } from './CustomProvider'
 import { HttpsProvider } from './HttpsProvider'
 import TemplateInstance from './Template'
@@ -59,16 +59,26 @@ export class Reclaim {
 	 * @param proofs proofs returned by the callback URL
 	 * @returns {Promise<boolean>} boolean value denotes if the verification was successful or failed
 	 */
-	verifyCorrectnessOfProofs = async(expectedSessionId: string, sproofs: SubmittedProof[]): Promise<boolean> => {
+	verifyCorrectnessOfProofs = async(expectedSessionId: string, submittedProofs: SubmittedProof[]): Promise<boolean> => {
 		let result: boolean = false
-		const proofs = transformProofsToverify(sproofs)
+		const proofs = transformProofsToverify(submittedProofs)
 		for(const proof of proofs) {
-			// fetch on chain witness address for the claim
-			const witnesses = await getClaimWitnessOnChain(proof.chainId, parseInt(proof.onChainClaimId))
+			let witnesses: string[] = []
+			if(proof.onChainClaimId === '0' && proof.epoch && proof.identifier) {
+				// fetch witness from epoch
+				witnesses = await getClaimWitnessesFromEpoch(proof.chainId, proof.epoch)
+			} else if(proof.onChainClaimId === '0' && (!proof.epoch || !proof.identifier)) {
+				// fetch witness from epoch
+				logger.error('Epoch or identifier missing')
+				return result
+			} else if(proof.onChainClaimId !== '0') {
+				// fetch on chain witness address for the claim
+				witnesses = await getClaimWitnessOnChain(proof.chainId, parseInt(proof.onChainClaimId))
+			}
 
 			// if no witnesses are present: return false
 			if(!witnesses.length) {
-				logger.error('No witnesses found on chain')
+				logger.error('No witnesses found for the claim')
 				return result
 			}
 
@@ -88,22 +98,25 @@ export class Reclaim {
 						context: proof.context,
 						sessionId: proof.sessionId,
 						parameters: serialize(proof.parameters)!,
+						epoch: proof.epoch ? proof.epoch : undefined,
+						identifier: proof.identifier ? proof.identifier : undefined,
 					},
 					signatures: proof.signatures.map(signature => {
 						return utils.arrayify(signature)
 					})
 				}
 
-				// fetch on chain claim data from the request id
-				const claimData = await getOnChainClaimDataFromRequestId(proof.chainId, proof.onChainClaimId)
-				const onChainInfoHash = claimData.infoHash
-				const calculatedInfoHash = hashClaimInfo({ parameters: serialize(proof.parameters)!, provider: proof.provider, context: proof.context, sessionId: expectedSessionId }) //TODO: pass context from the app
+				if(proof.onChainClaimId !== '0') {
+					// fetch on chain claim data from the claim id
+					const claimData = await getOnChainClaimDataFromRequestId(proof.chainId, parseInt(proof.onChainClaimId))
+					const onChainInfoHash = claimData.infoHash
+					const calculatedInfoHash = hashClaimInfo({ parameters: serialize(proof.parameters)!, provider: proof.provider, context: proof.context, sessionId: expectedSessionId })
 
-
-				// if the info hash is not same: return false
-				if(onChainInfoHash.toLowerCase() !== calculatedInfoHash.toLowerCase()) {
-					logger.error('Info hash mismatch')
-					return result
+					// if the info hash is not same: return false
+					if(onChainInfoHash.toLowerCase() !== calculatedInfoHash.toLowerCase()) {
+						logger.error('Info hash mismatch')
+						return result
+					}
 				}
 
 				// verify the witness signature
