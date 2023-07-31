@@ -46,28 +46,53 @@ describe('Verification', () => {
 		expect(result).toBe(false)
 	})
 })
-const EXPECTED_SESSION_ID = '9a927b04-6443-4db9-94fc-9077f766b74b' // TODO: update this with valid session id once the app integrates it into the proof
+const EXPECTED_SESSION_ID = 'f688df5f-f416-423c-91d0-f5909adf192b' // TODO: update this with valid session id once the app integrates it into the proof
+
 const CORRECT_PROOF: SubmittedProof = {
 	'chainId': 420,
-	'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
+	'context': '0xd05fc78ec74a76bcbb3ac656174b922a8b817f35a1bba793da26a058291ebc250x0',
+	'epoch': 1,
 	'extractedParameterValues': {
-	  'YC_USER_ID': '182853'
+		  'YC_USER_ID': '182853'
 	},
-	'onChainClaimId': '7492',
+	'identifier': '0x76b12e5ad42cc9a26156436ba5ce2148b1826eb8964efbd491b87a995e68a8d7',
+	'onChainClaimId': '0',
 	'ownerPublicKey': '03f9d34be41e082528d5e8541cf1d77bc88a1727612479b16e29e80810a1c8e1be',
 	'parameters': "{\"method\":\"GET\",\"responseSelections\":[{\"jsonPath\":\"$.currentUser\",\"responseMatch\":\"\\\\{\\\"id\\\":182853,.*?waas_admin.*?:{.*?}.*?:\\\\{.*?}.*?(?:full_name|first_name).*?}\",\"xPath\":\"//*[@id='js-react-on-rails-context']\"},{\"jsonPath\":\"$.hasBookface\",\"responseMatch\":\"\\\"hasBookface\\\":true\",\"xPath\":\"//script[@data-component-name='BookfaceCsrApp']\"}],\"url\":\"https://bookface.ycombinator.com/home\"}",
 	'provider': 'http',
-	'redactedParameters': "{\"method\":\"***\",\"responseSelections\":[{\"jsonPath\":\"$.currentUser\",\"responseMatch\":\"\\\\{\\\"id\\\":182853,.*?waas_admin.*?:{.*?}.*?:\\\\{.*?}.*?(?:full_name|first_name).*?}\",\"xPath\":\"//*[@id='js-react-on-rails-context']\"},{\"jsonPath\":\"$.hasBookface\",\"responseMatch\":\"\\\"hasBookface\\\":true\",\"xPath\":\"//script[@data-component-name='BookfaceCsrApp']\"}],\"url\":\"https://bookface.ycombinator.com/home\"}",
-	'sessionId': '9a927b04-6443-4db9-94fc-9077f766b74b',
+	'redactedParameters': "{\"url\":\"*************************************\",\"method\":\"***\",\"responseSelections\":[{\"jsonPath\":\"$.currentUser\",\"xPath\":\"//*[@id='js-react-on-rails-context']\",\"responseMatch\":\"\\\\{\\\"id\\\":182853,.*?waas_admin.*?:{.*?}.*?:\\\\{.*?}.*?(?:full_name|first_name).*?}\"},{\"jsonPath\":\"$.hasBookface\",\"xPath\":\"//script[@data-component-name='BookfaceCsrApp']\",\"responseMatch\":\"\\\"hasBookface\\\":true\"}]}",
+	'sessionId': 'f688df5f-f416-423c-91d0-f5909adf192b',
 	'signatures': [
-	  '0x7005795aedaf2c092efc9f8af8dc3c37ebd3acec59ae3b91a450f525125f528c56ff16351ab4aee308e3c6b66f202bfe643a2024963b69ac86b2a4165eb39bed1c'
+		  '0x4d8299cd0a45b173ab8ad57e5b3779e18c068a6701fa6ea88c3534a7fd6de0cb3dc8e376385efb04fd603cbc77d0877b2d2f50e5d4f0c280ee069bf0aca543b91c'
 	],
 	'templateClaimId': '0',
-	'timestampS': '1689564494',
+	'timestampS': '1690776029',
 	'witnessAddresses': [
-	  'reclaim-node.questbook.app'
+		  'reclaim-node.questbook.app'
 	]
 }
+
+// const CORRECT_PROOF: SubmittedProof = {
+// 	'chainId': 420,
+// 	'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
+// 	'extractedParameterValues': {
+// 	  'YC_USER_ID': '182853'
+// 	},
+// 	'onChainClaimId': '7492',
+// 	'ownerPublicKey': '03f9d34be41e082528d5e8541cf1d77bc88a1727612479b16e29e80810a1c8e1be',
+// 	'parameters': "{\"method\":\"GET\",\"responseSelections\":[{\"jsonPath\":\"$.currentUser\",\"responseMatch\":\"\\\\{\\\"id\\\":182853,.*?waas_admin.*?:{.*?}.*?:\\\\{.*?}.*?(?:full_name|first_name).*?}\",\"xPath\":\"//*[@id='js-react-on-rails-context']\"},{\"jsonPath\":\"$.hasBookface\",\"responseMatch\":\"\\\"hasBookface\\\":true\",\"xPath\":\"//script[@data-component-name='BookfaceCsrApp']\"}],\"url\":\"https://bookface.ycombinator.com/home\"}",
+// 	'provider': 'http',
+// 	'redactedParameters': "{\"method\":\"***\",\"responseSelections\":[{\"jsonPath\":\"$.currentUser\",\"responseMatch\":\"\\\\{\\\"id\\\":182853,.*?waas_admin.*?:{.*?}.*?:\\\\{.*?}.*?(?:full_name|first_name).*?}\",\"xPath\":\"//*[@id='js-react-on-rails-context']\"},{\"jsonPath\":\"$.hasBookface\",\"responseMatch\":\"\\\"hasBookface\\\":true\",\"xPath\":\"//script[@data-component-name='BookfaceCsrApp']\"}],\"url\":\"https://bookface.ycombinator.com/home\"}",
+// 	'sessionId': '9a927b04-6443-4db9-94fc-9077f766b74b',
+// 	'signatures': [
+// 	  '0x7005795aedaf2c092efc9f8af8dc3c37ebd3acec59ae3b91a450f525125f528c56ff16351ab4aee308e3c6b66f202bfe643a2024963b69ac86b2a4165eb39bed1c'
+// 	],
+// 	'templateClaimId': '0',
+// 	'timestampS': '1689564494',
+// 	'witnessAddresses': [
+// 	  'reclaim-node.questbook.app'
+// 	]
+// }
 
 // const CORRECT_PROOF_1: Proof = {
 // 	'onChainClaimId': '7485',
