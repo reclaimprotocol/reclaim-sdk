@@ -35,6 +35,12 @@ export async function getClaimWitnessOnChain(chainId: number, claimId: number) {
 	return witnesses.map(w => w.toLowerCase())
 }
 
+export async function getClaimWitnessesFromEpoch(chainId: number, epoch: number) {
+	const contract = getContract(chainId)
+	const epochFetched = await contract.fetchEpoch(epoch)
+	return epochFetched.witnesses.map(w => w.addr.toLowerCase())
+}
+
 export function getContract(chainId: number) {
 	const chainKey = `0x${chainId.toString(16)}`
 	if(!existingContractsMap[chainKey]) {
