@@ -1,10 +1,11 @@
 # On-chain Verification of Reclaim proofs
 
-This method of verification helps to build trustless dApps. A user generates a proof and submits it to the relevant smart-contract/dApp for verification. This smart-contract can query Reclaim Contract to verify the validity of the proof. Based on the response from Reclaim Contract and the specific application logic, the smart-contract can execute transactions.
+## Verifying Proofs from Reclaim
+Your user generates a proof and submits it to your smart-contract/dApp for verification. Your smart-contract call the function `assertValidEpochAndSignedClaim()` from Reclaim Contract to verify the validity of the proof. Based on the response from Reclaim Contract and your application logic, you can programme your contract to execute transactions.
 
 ## Prerequisites
 
-- Proof has already been generated using one of *reclaim-sdk* or *reclaim-client-sdk*.
+- Proof has been generated using Reclaim app. See [here](../installing-reclaim-wallet.md) for instructions on how to install Reclaim app.
 
 ## Relevant Components of the Proof
 
@@ -22,15 +23,26 @@ This method of verification helps to build trustless dApps. A user generates a p
     - `uint256 epoch` - the epoch number, same as above.
 4. `bytes[] signatures` - List of signatures received from the witnesses.
 
-## Verifying proofs in your Smart Contracts
+## Reclaim Contract Address
 
-The following function from Reclaim Contract helps check whether a proof is correct or not.
+The address of the Reclaim Contract is `0x6D0f81BDA11995f25921aAd5B43359630E65Ca96`.
+
+Chain Id: 420 (*Optimism-goerli*)
+
+## Steps to verify the proof
+
+Use the following function from Reclaim Contract to check whether a proof is correct or not.
 ```solidity
-function assertValidEpochAndSignedClaim(uint32 epochNum, ClaimInfo memory claimInfo, CompleteClaimData memory claimData, bytes[] memory signatures) external view;
+function assertValidEpochAndSignedClaim(
+    uint32 epochNum, 
+    ClaimInfo memory claimInfo, 
+    CompleteClaimData memory claimData, 
+    bytes[] memory signatures
+) external view;
 ```
 
 This returns successfully only if:
-- The infoHash computed using the claimInfo matches the infoHash in claimData.
+- The `infoHash` computed using the claimInfo matches the `infoHash` in `claimData`.
 - The signatures are by valid witnesses.
 
 The function reverts if either is unsuccessful. To use this function, implement an interface in your smart contract (SC).
@@ -47,18 +59,31 @@ interface ReclaimContractInterface {
 		string parameters;
 		string context;
 	}
-    function assertValidEpochAndSignedClaim(uint32 epochNum, ClaimInfo memory claimInfo, CompleteClaimData memory claimData, bytes[] memory signatures) external view;
+
+function assertValidEpochAndSignedClaim(
+    uint32 epochNum, 
+    ClaimInfo memory claimInfo, 
+    CompleteClaimData memory claimData, 
+    bytes[] memory signatures) 
+    external view;
 }
 ```
 
-The transaction which queries `assertValidEpochAndSignedClaim()` will look like the following:
+Following is a sample function that uses `assertValidEpochAndSignedClaim()` to verify the correctness of the proof:
 ```solidity
-function verifyProofAndExecuteSCLogic(uint32 _epoch, string memory _params, string memory _provider, address _contextAddress, ReclaimContractInterface.CompleteClaimData memory _claimData, bytes[] memory _signatures) public {
+function verifyProofAndExecuteSCLogic(
+    uint32 _epoch, 
+    string memory _params, 
+    string memory _provider, 
+    address _contextAddress, 
+    ReclaimContractInterface.CompleteClaimData memory _claimData, bytes[] memory _signatures
+    ) 
+    public {
 
     // execute checks on _params and _providers.
     // ...
 
-    // contextMessage is a contract constant. E.g. contextMessage = keccak256(abi.encode("MySC"));
+    // contextMessage is a contract constant. E.g. contextMessage = keccak256(abi.encode("Sei Airdrop"));
     string memory context = string(abi.encodePacked(contextMessage, contextAddressString));
 
     // create a claiminfo struct object to send to reclaim for verification
