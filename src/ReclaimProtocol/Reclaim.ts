@@ -121,8 +121,8 @@ export class Reclaim {
 
 				// verify the witness signature
 				assertValidSignedClaim(claim, witnesses)
-				logger.info(`isCorrectProof: ${result}`)
 				result = true
+				logger.info(`isCorrectProof: ${result}`)
 			} catch(error) {
 				// if the witness signature is not valid: return false
 				logger.error(`${error}`)
