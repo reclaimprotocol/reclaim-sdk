@@ -1,6 +1,6 @@
 # On-chain Verification of Reclaim proofs
 
-This method of verification is to build trustless dApps. A user generates a proof and submits it to the relevant smart-contract/dApp for verification. This smart-contract can query Reclaim Contract to verify the validity of the proof. Based on the response from Reclaim Contract and the specific application logic, the smart-contract can execute transactions.
+This method of verification helps to build trustless dApps. A user generates a proof and submits it to the relevant smart-contract/dApp for verification. This smart-contract can query Reclaim Contract to verify the validity of the proof. Based on the response from Reclaim Contract and the specific application logic, the smart-contract can execute transactions.
 
 ## Prerequisites
 
@@ -65,6 +65,7 @@ function verifyProofAndExecuteSCLogic(uint32 _epoch, string memory _params, stri
     ReclaimContractInterface.ClaimInfo memory claimInfo = ReclaimContractInterface.ClaimInfo(_provider, params, context);
 
     // assertValidEpochAndSignedClaim will revert if either infoHash or Signatures don't match.
+    // address reclaimContractAddress = '0x6D0f81BDA11995f25921aAd5B43359630E65Ca96' <- example
     ReclaimContractInterface(reclaimContractAddress).assertValidEpochAndSignedClaim(_epoch, claimInfo, _claimData, _signatures);
 
     // return success/execute further SC logic.
