@@ -104,7 +104,7 @@ export function generateCallbackUrl(baseUrl: string, callbackId?: string) {
 		baseUrl = baseUrl.slice(0, -1)
 	}
 
-	return `${baseUrl}?id=${id}`
+	return `${baseUrl}?callbackId=${id}`
 }
 
 export function getCallbackIdFromUrl(_url: string): string {
