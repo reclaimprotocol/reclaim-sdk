@@ -1,8 +1,6 @@
 # Integration - Quick Start
 
-Follow along the guide and build your own server or you can directly deploy the following provider example to Vercel with a single click [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/reclaimprotocol/one-step-deploy-provider) or just start tinkering with code sandbox environment right in on Replit <a href="https://replit.com/@AkshayNarisett1/Reclaim-SDK">
-    <img src="https://reclaimprotocol.s3.ap-south-1.amazonaws.com/Tinker-modified.png" alt="Tinker Inside Sandbox" width="90px" height="30px"/>
-</a>.
+Follow along the guide and build your own server or you can directly deploy the following provider example to Vercel with a single click [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/reclaimprotocol/one-step-deploy-provider) or just start tinkering with code sandbox environment right in on Replit [![Tinker Inside Sandbox](https://reclaimprotocol.s3.ap-south-1.amazonaws.com/Tinker-modified.png) ](https://replit.com/@AkshayNarisett1/Reclaim-SDK).
 
 ## Integrating Reclaim Protocol via HTTPS Provider
 
@@ -18,7 +16,8 @@ cd my-project
 npm init -y
 touch index.js
 ```
-Add ```"type": "module"``` to your package.json, your package.json will now look something like this
+
+Add `"type": "module"` to your package.json, your package.json will now look something like this
 
 ```json
 { 
@@ -51,10 +50,8 @@ The following example shows how to create an endpoint for requesting proofs of a
 
 Here are some important things to note:
 
-* `baseCallbackUrl`:  Reclaim SDK will append a unique identifier (UUID) to this base URL, creating a unique callback URL for each proof request. The proofs will be uploaded to this callback URL by the Reclaim Wallet App.
+* `baseCallbackUrl`: Reclaim SDK will append a unique identifier (UUID) to this base URL, creating a unique callback URL for each proof request. The proofs will be uploaded to this callback URL by the Reclaim Wallet App.
 * `title`, `name`, and `logoUrl`: These parameters will be displayed to the user in the Reclaim app. The `title` is used as the title of the proof request, the `name` is used as the name of the provider (e.g., the name of the website the user is logging into), and the `logoUrl` is the URL of the logo to display. These details can be used to provide the user with context about what proofs they're creating and why.
-
-
 
 ```javascript
 /* index.js */
@@ -129,8 +126,6 @@ A more accurate method to identify which cookies are required is as follows:
 
 By following these steps, you can figure out which cookies are required for the `loginCookies` parameter when creating an `HttpsProvider` instance.
 
-
-
 ### Setting Up a Callback to Verify Proofs
 
 To verify the proofs returned by the Reclaim Protocol, you'll need to set up a callback endpoint in your application. This callback verifies the correctness of the proofs and processes them accordingly.
@@ -138,7 +133,7 @@ To verify the proofs returned by the Reclaim Protocol, you'll need to set up a c
 ```javascript
 /* index.js */
 app.post("/callback/", async (req, res) => {
-    const { id } = req.query;
+    const { callbackId } = req.query;
     const { proofs } = JSON.parse(decodeURIComponent(req.body));
 
     const onChainClaimIds = reclaim.getOnChainClaimIdsFromProofs(proofs)
@@ -149,7 +144,7 @@ app.post("/callback/", async (req, res) => {
     if(results){
         res.status(400).json({ error: "Proofs already submitted" });
     } else {
-        const isProofsCorrect = await reclaim.verifyCorrectnessOfProofs(id, proofs);
+        const isProofsCorrect = await reclaim.verifyCorrectnessOfProofs(callbackId, proofs);
 
         if (isProofsCorrect) {
             console.log("Proofs submitted:", proofs);
@@ -170,4 +165,3 @@ In this code snippet, the callback first generates a unique proof ID and checks 
 ```bash
 node index.js
 ```
-
