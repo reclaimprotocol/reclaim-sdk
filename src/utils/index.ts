@@ -115,7 +115,7 @@ export function getCallbackIdFromUrl(_url: string): string {
 
 	const url = new URL(_url)
 	const urlParams = new URLSearchParams(url.search)
-	const callbackId = urlParams.get('id')
+	const callbackId = urlParams.get('callbackId')
 	if(!callbackId) {
 		throw new Error('Callback Id not found in URL')
 	} else {
