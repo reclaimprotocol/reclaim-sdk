@@ -6,7 +6,7 @@ description: ZK Circuits are WIP
 
 ### Why We Use ZK?
 
-1. Reclaim uses TLS KeyUpdate messages to redact (from the witness) arbitrary pieces of text in the user's request to the server. For more details, see the [whitepaper](whitepaper-and-how-reclaim-protocol-works.md).
+1. Reclaim uses TLS KeyUpdate messages to redact (from the witness) arbitrary pieces of text in the user's request to the server. For more details, see the [whitepaper](./).
 2. This KeyUpdate approach does not work for the response sent from the server back to the user, as we cannot control when the server will send a KeyUpdate message to us
 3. This meant that Reclaim could not redact text (from the witness) in the response, and would have to expose the entire TLS response to the witness to generate a claim
    * The above problem would prevent certain use cases where the response contains important information about the claim but simultaneously contains sensitive information that cannot be revealed to anybody else
@@ -51,7 +51,7 @@ To tackle the above problem, we use a ZK circuit that proves the user knows the 
        1. This is correct for many encryption schemes but not for a [CBC](https://en.wikipedia.org/wiki/Block\_cipher\_mode\_of\_operation) based scheme -- which we use with TLS.
        2. In this scheme, we can modify portions of the ciphertext without leading to a completely non-sensical plaintext as the ciphertext is obtained by XORing a plaintext with a counter block.
 
-       <figure><img src=".gitbook/assets/1000px-GCM-Galois_Counter_Mode_with_IV.svg.png" alt="" width="375"><figcaption></figcaption></figure>
+       <figure><img src="../../.gitbook/assets/1000px-GCM-Galois_Counter_Mode_with_IV.svg.png" alt="" width="375"><figcaption></figcaption></figure>
 
        1. For eg.
           1. if the ciphertext is originally some `qewojdja`
