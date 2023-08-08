@@ -2,8 +2,8 @@ import { assertValidSignedClaim, hashClaimInfo, signatures, SignedClaim } from '
 import serialize from 'canonicalize'
 import { utils } from 'ethers'
 import P from 'pino'
-import { Proof, ProofRequest, SubmittedProof, Template } from '../types'
-import { generateCallbackUrl, generateUuid, getCallbackIdFromUrl, getClaimWitnessesFromEpoch, getClaimWitnessOnChain, getOnChainClaimDataFromRequestId, transformProofsToverify } from '../utils'
+import { ProofRequest, SubmittedProof, Template } from '../types'
+import { decodeContext, encodeContext, generateCallbackUrl, generateUuid, getCallbackIdFromUrl, getClaimWitnessOnChain, transformProofsToverify } from '../utils'
 import { CustomProvider } from './CustomProvider'
 import { HttpsProvider } from './HttpsProvider'
 import TemplateInstance from './Template'
@@ -44,7 +44,7 @@ export class Reclaim {
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 					provider: requestedProof.params.provider as any,
 					payload: requestedProof.params.payload,
-					context: utils.keccak256(utils.toUtf8Bytes(contextMessage)) + '' + contextAddress,
+					context: encodeContext({ sessionId, contextMessage, contextAddress }),
 				}
 			})
 		}
@@ -63,18 +63,8 @@ export class Reclaim {
 		let result: boolean = false
 		const proofs = transformProofsToverify(submittedProofs)
 		for(const proof of proofs) {
-			let witnesses: string[] = []
-			if(proof.onChainClaimId === '0' && proof.epoch && proof.identifier) {
-				// fetch witness from epoch
-				witnesses = await getClaimWitnessesFromEpoch(proof.chainId, proof.epoch)
-			} else if(proof.onChainClaimId === '0' && (!proof.epoch || !proof.identifier)) {
-				// fetch witness from epoch
-				logger.error('Epoch or identifier missing')
-				return result
-			} else if(proof.onChainClaimId !== '0') {
-				// fetch on chain witness address for the claim
-				witnesses = await getClaimWitnessOnChain(proof.chainId, parseInt(proof.onChainClaimId))
-			}
+
+			const witnesses = await getClaimWitnessOnChain(proof.chainId, proof.epoch, proof.identifier, parseInt(proof.timestampS))
 
 			// if no witnesses are present: return false
 			if(!witnesses.length) {
@@ -82,41 +72,31 @@ export class Reclaim {
 				return result
 			}
 
-			// if the session id is not same: return false
-			if(proof.sessionId !== expectedSessionId) {
-				logger.error('Session id mismatch')
-				return result
-			}
-
 			try {
 				const claim: SignedClaim = {
 					claim: {
-						claimId: parseInt(proof.onChainClaimId),
 						owner: signatures.getAddress(Buffer.from(proof.ownerPublicKey, 'hex')),
 						provider: proof.provider,
 						timestampS: parseInt(proof.timestampS),
 						context: proof.context,
-						sessionId: proof.sessionId,
 						parameters: serialize(proof.parameters)!,
-						epoch: proof.epoch ? proof.epoch : undefined,
+						epoch: proof.epoch,
 						identifier: proof.identifier ? proof.identifier : undefined,
 					},
 					signatures: proof.signatures.map(signature => {
 						return utils.arrayify(signature)
 					})
 				}
-
-				if(proof.onChainClaimId !== '0') {
-					// fetch on chain claim data from the claim id
-					const claimData = await getOnChainClaimDataFromRequestId(proof.chainId, parseInt(proof.onChainClaimId))
-					const onChainInfoHash = claimData.infoHash
-					const calculatedInfoHash = hashClaimInfo({ parameters: serialize(proof.parameters)!, provider: proof.provider, context: proof.context, sessionId: expectedSessionId })
-
-					// if the info hash is not same: return false
-					if(onChainInfoHash.toLowerCase() !== calculatedInfoHash.toLowerCase()) {
-						logger.error('Info hash mismatch')
-						return result
-					}
+				// first decode ctx
+				const decodedCtx = decodeContext(proof.context)
+				// then encode it again with the expected sessionId
+				const encodedCtx = encodeContext({ sessionId: expectedSessionId, contextMessage: decodedCtx.contextMessage, contextAddress: decodedCtx.contextAddress })
+				// then hash the claim info with the encoded ctx to get the identifier
+				const calculatedIdentifier = hashClaimInfo({ parameters: serialize(proof.parameters)!, provider: proof.provider, context: encodedCtx })
+				// check if the identifier matches the one in the proof
+				if(calculatedIdentifier !== proof.identifier) {
+					logger.error('Identifier mismatch')
+					return result
 				}
 
 				// verify the witness signature
@@ -131,21 +111,6 @@ export class Reclaim {
 		}
 
 		return result
-	}
-
-	/**
-	 * function to get the onChainClaimIds from the proofs
-	 * @param proofs
-	 * @returns {string}
-	 */
-	getOnChainClaimIdsFromProofs = (proofs: Proof[]): string[] => {
-		const onChainClaimIdArray: string[] = []
-		for(const proof of proofs) {
-			const onChainClaimId = proof.onChainClaimId
-			onChainClaimIdArray.push(onChainClaimId)
-		}
-
-		return onChainClaimIdArray
 	}
 }
 
