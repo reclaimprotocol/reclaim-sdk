@@ -1,6 +1,6 @@
-import { ethers } from 'ethers'
+import { ethers, utils } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
-import { Proof, RequestClaim, SubmittedProof } from '../types'
+import { Context, Proof, SubmittedProof } from '../types'
 import CONTRACTS_CONFIG from '../utils/contracts/config.json'
 import { Reclaim, Reclaim__factory as ReclaimFactory } from '../utils/contracts/types'
 
@@ -10,29 +10,26 @@ export function generateUuid() {
 
 const existingContractsMap: { [chain: string]: Reclaim } = { }
 
-export async function getOnChainClaimDataFromRequestId(
-	chainId: number,
-	claimId: string | number
-): Promise<RequestClaim> {
+export async function getClaimWitnessOnChain(chainId: number, epoch: number, identifier: string, timestampS: number) {
 	const contract = getContract(chainId)
-	const pendingCreateData = await contract!.claimCreations(claimId)
-	if(!pendingCreateData?.claim.claimId) {
-		throw new Error(`Invalid request ID: ${claimId}`)
-	}
-
-	const claim = pendingCreateData.claim
-	return {
-		infoHash:claim.infoHash,
-		owner:claim.owner.toLowerCase(),
-		timestampS:claim.timestampS,
-		claimId:claim.claimId
-	}
+	const witnesses = await contract.fetchWitnessesForClaim(epoch, identifier, timestampS)
+	return witnesses.map(w => w.addr.toLowerCase())
 }
 
-export async function getClaimWitnessOnChain(chainId: number, claimId: number) {
-	const contract = getContract(chainId)
-	const witnesses = await contract.getClaimWitnesses(claimId)
-	return witnesses.map(w => w.toLowerCase())
+export function encodeContext(ctx: Context): string {
+	const context: Context = {
+		contextMessage: utils.keccak256(utils.toUtf8Bytes(ctx.contextMessage)),
+		contextAddress: ctx.contextAddress,
+		sessionId: ctx.sessionId,
+	}
+
+	return JSON.stringify(context)
+}
+
+export function decodeContext(ctx: string): Context {
+	const context: Context = JSON.parse(ctx)
+	context.contextMessage = utils.toUtf8String(context.contextMessage)
+	return context
 }
 
 export async function getClaimWitnessesFromEpoch(chainId: number, epoch: number) {
@@ -220,7 +217,6 @@ export function isProof(obj: unknown): obj is Proof {
 	return (
 		(obj as Proof).chainId !== undefined &&
 		(obj as Proof).parameters !== undefined &&
-		(obj as Proof).onChainClaimId !== undefined &&
 		(obj as Proof).ownerPublicKey !== undefined &&
 		(obj as Proof).signatures !== undefined &&
 		(obj as Proof).timestampS !== undefined &&
