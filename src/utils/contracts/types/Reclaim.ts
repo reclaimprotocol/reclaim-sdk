@@ -76,10 +76,10 @@ export declare namespace Claims {
   };
 
   export type CompleteClaimDataStruct = {
-    infoHash: PromiseOrValue<BytesLike>;
+    identifier: PromiseOrValue<BytesLike>;
     owner: PromiseOrValue<string>;
     timestampS: PromiseOrValue<BigNumberish>;
-    claimId: PromiseOrValue<BigNumberish>;
+    epoch: PromiseOrValue<BigNumberish>;
   };
 
   export type CompleteClaimDataStructOutput = [
@@ -88,41 +88,30 @@ export declare namespace Claims {
     number,
     BigNumber
   ] & {
-    infoHash: string;
+    identifier: string;
     owner: string;
     timestampS: number;
-    claimId: BigNumber;
+    epoch: BigNumber;
   };
 }
 
 export interface ReclaimInterface extends utils.Interface {
   functions: {
-    "MAX_CLAIM_LIFETIME_S()": FunctionFragment;
     "addAsWitness(address,string)": FunctionFragment;
     "addNewEpoch()": FunctionFragment;
-    "assertValidSignedClaim(uint256,bytes[])": FunctionFragment;
-    "assertValidSignedClaimAndInfoHash(uint256,(string,string,string),bytes[])": FunctionFragment;
-    "claimCreations(uint256)": FunctionFragment;
-    "createFees()": FunctionFragment;
+    "assertValidEpochAndSignedClaim(uint32,(string,string,string),(bytes32,address,uint32,uint256),bytes[])": FunctionFragment;
     "currentEpoch()": FunctionFragment;
     "epochDurationS()": FunctionFragment;
     "epochs(uint256)": FunctionFragment;
     "fetchEpoch(uint32)": FunctionFragment;
-    "getClaimWitnesses(uint256)": FunctionFragment;
+    "fetchWitnessesForClaim(uint32,bytes32,uint32)": FunctionFragment;
     "initialize()": FunctionFragment;
-    "latestRequestId()": FunctionFragment;
     "minimumWitnessesForClaimCreation()": FunctionFragment;
     "owner()": FunctionFragment;
     "proxiableUUID()": FunctionFragment;
     "removeAsWitness(address)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
-    "requestClaimCreate(bytes32)": FunctionFragment;
-    "requestClaimCreateForAnother(bytes,bytes32,uint64)": FunctionFragment;
-    "scFeesKeepPercentage()": FunctionFragment;
-    "transfer(address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "updateCreationFees(uint256)": FunctionFragment;
-    "updateSmartContractFeesKeepPercentage(uint8)": FunctionFragment;
     "updateWitnessWhitelist(address,bool)": FunctionFragment;
     "upgradeTo(address)": FunctionFragment;
     "upgradeToAndCall(address,bytes)": FunctionFragment;
@@ -131,42 +120,27 @@ export interface ReclaimInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
-      | "MAX_CLAIM_LIFETIME_S"
       | "addAsWitness"
       | "addNewEpoch"
-      | "assertValidSignedClaim"
-      | "assertValidSignedClaimAndInfoHash"
-      | "claimCreations"
-      | "createFees"
+      | "assertValidEpochAndSignedClaim"
       | "currentEpoch"
       | "epochDurationS"
       | "epochs"
       | "fetchEpoch"
-      | "getClaimWitnesses"
+      | "fetchWitnessesForClaim"
       | "initialize"
-      | "latestRequestId"
       | "minimumWitnessesForClaimCreation"
       | "owner"
       | "proxiableUUID"
       | "removeAsWitness"
       | "renounceOwnership"
-      | "requestClaimCreate"
-      | "requestClaimCreateForAnother"
-      | "scFeesKeepPercentage"
-      | "transfer"
       | "transferOwnership"
-      | "updateCreationFees"
-      | "updateSmartContractFeesKeepPercentage"
       | "updateWitnessWhitelist"
       | "upgradeTo"
       | "upgradeToAndCall"
       | "witnesses"
   ): FunctionFragment;
 
-  encodeFunctionData(
-    functionFragment: "MAX_CLAIM_LIFETIME_S",
-    values?: undefined
-  ): string;
   encodeFunctionData(
     functionFragment: "addAsWitness",
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
@@ -176,24 +150,13 @@ export interface ReclaimInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "assertValidSignedClaim",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BytesLike>[]]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "assertValidSignedClaimAndInfoHash",
+    functionFragment: "assertValidEpochAndSignedClaim",
     values: [
       PromiseOrValue<BigNumberish>,
       Claims.ClaimInfoStruct,
+      Claims.CompleteClaimDataStruct,
       PromiseOrValue<BytesLike>[]
     ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "claimCreations",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "createFees",
-    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "currentEpoch",
@@ -212,15 +175,15 @@ export interface ReclaimInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "getClaimWitnesses",
-    values: [PromiseOrValue<BigNumberish>]
+    functionFragment: "fetchWitnessesForClaim",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BytesLike>,
+      PromiseOrValue<BigNumberish>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "latestRequestId",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -241,36 +204,8 @@ export interface ReclaimInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "requestClaimCreate",
-    values: [PromiseOrValue<BytesLike>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "requestClaimCreateForAnother",
-    values: [
-      PromiseOrValue<BytesLike>,
-      PromiseOrValue<BytesLike>,
-      PromiseOrValue<BigNumberish>
-    ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "scFeesKeepPercentage",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "transfer",
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "updateCreationFees",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "updateSmartContractFeesKeepPercentage",
-    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "updateWitnessWhitelist",
@@ -290,10 +225,6 @@ export interface ReclaimInterface extends utils.Interface {
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "MAX_CLAIM_LIFETIME_S",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "addAsWitness",
     data: BytesLike
   ): Result;
@@ -302,18 +233,9 @@ export interface ReclaimInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "assertValidSignedClaim",
+    functionFragment: "assertValidEpochAndSignedClaim",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "assertValidSignedClaimAndInfoHash",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "claimCreations",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "createFees", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "currentEpoch",
     data: BytesLike
@@ -325,14 +247,10 @@ export interface ReclaimInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "epochs", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "fetchEpoch", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "getClaimWitnesses",
+    functionFragment: "fetchWitnessesForClaim",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "latestRequestId",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "minimumWitnessesForClaimCreation",
     data: BytesLike
@@ -351,28 +269,7 @@ export interface ReclaimInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "requestClaimCreate",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "requestClaimCreateForAnother",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "scFeesKeepPercentage",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "transfer", data: BytesLike): Result;
-  decodeFunctionResult(
     functionFragment: "transferOwnership",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "updateCreationFees",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "updateSmartContractFeesKeepPercentage",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -389,8 +286,6 @@ export interface ReclaimInterface extends utils.Interface {
   events: {
     "AdminChanged(address,address)": EventFragment;
     "BeaconUpgraded(address)": EventFragment;
-    "ClaimCreated(uint256)": EventFragment;
-    "ClaimCreationRequested(uint256,bytes32,address,uint32,address,string[],address[],uint256)": EventFragment;
     "EpochAdded(tuple)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
@@ -399,8 +294,6 @@ export interface ReclaimInterface extends utils.Interface {
 
   getEvent(nameOrSignatureOrTopic: "AdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BeaconUpgraded"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "ClaimCreated"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "ClaimCreationRequested"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "EpochAdded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
@@ -427,34 +320,6 @@ export type BeaconUpgradedEvent = TypedEvent<
 >;
 
 export type BeaconUpgradedEventFilter = TypedEventFilter<BeaconUpgradedEvent>;
-
-export interface ClaimCreatedEventObject {
-  requestId: BigNumber;
-}
-export type ClaimCreatedEvent = TypedEvent<
-  [BigNumber],
-  ClaimCreatedEventObject
->;
-
-export type ClaimCreatedEventFilter = TypedEventFilter<ClaimCreatedEvent>;
-
-export interface ClaimCreationRequestedEventObject {
-  claimId: BigNumber;
-  infoHash: string;
-  owner: string;
-  timestampS: number;
-  requestor: string;
-  witnessHosts: string[];
-  witnessAddresses: string[];
-  feesPaid: BigNumber;
-}
-export type ClaimCreationRequestedEvent = TypedEvent<
-  [BigNumber, string, string, number, string, string[], string[], BigNumber],
-  ClaimCreationRequestedEventObject
->;
-
-export type ClaimCreationRequestedEventFilter =
-  TypedEventFilter<ClaimCreationRequestedEvent>;
 
 export interface EpochAddedEventObject {
   epoch: Reclaim.EpochStructOutput;
@@ -519,8 +384,6 @@ export interface Reclaim extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    MAX_CLAIM_LIFETIME_S(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     addAsWitness(
       witnessAddress: PromiseOrValue<string>,
       host: PromiseOrValue<string>,
@@ -531,31 +394,13 @@ export interface Reclaim extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    assertValidSignedClaim(
-      claimId: PromiseOrValue<BigNumberish>,
-      signatures: PromiseOrValue<BytesLike>[],
-      overrides?: CallOverrides
-    ): Promise<[void]>;
-
-    assertValidSignedClaimAndInfoHash(
-      claimId: PromiseOrValue<BigNumberish>,
+    assertValidEpochAndSignedClaim(
+      epochNum: PromiseOrValue<BigNumberish>,
       claimInfo: Claims.ClaimInfoStruct,
+      claimData: Claims.CompleteClaimDataStruct,
       signatures: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
     ): Promise<[void]>;
-
-    claimCreations(
-      arg0: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<
-      [Claims.CompleteClaimDataStructOutput, string, BigNumber] & {
-        claim: Claims.CompleteClaimDataStructOutput;
-        requestor: string;
-        feesPaid: BigNumber;
-      }
-    >;
-
-    createFees(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     currentEpoch(overrides?: CallOverrides): Promise<[number]>;
 
@@ -578,16 +423,16 @@ export interface Reclaim extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[Reclaim.EpochStructOutput]>;
 
-    getClaimWitnesses(
-      requestId: PromiseOrValue<BigNumberish>,
+    fetchWitnessesForClaim(
+      epoch: PromiseOrValue<BigNumberish>,
+      identifier: PromiseOrValue<BytesLike>,
+      timestampS: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<[string[]]>;
+    ): Promise<[Reclaim.WitnessStructOutput[]]>;
 
     initialize(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-
-    latestRequestId(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     minimumWitnessesForClaimCreation(
       overrides?: CallOverrides
@@ -606,38 +451,8 @@ export interface Reclaim extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    requestClaimCreate(
-      infoHash: PromiseOrValue<BytesLike>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    requestClaimCreateForAnother(
-      signature: PromiseOrValue<BytesLike>,
-      infoHash: PromiseOrValue<BytesLike>,
-      expiryTimestampMs: PromiseOrValue<BigNumberish>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    scFeesKeepPercentage(overrides?: CallOverrides): Promise<[number]>;
-
-    transfer(
-      to: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     transferOwnership(
       newOwner: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    updateCreationFees(
-      newCreationFees: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    updateSmartContractFeesKeepPercentage(
-      newPercentage: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -664,8 +479,6 @@ export interface Reclaim extends BaseContract {
     ): Promise<[string, string] & { addr: string; host: string }>;
   };
 
-  MAX_CLAIM_LIFETIME_S(overrides?: CallOverrides): Promise<BigNumber>;
-
   addAsWitness(
     witnessAddress: PromiseOrValue<string>,
     host: PromiseOrValue<string>,
@@ -676,31 +489,13 @@ export interface Reclaim extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  assertValidSignedClaim(
-    claimId: PromiseOrValue<BigNumberish>,
-    signatures: PromiseOrValue<BytesLike>[],
-    overrides?: CallOverrides
-  ): Promise<void>;
-
-  assertValidSignedClaimAndInfoHash(
-    claimId: PromiseOrValue<BigNumberish>,
+  assertValidEpochAndSignedClaim(
+    epochNum: PromiseOrValue<BigNumberish>,
     claimInfo: Claims.ClaimInfoStruct,
+    claimData: Claims.CompleteClaimDataStruct,
     signatures: PromiseOrValue<BytesLike>[],
     overrides?: CallOverrides
   ): Promise<void>;
-
-  claimCreations(
-    arg0: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<
-    [Claims.CompleteClaimDataStructOutput, string, BigNumber] & {
-      claim: Claims.CompleteClaimDataStructOutput;
-      requestor: string;
-      feesPaid: BigNumber;
-    }
-  >;
-
-  createFees(overrides?: CallOverrides): Promise<BigNumber>;
 
   currentEpoch(overrides?: CallOverrides): Promise<number>;
 
@@ -723,16 +518,16 @@ export interface Reclaim extends BaseContract {
     overrides?: CallOverrides
   ): Promise<Reclaim.EpochStructOutput>;
 
-  getClaimWitnesses(
-    requestId: PromiseOrValue<BigNumberish>,
+  fetchWitnessesForClaim(
+    epoch: PromiseOrValue<BigNumberish>,
+    identifier: PromiseOrValue<BytesLike>,
+    timestampS: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
-  ): Promise<string[]>;
+  ): Promise<Reclaim.WitnessStructOutput[]>;
 
   initialize(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
-
-  latestRequestId(overrides?: CallOverrides): Promise<BigNumber>;
 
   minimumWitnessesForClaimCreation(overrides?: CallOverrides): Promise<number>;
 
@@ -749,38 +544,8 @@ export interface Reclaim extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  requestClaimCreate(
-    infoHash: PromiseOrValue<BytesLike>,
-    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  requestClaimCreateForAnother(
-    signature: PromiseOrValue<BytesLike>,
-    infoHash: PromiseOrValue<BytesLike>,
-    expiryTimestampMs: PromiseOrValue<BigNumberish>,
-    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  scFeesKeepPercentage(overrides?: CallOverrides): Promise<number>;
-
-  transfer(
-    to: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   transferOwnership(
     newOwner: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  updateCreationFees(
-    newCreationFees: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  updateSmartContractFeesKeepPercentage(
-    newPercentage: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -807,8 +572,6 @@ export interface Reclaim extends BaseContract {
   ): Promise<[string, string] & { addr: string; host: string }>;
 
   callStatic: {
-    MAX_CLAIM_LIFETIME_S(overrides?: CallOverrides): Promise<BigNumber>;
-
     addAsWitness(
       witnessAddress: PromiseOrValue<string>,
       host: PromiseOrValue<string>,
@@ -817,31 +580,13 @@ export interface Reclaim extends BaseContract {
 
     addNewEpoch(overrides?: CallOverrides): Promise<void>;
 
-    assertValidSignedClaim(
-      claimId: PromiseOrValue<BigNumberish>,
-      signatures: PromiseOrValue<BytesLike>[],
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    assertValidSignedClaimAndInfoHash(
-      claimId: PromiseOrValue<BigNumberish>,
+    assertValidEpochAndSignedClaim(
+      epochNum: PromiseOrValue<BigNumberish>,
       claimInfo: Claims.ClaimInfoStruct,
+      claimData: Claims.CompleteClaimDataStruct,
       signatures: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
     ): Promise<void>;
-
-    claimCreations(
-      arg0: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<
-      [Claims.CompleteClaimDataStructOutput, string, BigNumber] & {
-        claim: Claims.CompleteClaimDataStructOutput;
-        requestor: string;
-        feesPaid: BigNumber;
-      }
-    >;
-
-    createFees(overrides?: CallOverrides): Promise<BigNumber>;
 
     currentEpoch(overrides?: CallOverrides): Promise<number>;
 
@@ -864,14 +609,14 @@ export interface Reclaim extends BaseContract {
       overrides?: CallOverrides
     ): Promise<Reclaim.EpochStructOutput>;
 
-    getClaimWitnesses(
-      requestId: PromiseOrValue<BigNumberish>,
+    fetchWitnessesForClaim(
+      epoch: PromiseOrValue<BigNumberish>,
+      identifier: PromiseOrValue<BytesLike>,
+      timestampS: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<string[]>;
+    ): Promise<Reclaim.WitnessStructOutput[]>;
 
     initialize(overrides?: CallOverrides): Promise<void>;
-
-    latestRequestId(overrides?: CallOverrides): Promise<BigNumber>;
 
     minimumWitnessesForClaimCreation(
       overrides?: CallOverrides
@@ -888,38 +633,8 @@ export interface Reclaim extends BaseContract {
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
-    requestClaimCreate(
-      infoHash: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber, string[]]>;
-
-    requestClaimCreateForAnother(
-      signature: PromiseOrValue<BytesLike>,
-      infoHash: PromiseOrValue<BytesLike>,
-      expiryTimestampMs: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber, string[]]>;
-
-    scFeesKeepPercentage(overrides?: CallOverrides): Promise<number>;
-
-    transfer(
-      to: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     transferOwnership(
       newOwner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    updateCreationFees(
-      newCreationFees: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    updateSmartContractFeesKeepPercentage(
-      newPercentage: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -963,30 +678,6 @@ export interface Reclaim extends BaseContract {
       beacon?: PromiseOrValue<string> | null
     ): BeaconUpgradedEventFilter;
 
-    "ClaimCreated(uint256)"(requestId?: null): ClaimCreatedEventFilter;
-    ClaimCreated(requestId?: null): ClaimCreatedEventFilter;
-
-    "ClaimCreationRequested(uint256,bytes32,address,uint32,address,string[],address[],uint256)"(
-      claimId?: null,
-      infoHash?: null,
-      owner?: null,
-      timestampS?: null,
-      requestor?: null,
-      witnessHosts?: null,
-      witnessAddresses?: null,
-      feesPaid?: null
-    ): ClaimCreationRequestedEventFilter;
-    ClaimCreationRequested(
-      claimId?: null,
-      infoHash?: null,
-      owner?: null,
-      timestampS?: null,
-      requestor?: null,
-      witnessHosts?: null,
-      witnessAddresses?: null,
-      feesPaid?: null
-    ): ClaimCreationRequestedEventFilter;
-
     "EpochAdded(tuple)"(epoch?: null): EpochAddedEventFilter;
     EpochAdded(epoch?: null): EpochAddedEventFilter;
 
@@ -1011,8 +702,6 @@ export interface Reclaim extends BaseContract {
   };
 
   estimateGas: {
-    MAX_CLAIM_LIFETIME_S(overrides?: CallOverrides): Promise<BigNumber>;
-
     addAsWitness(
       witnessAddress: PromiseOrValue<string>,
       host: PromiseOrValue<string>,
@@ -1023,25 +712,13 @@ export interface Reclaim extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    assertValidSignedClaim(
-      claimId: PromiseOrValue<BigNumberish>,
-      signatures: PromiseOrValue<BytesLike>[],
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    assertValidSignedClaimAndInfoHash(
-      claimId: PromiseOrValue<BigNumberish>,
+    assertValidEpochAndSignedClaim(
+      epochNum: PromiseOrValue<BigNumberish>,
       claimInfo: Claims.ClaimInfoStruct,
+      claimData: Claims.CompleteClaimDataStruct,
       signatures: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    claimCreations(
-      arg0: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    createFees(overrides?: CallOverrides): Promise<BigNumber>;
 
     currentEpoch(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1057,16 +734,16 @@ export interface Reclaim extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getClaimWitnesses(
-      requestId: PromiseOrValue<BigNumberish>,
+    fetchWitnessesForClaim(
+      epoch: PromiseOrValue<BigNumberish>,
+      identifier: PromiseOrValue<BytesLike>,
+      timestampS: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     initialize(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
-
-    latestRequestId(overrides?: CallOverrides): Promise<BigNumber>;
 
     minimumWitnessesForClaimCreation(
       overrides?: CallOverrides
@@ -1085,38 +762,8 @@ export interface Reclaim extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    requestClaimCreate(
-      infoHash: PromiseOrValue<BytesLike>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    requestClaimCreateForAnother(
-      signature: PromiseOrValue<BytesLike>,
-      infoHash: PromiseOrValue<BytesLike>,
-      expiryTimestampMs: PromiseOrValue<BigNumberish>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    scFeesKeepPercentage(overrides?: CallOverrides): Promise<BigNumber>;
-
-    transfer(
-      to: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     transferOwnership(
       newOwner: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    updateCreationFees(
-      newCreationFees: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    updateSmartContractFeesKeepPercentage(
-      newPercentage: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1144,10 +791,6 @@ export interface Reclaim extends BaseContract {
   };
 
   populateTransaction: {
-    MAX_CLAIM_LIFETIME_S(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     addAsWitness(
       witnessAddress: PromiseOrValue<string>,
       host: PromiseOrValue<string>,
@@ -1158,25 +801,13 @@ export interface Reclaim extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    assertValidSignedClaim(
-      claimId: PromiseOrValue<BigNumberish>,
-      signatures: PromiseOrValue<BytesLike>[],
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    assertValidSignedClaimAndInfoHash(
-      claimId: PromiseOrValue<BigNumberish>,
+    assertValidEpochAndSignedClaim(
+      epochNum: PromiseOrValue<BigNumberish>,
       claimInfo: Claims.ClaimInfoStruct,
+      claimData: Claims.CompleteClaimDataStruct,
       signatures: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
-
-    claimCreations(
-      arg0: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    createFees(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     currentEpoch(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1192,16 +823,16 @@ export interface Reclaim extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getClaimWitnesses(
-      requestId: PromiseOrValue<BigNumberish>,
+    fetchWitnessesForClaim(
+      epoch: PromiseOrValue<BigNumberish>,
+      identifier: PromiseOrValue<BytesLike>,
+      timestampS: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     initialize(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
-
-    latestRequestId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     minimumWitnessesForClaimCreation(
       overrides?: CallOverrides
@@ -1220,40 +851,8 @@ export interface Reclaim extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    requestClaimCreate(
-      infoHash: PromiseOrValue<BytesLike>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    requestClaimCreateForAnother(
-      signature: PromiseOrValue<BytesLike>,
-      infoHash: PromiseOrValue<BytesLike>,
-      expiryTimestampMs: PromiseOrValue<BigNumberish>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    scFeesKeepPercentage(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    transfer(
-      to: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
     transferOwnership(
       newOwner: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    updateCreationFees(
-      newCreationFees: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    updateSmartContractFeesKeepPercentage(
-      newPercentage: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
