@@ -17,13 +17,13 @@ const {userAddress} = req.body;
 try {
     const request = reclaim.requestProofs({
         title: "Reclaim Protocol", // Name of your application
-        baseCallbackUrl: "http://localhost:3000/callback", 
+        baseCallbackUrl: "http://<YOUR_BACKEND_SERVER_URL>/callback", 
         // callbackId: "<UNIQUE_IDENTIFIER_GOES_HERE>" // optional
         contextMessage: "Airdrop for Reclaim Users!", //required : Why you are requesting this proof. Displayed on the user's device while creating the proof
         contextAddress: userAddress, //optional: your users' EVM/Solana/Bitcoin wallet address if you are planning to use this proof for NFT or Coin drops
         requestedProofs: [
             new reclaim.CustomProvider({
-                provider: 'google-login',
+                provider: 'bybit-balance',
                 payload: {}
             }),
         ],
