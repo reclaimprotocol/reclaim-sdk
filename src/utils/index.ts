@@ -1,5 +1,8 @@
-import { ethers, utils } from 'ethers'
+import { Beacon, BeaconState, fetchWitnessListForClaim } from '@reclaimprotocol/crypto-sdk'
+import canonicalize from 'canonicalize'
+import { ethers, logger, utils } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
+import { DEFAULT_CHAIN_ID } from '../config'
 import { Context, Proof, SubmittedProof } from '../types'
 import CONTRACTS_CONFIG from '../utils/contracts/config.json'
 import { Reclaim, Reclaim__factory as ReclaimFactory } from '../utils/contracts/types'
@@ -12,23 +15,39 @@ const existingContractsMap: { [chain: string]: Reclaim } = { }
 
 export async function getClaimWitnessOnChain(chainId: number, epoch: number, identifier: string, timestampS: number) {
 	const contract = getContract(chainId)
-	const witnesses = await contract.fetchWitnessesForClaim(epoch, identifier, timestampS)
-	return witnesses.map(w => w.addr.toLowerCase())
+	logger.info('fetching witnesses for claim', epoch, identifier, timestampS)
+	try {
+		const witnesses = await contract.fetchWitnessesForClaim(epoch, identifier, timestampS)
+		return witnesses.map(w => w.addr.toLowerCase())
+	} catch(e) {
+		logger.info('error fetching witnesses', e)
+		return []
+	}
 }
 
-export function encodeContext(ctx: Context): string {
+export async function getWitnessesForClaim(epoch: number, identifier: string, timestampS: number, chainId?: number) {
+	const beacon = makeSmartContractBeacon(chainId)
+	const state = await beacon.getState(epoch)
+	const witnessList = fetchWitnessListForClaim(
+		state,
+		identifier,
+		timestampS,
+	)
+	return witnessList.map(w => w.id.toLowerCase())
+}
+
+export function encodeContext(ctx: Context, fromProof: boolean): string {
 	const context: Context = {
-		contextMessage: utils.keccak256(utils.toUtf8Bytes(ctx.contextMessage)),
+		contextMessage: !fromProof ? utils.keccak256(utils.toUtf8Bytes(ctx.contextMessage)) : ctx.contextMessage,
 		contextAddress: ctx.contextAddress,
 		sessionId: ctx.sessionId,
 	}
-
-	return JSON.stringify(context)
+	return canonicalize(context)!
 }
 
 export function decodeContext(ctx: string): Context {
 	const context: Context = JSON.parse(ctx)
-	context.contextMessage = utils.toUtf8String(context.contextMessage)
+	// context.contextMessage = utils.toUtf8String(context.contextMessage)
 	return context
 }
 
@@ -215,7 +234,6 @@ export async function getShortenedUrl(url: string) {
 // type guard for proof
 export function isProof(obj: unknown): obj is Proof {
 	return (
-		(obj as Proof).chainId !== undefined &&
 		(obj as Proof).parameters !== undefined &&
 		(obj as Proof).ownerPublicKey !== undefined &&
 		(obj as Proof).signatures !== undefined &&
@@ -224,4 +242,49 @@ export function isProof(obj: unknown): obj is Proof {
 		(obj as Proof).witnessAddresses !== undefined &&
 		(obj as Proof).templateClaimId !== undefined
 	)
+}
+
+export default function makeSmartContractBeacon(chainId?: number): Beacon {
+	chainId = chainId ? chainId : DEFAULT_CHAIN_ID
+	const contract = getContract(chainId)
+	return makeBeaconCacheable({
+		async getState(epochId) {
+			const epoch = await contract.fetchEpoch(epochId || 0)
+			if(!epoch.id) {
+				throw new Error(`Invalid epoch ID: ${epochId}`)
+			}
+
+			return {
+				epoch: epoch.id,
+				witnesses: epoch.witnesses.map(w => ({
+					id: w.addr.toLowerCase(),
+					url: w.host
+				})),
+				witnessesRequiredForClaim: epoch.minimumWitnessesForClaimCreation,
+				nextEpochTimestampS: epoch.timestampEnd
+			}
+		}
+	})
+}
+
+export function makeBeaconCacheable(beacon: Beacon): Beacon {
+	const cache: { [epochId: number]: Promise<BeaconState> } = {}
+
+	return {
+		...beacon,
+		async getState(epochId) {
+			if(!epochId) {
+				// TODO: add cache here
+				const state = await beacon.getState()
+				return state
+			}
+
+			const key = epochId
+			if(!cache[key]) {
+				cache[key] = beacon.getState(epochId)
+			}
+
+			return cache[key]
+		},
+	}
 }

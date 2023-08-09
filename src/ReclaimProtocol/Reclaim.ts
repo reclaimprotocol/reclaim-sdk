@@ -3,7 +3,7 @@ import serialize from 'canonicalize'
 import { utils } from 'ethers'
 import P from 'pino'
 import { ProofRequest, SubmittedProof, Template } from '../types'
-import { decodeContext, encodeContext, generateCallbackUrl, generateUuid, getCallbackIdFromUrl, getClaimWitnessOnChain, transformProofsToverify } from '../utils'
+import { decodeContext, encodeContext, generateCallbackUrl, generateUuid, getCallbackIdFromUrl, getWitnessesForClaim, transformProofsToverify } from '../utils'
 import { CustomProvider } from './CustomProvider'
 import { HttpsProvider } from './HttpsProvider'
 import TemplateInstance from './Template'
@@ -44,7 +44,7 @@ export class Reclaim {
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 					provider: requestedProof.params.provider as any,
 					payload: requestedProof.params.payload,
-					context: encodeContext({ sessionId, contextMessage, contextAddress }),
+					context: encodeContext({ sessionId, contextMessage, contextAddress }, false),
 				}
 			})
 		}
@@ -64,8 +64,7 @@ export class Reclaim {
 		const proofs = transformProofsToverify(submittedProofs)
 		for(const proof of proofs) {
 
-			const witnesses = await getClaimWitnessOnChain(proof.chainId, proof.epoch, proof.identifier, parseInt(proof.timestampS))
-
+			const witnesses = await getWitnessesForClaim(proof.epoch, proof.identifier, parseInt(proof.timestampS))
 			// if no witnesses are present: return false
 			if(!witnesses.length) {
 				logger.error('No witnesses found for the claim')
@@ -81,7 +80,7 @@ export class Reclaim {
 						context: proof.context,
 						parameters: serialize(proof.parameters)!,
 						epoch: proof.epoch,
-						identifier: proof.identifier ? proof.identifier : undefined,
+						identifier: proof.identifier,
 					},
 					signatures: proof.signatures.map(signature => {
 						return utils.arrayify(signature)
@@ -90,7 +89,7 @@ export class Reclaim {
 				// first decode ctx
 				const decodedCtx = decodeContext(proof.context)
 				// then encode it again with the expected sessionId
-				const encodedCtx = encodeContext({ sessionId: expectedSessionId, contextMessage: decodedCtx.contextMessage, contextAddress: decodedCtx.contextAddress })
+				const encodedCtx = encodeContext({ sessionId: expectedSessionId, contextMessage: decodedCtx.contextMessage, contextAddress: decodedCtx.contextAddress }, true)
 				// then hash the claim info with the encoded ctx to get the identifier
 				const calculatedIdentifier = hashClaimInfo({ parameters: serialize(proof.parameters)!, provider: proof.provider, context: encodedCtx })
 				// check if the identifier matches the one in the proof
