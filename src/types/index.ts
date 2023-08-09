@@ -179,7 +179,6 @@ export type Proof = {
 	witnessAddresses: string[]
 	signatures: string[]
 	redactedParameters: string
-	chainId: number
 	epoch: number
 	identifier: string
 	extractedParameterValues?: {
