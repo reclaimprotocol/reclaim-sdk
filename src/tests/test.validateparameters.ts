@@ -79,8 +79,6 @@ const INCORRECT_REGEX_XPATH_PARAMS_1 = {
 // const selectionRegex = 'WyI8c3BhbiBpZD0nZW1waWQnPnt7Y3JlYXRvcm9zLWVtcGlkfX08L3NwYW4+IiwiIiwiPHNwYW4gaWQ9J2VtcGlkJz57e3FiLWVtcGlkfX08L3NwYW4+Il0='
 const PROOFS_WITHOUT_XPATH: Proof[] = [
 	{
-		'onChainClaimId': '2617',
-		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 		'templateClaimId': '0',
 		'provider': 'http',
 		'parameters': {
@@ -91,17 +89,16 @@ const PROOFS_WITHOUT_XPATH: Proof[] = [
 			]
 		},
 		'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
-		'chainId': 420,
 		'ownerPublicKey': '03057dd1b36d108cc0d9bced0565b6363ed910bc6522aa937092e1dc344614ddde',
 		'timestampS': '1684343138',
 		'witnessAddresses': ['reclaim-node.questbook.app'],
 		'signatures': ['0xea2b6a7f7183ddea565a0cb569ce4ff2896f3b6f4dcdd2b5da5be1e67f8865086fcff48227336636a3a32c9cbf801d946351b00b411b2e129ad4b005acfb4fed1b'],
 		'redactedParameters': '{"url":"**********************@undefined"}',
-		'extractedParameterValues': REGEX_PARAMS
+		'extractedParameterValues': REGEX_PARAMS,
+		identifier: '0',
+		epoch: 0,
 	},
 	{
-		'onChainClaimId': '2617',
-		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 		'templateClaimId': '0',
 		'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
 		'provider': 'http',
@@ -114,40 +111,37 @@ const PROOFS_WITHOUT_XPATH: Proof[] = [
 
 			]
 		},
-		'chainId': 420,
 		'ownerPublicKey': '03057dd1b36d108cc0d9bced0565b6363ed910bc6522aa937092e1dc344614ddde',
 		'timestampS': '1684343138',
 		'witnessAddresses': ['reclaim-node.questbook.app'],
 		'signatures': ['0xea2b6a7f7183ddea565a0cb569ce4ff2896f3b6f4dcdd2b5da5be1e67f8865086fcff48227336636a3a32c9cbf801d946351b00b411b2e129ad4b005acfb4fed1b'],
 		'redactedParameters': '{"url":"**********************@undefined"}',
-		'extractedParameterValues': REGEX_PARAMS
+		'extractedParameterValues': REGEX_PARAMS,
+		identifier: '0',
+		epoch: 0,
 	},
 	{
-		'onChainClaimId': '2617',
-		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 		'templateClaimId': '0',
 		'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
 		'provider': 'http',
 		'parameters': {
 			'emailAddress': 'abc@gmail.com'
 		},
-		'chainId': 420,
 		'ownerPublicKey': '03057dd1b36d108cc0d9bced0565b6363ed910bc6522aa937092e1dc344614ddde',
 		'timestampS': '1684343138',
 		'witnessAddresses': ['reclaim-node.questbook.app'],
 		'signatures': ['0xea2b6a7f7183ddea565a0cb569ce4ff2896f3b6f4dcdd2b5da5be1e67f8865086fcff48227336636a3a32c9cbf801d946351b00b411b2e129ad4b005acfb4fed1b'],
 		'redactedParameters': '{"url":"**********************@undefined"}',
-		'extractedParameterValues': REGEX_PARAMS
+		'extractedParameterValues': REGEX_PARAMS,
+		identifier: '0',
+		epoch: 0,
 	},
 
 ]
 
 const PROOFS_WITH_XPATH_1: Proof[] = [
 	{
-		'chainId': 420,
-		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 		'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
-		'onChainClaimId': '6607',
 		'ownerPublicKey': '0217aff403993ec235b028c89e7148927a971fc1b6bcdc01d276ca48659f76b404',
 		'parameters': {
 			'method': 'GET',
@@ -166,13 +160,12 @@ const PROOFS_WITH_XPATH_1: Proof[] = [
 		'templateClaimId': '0',
 		'timestampS': '1688383636',
 		'witnessAddresses': ['reclaim - node.questbook.app'],
-		'extractedParameterValues':REGEX_XPATH_PARAMS
+		'extractedParameterValues':REGEX_XPATH_PARAMS,
+		identifier: '0',
+		epoch: 0,
 	},
 	{
-		'chainId': 420,
-		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 		'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
-		'onChainClaimId': '6607',
 		'ownerPublicKey': '0217aff403993ec235b028c89e7148927a971fc1b6bcdc01d276ca48659f76b404',
 		'parameters': {
 			'method': 'GET',
@@ -196,13 +189,12 @@ const PROOFS_WITH_XPATH_1: Proof[] = [
 		'templateClaimId': '0',
 		'timestampS': '1688383636',
 		'witnessAddresses': ['reclaim - node.questbook.app'],
-		'extractedParameterValues':REGEX_XPATH_PARAMS
+		'extractedParameterValues':REGEX_XPATH_PARAMS,
+		identifier: '0',
+		epoch: 0,
 	},
 	{
-		'chainId': 420,
-		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 		'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
-		'onChainClaimId': '6607',
 		'ownerPublicKey': '0217aff403993ec235b028c89e7148927a971fc1b6bcdc01d276ca48659f76b404',
 		'parameters': {
 			'method': 'GET',
@@ -221,17 +213,16 @@ const PROOFS_WITH_XPATH_1: Proof[] = [
 		'templateClaimId': '0',
 		'timestampS': '1688383636',
 		'witnessAddresses': ['reclaim - node.questbook.app'],
-		'extractedParameterValues':REGEX_XPATH_PARAMS
+		'extractedParameterValues':REGEX_XPATH_PARAMS,
+		identifier: '0',
+		epoch: 0,
 	},
 
 ]
 
 const PROOFS_WITH_XPATH_2: Proof[] = [
 	{
-		'chainId': 420,
-		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 		'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
-		'onChainClaimId': '6607',
 		'ownerPublicKey': '0217aff403993ec235b028c89e7148927a971fc1b6bcdc01d276ca48659f76b404',
 		'parameters': {
 			'method': 'GET',
@@ -255,13 +246,12 @@ const PROOFS_WITH_XPATH_2: Proof[] = [
 		'templateClaimId': '0',
 		'timestampS': '1688383636',
 		'witnessAddresses': ['reclaim - node.questbook.app'],
-		'extractedParameterValues':INCORRECT_REGEX_XPATH_PARAMS
+		'extractedParameterValues':INCORRECT_REGEX_XPATH_PARAMS,
+		identifier: '0',
+		epoch: 0,
 	},
 	{
-		'chainId': 420,
-		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 		'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
-		'onChainClaimId': '6607',
 		'ownerPublicKey': '0217aff403993ec235b028c89e7148927a971fc1b6bcdc01d276ca48659f76b404',
 		'parameters': {
 			'method': 'GET',
@@ -277,7 +267,7 @@ const PROOFS_WITH_XPATH_2: Proof[] = [
 					'xPath': "//script[@data-component-name='BookfaceCsrApp']"
 				}],
 			'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
-			'url': 'https://bookface.ycombinator.com/home'
+			'url': 'https://bookface.ycombinator.com/home',
 		},
 		'provider': 'http',
 		'redactedParameters': "{\"url\":\"*************************************\",\"method\":\"GET\",\"responseSelections\":[{\"jsonPath\":\"$.currentUser\",\"responseMatch\":\"\\\\{\\\"id\\\":182853,.*?waas_admin.*?:{.*?}.*?:\\\\{.*?}.*?(?:full_name|first_name).*?}\",\"xPath\":\"//script[@id='js-react-on-rails-context']\"},{\"jsonPath\":\"$.hasBookface\",\"responseMatch\":\"\\\"hasBookface\\\":true\",\"xPath\":\"//script[@data-component-name='BookfaceCsrApp']\"}]}",
@@ -285,13 +275,12 @@ const PROOFS_WITH_XPATH_2: Proof[] = [
 		'templateClaimId': '0',
 		'timestampS': '1688383636',
 		'witnessAddresses': ['reclaim - node.questbook.app'],
-		'extractedParameterValues':INCORRECT_REGEX_XPATH_PARAMS
+		'extractedParameterValues':INCORRECT_REGEX_XPATH_PARAMS,
+		identifier: '0',
+		epoch: 0,
 	},
 	{
-		'chainId': 420,
-		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 		'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
-		'onChainClaimId': '6607',
 		'ownerPublicKey': '0217aff403993ec235b028c89e7148927a971fc1b6bcdc01d276ca48659f76b404',
 		'parameters': {
 			'method': 'GET',
@@ -315,16 +304,15 @@ const PROOFS_WITH_XPATH_2: Proof[] = [
 		'templateClaimId': '0',
 		'timestampS': '1688383636',
 		'witnessAddresses': ['reclaim - node.questbook.app'],
-		'extractedParameterValues':INCORRECT_REGEX_XPATH_PARAMS
+		'extractedParameterValues':INCORRECT_REGEX_XPATH_PARAMS,
+		identifier: '0',
+		epoch: 0,
 	},
 ]
 
 const PROOFS_WITH_XPATH_3: Proof[] = [
 	{
-		'chainId': 420,
-		'sessionId': '0', // TODO: update this once the app integrates sessionId into the proof
 		'context': '0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c800x0',
-		'onChainClaimId': '6607',
 		'ownerPublicKey': '0217aff403993ec235b028c89e7148927a971fc1b6bcdc01d276ca48659f76b404',
 		'parameters': {
 			'method': 'GET',
@@ -348,6 +336,8 @@ const PROOFS_WITH_XPATH_3: Proof[] = [
 		'templateClaimId': '0',
 		'timestampS': '1688383636',
 		'witnessAddresses': ['reclaim - node.questbook.app'],
-		'extractedParameterValues':INCORRECT_REGEX_XPATH_PARAMS_1
+		'extractedParameterValues':INCORRECT_REGEX_XPATH_PARAMS_1,
+		identifier: '0',
+		epoch: 0,
 	},
 ]

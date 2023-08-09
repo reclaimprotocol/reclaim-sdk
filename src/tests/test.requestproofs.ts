@@ -27,6 +27,7 @@ describe('Create proof request with xpath', () => {
 		expect(request.template.name).toBe('YC')
 		expect(request.template.claims.length).toEqual(1)
 		// expect(request.callbackId).toBe('1234')
+		// console.log(await request.getReclaimUrl())
 	})
 
 	it('should correctly create proof request without xPath', () => {
@@ -72,6 +73,7 @@ const REQUEST_PROOF_WITHOUT_XPATH: ProofRequest = {
 const REQUEST_PROOF_WITH_XPATH = {
 	title: 'YC',
 	baseCallbackUrl: 'https://www.google.com/',
+	callbackId: '1234',
 	requestedProofs: [
 		new reclaim.HttpsProvider({
 			name: 'YC https provider',
