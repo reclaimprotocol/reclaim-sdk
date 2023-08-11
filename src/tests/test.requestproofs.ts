@@ -27,7 +27,7 @@ describe('Create proof request with xpath', () => {
 		expect(request.template.name).toBe('YC')
 		expect(request.template.claims.length).toEqual(1)
 		// expect(request.callbackId).toBe('1234')
-		// console.log(await request.getReclaimUrl())
+		// console.log(await request.getReclaimUrl({}))
 	})
 
 	it('should correctly create proof request without xPath', () => {

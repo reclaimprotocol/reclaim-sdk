@@ -89,7 +89,7 @@ Follow along the guide and build your own server or you can directly deploy the 
         });
         // Store the callback Id and Reclaim URL in your database
         const { callbackId } = request;
-        const reclaimUrl = await request.getReclaimUrl();
+        const reclaimUrl = await request.getReclaimUrl({});
         // ... store the callbackId and reclaimUrl in your database
         res.json({ reclaimUrl });
     }
@@ -212,7 +212,7 @@ app.get("/request-proofs", async(req, res) => {
         });
         // Store the callback Id, Reclaim URL and expectedProofsInCallback in your database
         const { callbackId, expectedProofsInCallback } = request;
-        const reclaimUrl = await request.getReclaimUrl()
+        const reclaimUrl = await request.getReclaimUrl({})
         // ... store the callbackId, reclaimUrl and expectedProofsInCallback in your database
         res.json({ reclaimUrl });
     }
