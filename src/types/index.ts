@@ -31,6 +31,12 @@ export type ProofRequest = {
 	contextAddress?: string
 }
 
+export type Context = {
+	sessionId: string
+	contextMessage: string
+	contextAddress: string
+}
+
 export type HttpsProviderParams = {
 	/**
 	 * Name of the website to be displayed on the UI
@@ -168,16 +174,13 @@ export type httpProof = Omit<Claim, 'payload'> & {
 }
 
 export type Proof = {
-	onChainClaimId: string
-	sessionId: string
 	ownerPublicKey: string
 	timestampS: string
 	witnessAddresses: string[]
 	signatures: string[]
 	redactedParameters: string
-	chainId: number
-	epoch?: number
-	identifier?: string
+	epoch: number
+	identifier: string
 	extractedParameterValues?: {
 		[key: string]: string | number
 	}

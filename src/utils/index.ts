@@ -1,6 +1,9 @@
-import { ethers } from 'ethers'
+import { fetchWitnessListForClaim } from '@reclaimprotocol/crypto-sdk'
+import { makeBeacon } from '@reclaimprotocol/reclaim-node'
+import canonicalize from 'canonicalize'
+import { ethers, logger, utils } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
-import { Proof, RequestClaim, SubmittedProof } from '../types'
+import { Context, Proof, SubmittedProof } from '../types'
 import CONTRACTS_CONFIG from '../utils/contracts/config.json'
 import { Reclaim, Reclaim__factory as ReclaimFactory } from '../utils/contracts/types'
 
@@ -10,29 +13,42 @@ export function generateUuid() {
 
 const existingContractsMap: { [chain: string]: Reclaim } = { }
 
-export async function getOnChainClaimDataFromRequestId(
-	chainId: number,
-	claimId: string | number
-): Promise<RequestClaim> {
+export async function getClaimWitnessOnChain(chainId: number, epoch: number, identifier: string, timestampS: number) {
 	const contract = getContract(chainId)
-	const pendingCreateData = await contract!.claimCreations(claimId)
-	if(!pendingCreateData?.claim.claimId) {
-		throw new Error(`Invalid request ID: ${claimId}`)
-	}
-
-	const claim = pendingCreateData.claim
-	return {
-		infoHash:claim.infoHash,
-		owner:claim.owner.toLowerCase(),
-		timestampS:claim.timestampS,
-		claimId:claim.claimId
+	logger.info('fetching witnesses for claim', epoch, identifier, timestampS)
+	try {
+		const witnesses = await contract.fetchWitnessesForClaim(epoch, identifier, timestampS)
+		return witnesses.map(w => w.addr.toLowerCase())
+	} catch(e) {
+		logger.info('error fetching witnesses', e)
+		return []
 	}
 }
 
-export async function getClaimWitnessOnChain(chainId: number, claimId: number) {
-	const contract = getContract(chainId)
-	const witnesses = await contract.getClaimWitnesses(claimId)
-	return witnesses.map(w => w.toLowerCase())
+export async function getWitnessesForClaim(epoch: number, identifier: string, timestampS: number) {
+	const beacon = makeBeacon()
+	const state = await beacon.getState(epoch)
+	const witnessList = fetchWitnessListForClaim(
+		state,
+		identifier,
+		timestampS,
+	)
+	return witnessList.map(w => w.id.toLowerCase())
+}
+
+export function encodeContext(ctx: Context, fromProof: boolean): string {
+	const context: Context = {
+		contextMessage: !fromProof ? utils.keccak256(utils.toUtf8Bytes(ctx.contextMessage)) : ctx.contextMessage,
+		contextAddress: ctx.contextAddress,
+		sessionId: ctx.sessionId,
+	}
+	return canonicalize(context)!
+}
+
+export function decodeContext(ctx: string): Context {
+	const context: Context = JSON.parse(ctx)
+	// context.contextMessage = utils.toUtf8String(context.contextMessage)
+	return context
 }
 
 export async function getClaimWitnessesFromEpoch(chainId: number, epoch: number) {
@@ -218,9 +234,7 @@ export async function getShortenedUrl(url: string) {
 // type guard for proof
 export function isProof(obj: unknown): obj is Proof {
 	return (
-		(obj as Proof).chainId !== undefined &&
 		(obj as Proof).parameters !== undefined &&
-		(obj as Proof).onChainClaimId !== undefined &&
 		(obj as Proof).ownerPublicKey !== undefined &&
 		(obj as Proof).signatures !== undefined &&
 		(obj as Proof).timestampS !== undefined &&

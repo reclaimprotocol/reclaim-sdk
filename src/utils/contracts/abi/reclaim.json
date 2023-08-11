@@ -35,74 +35,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "requestId",
-        "type": "uint256"
-      }
-    ],
-    "name": "ClaimCreated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "claimId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "infoHash",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint32",
-        "name": "timestampS",
-        "type": "uint32"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "requestor",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "string[]",
-        "name": "witnessHosts",
-        "type": "string[]"
-      },
-      {
-        "indexed": false,
-        "internalType": "address[]",
-        "name": "witnessAddresses",
-        "type": "address[]"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "feesPaid",
-        "type": "uint256"
-      }
-    ],
-    "name": "ClaimCreationRequested",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "components": [
           {
             "internalType": "uint32",
@@ -197,19 +129,6 @@
     "type": "event"
   },
   {
-    "inputs": [],
-    "name": "MAX_CLAIM_LIFETIME_S",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -237,27 +156,9 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "claimId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes[]",
-        "name": "signatures",
-        "type": "bytes[]"
-      }
-    ],
-    "name": "assertValidSignedClaim",
-    "outputs": [],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "claimId",
-        "type": "uint256"
+        "internalType": "uint32",
+        "name": "epochNum",
+        "type": "uint32"
       },
       {
         "components": [
@@ -282,31 +183,10 @@
         "type": "tuple"
       },
       {
-        "internalType": "bytes[]",
-        "name": "signatures",
-        "type": "bytes[]"
-      }
-    ],
-    "name": "assertValidSignedClaimAndInfoHash",
-    "outputs": [],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "claimCreations",
-    "outputs": [
-      {
         "components": [
           {
             "internalType": "bytes32",
-            "name": "infoHash",
+            "name": "identifier",
             "type": "bytes32"
           },
           {
@@ -321,38 +201,22 @@
           },
           {
             "internalType": "uint256",
-            "name": "claimId",
+            "name": "epoch",
             "type": "uint256"
           }
         ],
         "internalType": "struct Claims.CompleteClaimData",
-        "name": "claim",
+        "name": "claimData",
         "type": "tuple"
       },
       {
-        "internalType": "address",
-        "name": "requestor",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "feesPaid",
-        "type": "uint256"
+        "internalType": "bytes[]",
+        "name": "signatures",
+        "type": "bytes[]"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "createFees",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "name": "assertValidEpochAndSignedClaim",
+    "outputs": [],
     "stateMutability": "view",
     "type": "function"
   },
@@ -477,17 +341,39 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "requestId",
-        "type": "uint256"
+        "internalType": "uint32",
+        "name": "epoch",
+        "type": "uint32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "identifier",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint32",
+        "name": "timestampS",
+        "type": "uint32"
       }
     ],
-    "name": "getClaimWitnesses",
+    "name": "fetchWitnessesForClaim",
     "outputs": [
       {
-        "internalType": "address[]",
+        "components": [
+          {
+            "internalType": "address",
+            "name": "addr",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "host",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct Reclaim.Witness[]",
         "name": "",
-        "type": "address[]"
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",
@@ -498,19 +384,6 @@
     "name": "initialize",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "latestRequestId",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -575,127 +448,12 @@
   {
     "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "infoHash",
-        "type": "bytes32"
-      }
-    ],
-    "name": "requestClaimCreate",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "string[]",
-        "name": "",
-        "type": "string[]"
-      }
-    ],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes",
-        "name": "signature",
-        "type": "bytes"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "infoHash",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "uint64",
-        "name": "expiryTimestampMs",
-        "type": "uint64"
-      }
-    ],
-    "name": "requestClaimCreateForAnother",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "string[]",
-        "name": "",
-        "type": "string[]"
-      }
-    ],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "scFeesKeepPercentage",
-    "outputs": [
-      {
-        "internalType": "uint8",
-        "name": "",
-        "type": "uint8"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "transfer",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "newOwner",
         "type": "address"
       }
     ],
     "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "newCreationFees",
-        "type": "uint256"
-      }
-    ],
-    "name": "updateCreationFees",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint8",
-        "name": "newPercentage",
-        "type": "uint8"
-      }
-    ],
-    "name": "updateSmartContractFeesKeepPercentage",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
