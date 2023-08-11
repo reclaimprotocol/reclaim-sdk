@@ -1,8 +1,8 @@
-import { Beacon, BeaconState, fetchWitnessListForClaim } from '@reclaimprotocol/crypto-sdk'
+import { fetchWitnessListForClaim } from '@reclaimprotocol/crypto-sdk'
+import { makeBeacon } from '@reclaimprotocol/reclaim-node'
 import canonicalize from 'canonicalize'
 import { ethers, logger, utils } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
-import { DEFAULT_CHAIN_ID } from '../config'
 import { Context, Proof, SubmittedProof } from '../types'
 import CONTRACTS_CONFIG from '../utils/contracts/config.json'
 import { Reclaim, Reclaim__factory as ReclaimFactory } from '../utils/contracts/types'
@@ -25,8 +25,8 @@ export async function getClaimWitnessOnChain(chainId: number, epoch: number, ide
 	}
 }
 
-export async function getWitnessesForClaim(epoch: number, identifier: string, timestampS: number, chainId?: number) {
-	const beacon = makeSmartContractBeacon(chainId)
+export async function getWitnessesForClaim(epoch: number, identifier: string, timestampS: number) {
+	const beacon = makeBeacon()
 	const state = await beacon.getState(epoch)
 	const witnessList = fetchWitnessListForClaim(
 		state,
@@ -242,49 +242,4 @@ export function isProof(obj: unknown): obj is Proof {
 		(obj as Proof).witnessAddresses !== undefined &&
 		(obj as Proof).templateClaimId !== undefined
 	)
-}
-
-export default function makeSmartContractBeacon(chainId?: number): Beacon {
-	chainId = chainId ? chainId : DEFAULT_CHAIN_ID
-	const contract = getContract(chainId)
-	return makeBeaconCacheable({
-		async getState(epochId) {
-			const epoch = await contract.fetchEpoch(epochId || 0)
-			if(!epoch.id) {
-				throw new Error(`Invalid epoch ID: ${epochId}`)
-			}
-
-			return {
-				epoch: epoch.id,
-				witnesses: epoch.witnesses.map(w => ({
-					id: w.addr.toLowerCase(),
-					url: w.host
-				})),
-				witnessesRequiredForClaim: epoch.minimumWitnessesForClaimCreation,
-				nextEpochTimestampS: epoch.timestampEnd
-			}
-		}
-	})
-}
-
-export function makeBeaconCacheable(beacon: Beacon): Beacon {
-	const cache: { [epochId: number]: Promise<BeaconState> } = {}
-
-	return {
-		...beacon,
-		async getState(epochId) {
-			if(!epochId) {
-				// TODO: add cache here
-				const state = await beacon.getState()
-				return state
-			}
-
-			const key = epochId
-			if(!cache[key]) {
-				cache[key] = beacon.getState(epochId)
-			}
-
-			return cache[key]
-		},
-	}
 }
