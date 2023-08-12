@@ -46,23 +46,24 @@ describe('Verification', () => {
 		expect(result).toBe(false)
 	})
 })
-const EXPECTED_SESSION_ID = '1234'
+const EXPECTED_SESSION_ID = '2a61da2f-e3b8-4ce5-a4cc-22964890aea0'
 
 const CORRECT_PROOF: SubmittedProof = {
-	'context': '{"contextAddress":"0x0","contextMessage":"0xb6d6fb002c789cae7ee1bb3b184dbcbe53d20357f824466057c7e3f1579c7c80","sessionId":"1234"}',
-	'epoch': 1,
-	'extractedParameterValues': {},
-	'identifier': '0xb91ec2b387e655b99746312f80a7c6d3c72da165464fb34b0b2a02535c33369d',
-	'ownerPublicKey': '03f9d34be41e082528d5e8541cf1d77bc88a1727612479b16e29e80810a1c8e1be',
-	'parameters': "{\"method\":\"GET\",\"responseSelections\":[{\"jsonPath\":\"$.currentUser\",\"responseMatch\":\"\\\\{\\\"id\\\":182853,.*?waas_admin.*?:{.*?}.*?:\\\\{.*?}.*?(?:full_name|first_name).*?}\",\"xPath\":\"//*[@id='js-react-on-rails-context']\"},{\"jsonPath\":\"$.hasBookface\",\"responseMatch\":\"\\\"hasBookface\\\":true\",\"xPath\":\"//script[@data-component-name='BookfaceCsrApp']\"}],\"url\":\"https://bookface.ycombinator.com/home\"}",
-	'provider': 'http',
-	'redactedParameters': "{\"url\":\"*************************************\",\"method\":\"***\",\"responseSelections\":[{\"jsonPath\":\"$.currentUser\",\"responseMatch\":\"\\\\{\\\"id\\\":182853,.*?waas_admin.*?:{.*?}.*?:\\\\{.*?}.*?(?:full_name|first_name).*?}\",\"xPath\":\"//*[@id='js-react-on-rails-context']\"},{\"jsonPath\":\"$.hasBookface\",\"responseMatch\":\"\\\"hasBookface\\\":true\",\"xPath\":\"//script[@data-component-name='BookfaceCsrApp']\"}]}",
-	'signatures': [
-	  '0x82b2315cf47fd7cea17ac4c9681fabef82d7895a8e2065bd63f66fbe49cd835831eeb0ac863cccdd2b8cb5b484e7953271abf0da5e2aee696be56c9906faf3f61c'
-	],
 	'templateClaimId': '0',
-	'timestampS': '1691587844',
-	'witnessAddresses': ['http://localhost:8002']
+	'provider': 'google-login',
+	'parameters': '{"emailAddress":"sweta@creatoros.co"}',
+	'ownerPublicKey': '03f9d34be41e082528d5e8541cf1d77bc88a1727612479b16e29e80810a1c8e1be',
+	'timestampS': '1691839255',
+	'witnessAddresses': [
+	  'https://reclaim-node.questbook.app'
+	],
+	'signatures': [
+	  '0xbbafd90ff1fa6e40fbae421a44a4d1cb84b48067d2407245fd46aa02633b8a21716a6ebe2f8cca22b8f96b0f3d78847c677755e95e2cf18abef492d0019e28f71b'
+	],
+	'redactedParameters': '{"emailAddress":"*****@creatoros.co"}',
+	'context': '{"contextAddress":"0x0","contextMessage":"0xe37a4cb1f11d7989933d53d8c243b03701a887ed26c0d37e752e0749b463cf67","sessionId":"2a61da2f-e3b8-4ce5-a4cc-22964890aea0"}',
+	'epoch': 2,
+	'identifier': '0x57c8e8c8a1765afcfd5667d8a6465ebb8bcf5218f33a717f2138a3ba22bf1549'
 }
 
 // const CORRECT_PROOF: SubmittedProof = {
