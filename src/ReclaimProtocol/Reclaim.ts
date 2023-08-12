@@ -2,7 +2,7 @@ import { assertValidSignedClaim, hashClaimInfo, signatures, SignedClaim } from '
 import serialize from 'canonicalize'
 import { utils } from 'ethers'
 import P from 'pino'
-import { ProofRequest, SubmittedProof, Template } from '../types'
+import { Proof, ProofRequest, SubmittedProof, Template } from '../types'
 import { decodeContext, encodeContext, generateCallbackUrl, generateUuid, getCallbackIdFromUrl, getWitnessesForClaim, transformProofsToverify } from '../utils'
 import { CustomProvider } from './CustomProvider'
 import { HttpsProvider } from './HttpsProvider'
@@ -63,7 +63,7 @@ export class Reclaim {
 		let result: boolean = false
 		const proofs = transformProofsToverify(submittedProofs)
 		for(const proof of proofs) {
-
+			console.log('proof', proof)
 			const witnesses = await getWitnessesForClaim(proof.epoch, proof.identifier, parseInt(proof.timestampS))
 			// if no witnesses are present: return false
 			if(!witnesses.length) {
@@ -91,7 +91,9 @@ export class Reclaim {
 				// then encode it again with the expected sessionId
 				const encodedCtx = encodeContext({ sessionId: expectedSessionId, contextMessage: decodedCtx.contextMessage, contextAddress: decodedCtx.contextAddress }, true)
 				// then hash the claim info with the encoded ctx to get the identifier
+				console.log('proof.parameters', serialize(proof.parameters))
 				const calculatedIdentifier = hashClaimInfo({ parameters: serialize(proof.parameters)!, provider: proof.provider, context: encodedCtx })
+				console.log('calculatedIdentifier', calculatedIdentifier)
 				// check if the identifier matches the one in the proof
 				if(calculatedIdentifier !== proof.identifier) {
 					logger.error('Identifier mismatch')
@@ -110,6 +112,21 @@ export class Reclaim {
 		}
 
 		return result
+	}
+
+	/**
+	 * function to get the claimIds from the proofs
+	 * @param proofs
+	 * @returns {string}
+	 */
+	 getClaimIdsFromProofs = (proofs: Proof[]): string[] => {
+		const claimIdArray: string[] = []
+		for(const proof of proofs) {
+			const claimId = proof.identifier
+			claimIdArray.push(claimId)
+		}
+
+		return claimIdArray
 	}
 }
 
