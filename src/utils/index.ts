@@ -1,5 +1,5 @@
 import { Beacon, fetchWitnessListForClaim } from '@reclaimprotocol/crypto-sdk'
-import { DEFAULT_CHAIN_ID, makeBeaconCacheable } from '@reclaimprotocol/reclaim-node'
+import { DEFAULT_CHAIN_ID, makeBeacon, makeBeaconCacheable } from '@reclaimprotocol/reclaim-node'
 import canonicalize from 'canonicalize'
 import { ethers, logger, utils } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
@@ -26,7 +26,7 @@ export async function getClaimWitnessOnChain(chainId: number, epoch: number, ide
 }
 
 export async function getWitnessesForClaim(epoch: number, identifier: string, timestampS: number) {
-	const beacon = makeSmartContractBeacon()
+	const beacon = makeBeacon()
 	const state = await beacon.getState(epoch)
 	const witnessList = fetchWitnessListForClaim(
 		state,
