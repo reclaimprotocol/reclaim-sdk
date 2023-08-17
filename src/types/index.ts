@@ -29,6 +29,10 @@ export type ProofRequest = {
 	 * This is your users' ethereum wallet address
 	 */
 	contextAddress?: string
+	/**
+	 * public key of the requestor
+	 */
+	requestorAddress?: string
 }
 
 export type Context = {
@@ -157,6 +161,7 @@ export type Template = {
 	name: string
 	callbackUrl: string
 	claims: Claim[]
+	requestorAddress?: string
 }
 
 export type ProofClaim = Omit<Claim, 'payload'> & {
@@ -215,3 +220,7 @@ export type SearchQueryObject = {
 	qualifiers: Record<string, string[]>
 }
 
+
+export type Options ={
+	shortened?: boolean
+}

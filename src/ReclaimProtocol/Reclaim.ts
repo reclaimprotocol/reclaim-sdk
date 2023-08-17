@@ -38,6 +38,7 @@ export class Reclaim {
 			sessionId,
 			name: request.title,
 			callbackUrl,
+			requestorAddress: request.requestorAddress,
 			claims: request.requestedProofs.map((requestedProof) => {
 				return {
 					templateClaimId: generateUuid(),

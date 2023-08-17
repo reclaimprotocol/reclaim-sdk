@@ -1,5 +1,5 @@
 import { RECLAIM_APP_URL } from '../config'
-import { Template } from '../types'
+import { Options, Template } from '../types'
 import { encodeBase64, getCallbackIdFromUrl, getShortenedUrl } from '../utils'
 
 /** Template instance */
@@ -61,7 +61,7 @@ export default class TemplateInstance {
    * function to get the reclaim url
    * @return {string}
    */
-	getReclaimUrl = async({ shortened = true }): Promise<string> => {
+	getReclaimUrl = async({ shortened = true }: Options = { shortened: true }): Promise<string> => {
 		if(!shortened) {
 			return (
 				RECLAIM_APP_URL + encodeURIComponent(JSON.stringify(this._template))
