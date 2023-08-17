@@ -3,13 +3,13 @@ import { ProofRequest, reclaimprotocol } from '..'
 jest.setTimeout(15000)
 
 describe('Create proof request without xpath', () => {
-	it('should correctly create proof request', () => {
+	it('should correctly create proof request', async() => {
 		const reclaim = new reclaimprotocol.Reclaim()
 		const request = reclaim.requestProofs(
 			REQUEST_PROOF_WITHOUT_XPATH
 		)
 
-		// console.log(await request.getReclaimUrl())
+		console.log(await request.getReclaimUrl())
 
 		expect(request.template.name).toBe('Proof of Reddit Karma')
 		expect(request.template.claims.length).toEqual(2)
@@ -27,7 +27,7 @@ describe('Create proof request with xpath', () => {
 		expect(request.template.name).toBe('YC')
 		expect(request.template.claims.length).toEqual(1)
 		// expect(request.callbackId).toBe('1234')
-		// console.log(await request.getReclaimUrl({}))
+		// console.log(await request.getReclaimUrl())
 	})
 
 	it('should correctly create proof request without xPath', () => {
