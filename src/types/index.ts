@@ -30,9 +30,13 @@ export type ProofRequest = {
 	 */
 	contextAddress?: string
 	/**
-	 * public key of the requestor
+	 * master wallet address of the requestor
 	 */
 	requestorAddress?: string
+	/**
+	 * ephemeral public key of the requestor
+	 */
+	requestorPublicKey?: string
 }
 
 export type Context = {
@@ -161,7 +165,10 @@ export type Template = {
 	name: string
 	callbackUrl: string
 	claims: Claim[]
+	/** master wallet address of the requestor */
 	requestorAddress?: string
+	/** ephemeral public key of the requestor */
+	requestorPublicKey?: string
 }
 
 export type ProofClaim = Omit<Claim, 'payload'> & {
