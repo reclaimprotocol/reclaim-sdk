@@ -9,7 +9,7 @@ describe('Create proof request without xpath', () => {
 			REQUEST_PROOF_WITHOUT_XPATH
 		)
 
-		console.log(await request.getReclaimUrl())
+		// console.log(await request.getReclaimUrl())
 
 		expect(request.template.name).toBe('Proof of Reddit Karma')
 		expect(request.template.claims.length).toEqual(2)
@@ -55,11 +55,13 @@ const REQUEST_PROOF_WITHOUT_XPATH: ProofRequest = {
 		new reclaim.HttpsProvider({
 			name: 'Reddit',
 			logoUrl: 'https://www.redditstatic.com/desktop2x/img/favicon/android-icon-192x192.png',
-			url: 'https://www.reddit.com',
+			url: 'https://www.reddit.com/',
 			loginUrl: 'https://www.reddit.com/login',
 			loginCookies: ['session', 'reddit_session', 'loid', 'token_v2', 'edgebucket'],
 			responseSelection: [
-				{ responseMatch: '<span class=\“_2BMnTatQ5gjKGK5OWROgaG\“>{{username}}</span>.*?<span>{{karma}} karma</span>' }
+				{
+					'responseMatch': '<span class=\"_2BMnTatQ5gjKGK5OWROgaG\">{{username}}</span>.*?<span>{{karma}} karma</span>'
+				}
 			],
 		}),
 

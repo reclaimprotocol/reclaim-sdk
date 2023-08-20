@@ -65,7 +65,6 @@ export class Reclaim {
 		let result: boolean = false
 		const proofs = transformProofsToverify(submittedProofs)
 		for(const proof of proofs) {
-			console.log('proof', proof)
 			const witnesses = await getWitnessesForClaim(proof.epoch, proof.identifier, parseInt(proof.timestampS))
 			// if no witnesses are present: return false
 			if(!witnesses.length) {
@@ -93,9 +92,7 @@ export class Reclaim {
 				// then encode it again with the expected sessionId
 				const encodedCtx = encodeContext({ sessionId: expectedSessionId, contextMessage: decodedCtx.contextMessage, contextAddress: decodedCtx.contextAddress }, true)
 				// then hash the claim info with the encoded ctx to get the identifier
-				console.log('proof.parameters', serialize(proof.parameters))
 				const calculatedIdentifier = hashClaimInfo({ parameters: serialize(proof.parameters)!, provider: proof.provider, context: encodedCtx })
-				console.log('calculatedIdentifier', calculatedIdentifier)
 				// check if the identifier matches the one in the proof
 				if(calculatedIdentifier !== proof.identifier) {
 					logger.error('Identifier mismatch')
