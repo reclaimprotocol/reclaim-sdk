@@ -12,7 +12,7 @@ describe('Create proof request without xpath', () => {
 		// console.log(await request.getReclaimUrl())
 
 		expect(request.template.name).toBe('Proof of Reddit Karma')
-		expect(request.template.claims.length).toEqual(2)
+		expect(request.template.claims.length).toEqual(1)
 		// expect(request.callbackId).toBe('1234')
 	})
 })
@@ -39,7 +39,7 @@ describe('Create proof request with xpath', () => {
 		// console.log(await request.getReclaimUrl())
 
 		expect(request.template.name).toBe('Proof of Reddit Karma')
-		expect(request.template.claims.length).toEqual(2)
+		expect(request.template.claims.length).toEqual(1)
 		// expect(request.callbackId).toBe('1234')
 	})
 })
@@ -60,15 +60,17 @@ const REQUEST_PROOF_WITHOUT_XPATH: ProofRequest = {
 			loginCookies: ['session', 'reddit_session', 'loid', 'token_v2', 'edgebucket'],
 			responseSelection: [
 				{
-					'responseMatch': '<span class=\"_2BMnTatQ5gjKGK5OWROgaG\">{{username}}</span>.*?<span>{{karma}} karma</span>'
+					jsonPath: '',
+					'xPath': "//*[@id='email-collection-tooltip-id']/span/span[2]/span",
+					responseMatch: '<span>{{karma}} karma</span>'
 				}
 			],
 		}),
 
-		new reclaim.CustomProvider({
-			provider: 'google-login',
-			payload: {}
-		}),
+		// new reclaim.CustomProvider({
+		// 	provider: 'google-login',
+		// 	payload: {}
+		// }),
 	]
 }
 

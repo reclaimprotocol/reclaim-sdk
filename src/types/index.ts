@@ -102,7 +102,10 @@ export type ProviderParams =
 	| { provider: 'spotify-account-type', payload: {} }
 	| { provider: 'spotify-username', payload: {} }
 	| { provider: 'spotify-email', payload: {} }
-	| { provider: 'tumblr-follower', payload: {} }
+	| { provider: 'tumblr-follower'
+		payload: {
+		followingAccount: string
+	} }
 	| { provider: 'swiggy-total-count', payload: {} }
 	| { provider: 'wikipedia-user', payload: {} }
 	| { provider: 'facebook-friends-count', payload: {} }

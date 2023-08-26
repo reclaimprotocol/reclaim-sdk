@@ -1,28 +1,12 @@
-import { Beacon, fetchWitnessListForClaim } from '@reclaimprotocol/crypto-sdk'
-import { DEFAULT_CHAIN_ID, makeBeacon, makeBeaconCacheable } from '@reclaimprotocol/reclaim-node'
+import { fetchWitnessListForClaim } from '@reclaimprotocol/crypto-sdk'
+import { makeBeacon } from '@reclaimprotocol/reclaim-node'
 import canonicalize from 'canonicalize'
-import { ethers, logger, utils } from 'ethers'
+import { utils } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
 import { Context, Proof, SubmittedProof } from '../types'
-import CONTRACTS_CONFIG from '../utils/contracts/config.json'
-import { Reclaim, Reclaim__factory as ReclaimFactory } from '../utils/contracts/types'
 
 export function generateUuid() {
 	return uuidv4()
-}
-
-const existingContractsMap: { [chain: string]: Reclaim } = { }
-
-export async function getClaimWitnessOnChain(chainId: number, epoch: number, identifier: string, timestampS: number) {
-	const contract = getContract(chainId)
-	logger.info('fetching witnesses for claim', epoch, identifier, timestampS)
-	try {
-		const witnesses = await contract.fetchWitnessesForClaim(epoch, identifier, timestampS)
-		return witnesses.map(w => w.addr.toLowerCase())
-	} catch(e) {
-		logger.info('error fetching witnesses', e)
-		return []
-	}
 }
 
 export async function getWitnessesForClaim(epoch: number, identifier: string, timestampS: number) {
@@ -49,30 +33,6 @@ export function decodeContext(ctx: string): Context {
 	const context: Context = JSON.parse(ctx)
 	// context.contextMessage = utils.toUtf8String(context.contextMessage)
 	return context
-}
-
-export async function getClaimWitnessesFromEpoch(chainId: number, epoch: number) {
-	const contract = getContract(chainId)
-	const epochFetched = await contract.fetchEpoch(epoch)
-	return epochFetched.witnesses.map(w => w.addr.toLowerCase())
-}
-
-export function getContract(chainId: number) {
-	const chainKey = `0x${chainId.toString(16)}`
-	if(!existingContractsMap[chainKey]) {
-		const contractData = CONTRACTS_CONFIG[chainKey as keyof typeof CONTRACTS_CONFIG]
-		if(!contractData) {
-			throw new Error(`Unsupported chain: "${chainKey}"`)
-		}
-
-		const rpcProvider = new ethers.providers.JsonRpcProvider(contractData.rpcUrl)
-		existingContractsMap[chainKey] = ReclaimFactory.connect(
-			contractData.address,
-			rpcProvider,
-		)
-	}
-
-	return existingContractsMap[chainKey]
 }
 
 export function getProofsFromRequestBody(requestBody: string) {
@@ -242,27 +202,4 @@ export function isProof(obj: unknown): obj is Proof {
 		(obj as Proof).witnessAddresses !== undefined &&
 		(obj as Proof).templateClaimId !== undefined
 	)
-}
-
-export default function makeSmartContractBeacon(chainId?: number): Beacon {
-	chainId = chainId || DEFAULT_CHAIN_ID
-	const contract = getContract(chainId)
-	return makeBeaconCacheable({
-		async getState(epochId) {
-			const epoch = await contract.fetchEpoch(epochId || 0)
-			if(!epoch.id) {
-				throw new Error(`Invalid epoch ID: ${epochId}`)
-			}
-
-			return {
-				epoch: epoch.id,
-				witnesses: epoch.witnesses.map(w => ({
-					id: w.addr.toLowerCase(),
-					url: w.host
-				})),
-				witnessesRequiredForClaim: epoch.minimumWitnessesForClaimCreation,
-				nextEpochTimestampS: epoch.timestampEnd
-			}
-		}
-	})
 }
