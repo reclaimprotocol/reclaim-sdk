@@ -60,3 +60,20 @@ export interface EncryptedClaimProof {
 	/** encrypted claim proof */
 	enc: Uint8Array
 }
+
+export interface ClaimProof {
+	/** the full parameters of the claim */
+	parameters: string
+	/**
+	 * signatures of the claim done by the witnesses
+	 * that attested to the claim's validity
+	 */
+	signatures: Uint8Array[]
+  }
+
+export interface EncryptedClaimProof {
+	/** identifier of the encrypted claim */
+	identifier: string
+	/** encrypted claim proof */
+	enc: Uint8Array
+  }
