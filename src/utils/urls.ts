@@ -6,10 +6,10 @@ export function generateUuid() {
 
 function isValidUrl(url: string) {
 	try {
-	  new URL(url)
-	  return true
+		new URL(url)
+		return true
 	} catch(err) {
-	  return false
+		return false
 	}
 }
 
@@ -49,16 +49,20 @@ export function getCallbackIdFromUrl(_url: string): string {
 export async function getShortenedUrl(url: string) {
 	// const headers = new Headers()
 	// headers.append('Content-Type', 'application/json')
-	const response = await fetch('https://rclm.link/short', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({
-			fullUrl: url
+	try {
+		const response = await fetch('https://rclm.link/short', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				fullUrl: url
+			})
 		})
-	})
-	const res = await response.json()
-	const shortenedVerificationUrl = res.shortUrl
-	return shortenedVerificationUrl
+		const res = await response.json()
+		const shortenedVerificationUrl = res.shortUrl
+		return shortenedVerificationUrl
+	} catch(err) {
+		return url
+	}
 }

@@ -1,9 +1,10 @@
 import { SignedClaim } from '@reclaimprotocol/witness-sdk'
+import { ETH_SIGNATURE_PROVIDER } from '@reclaimprotocol/witness-sdk/lib/signatures/eth'
 import serialize from 'canonicalize'
 import { utils } from 'ethers'
 import P from 'pino'
-import { assertValidSignedClaim, hashClaimInfo, signatures } from '../crypto'
 import { Proof, ProofRequest, SubmittedProof, Template } from '../types'
+import { assertValidSignedClaim, hashClaimInfo } from '../utils'
 import { decodeContext, encodeContext, generateCallbackUrl, generateUuid, getCallbackIdFromUrl, getWitnessesForClaim, transformProofsToverify } from '../utils'
 import { CustomProvider } from './CustomProvider'
 import { HttpsProvider } from './HttpsProvider'
@@ -76,7 +77,7 @@ export class Reclaim {
 			try {
 				const claim: SignedClaim = {
 					claim: {
-						owner: signatures.getAddress(Buffer.from(proof.ownerPublicKey, 'hex')),
+						owner: ETH_SIGNATURE_PROVIDER.getAddress(Buffer.from(proof.ownerPublicKey, 'hex')),
 						provider: proof.provider,
 						timestampS: parseInt(proof.timestampS),
 						context: proof.context,
