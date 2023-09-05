@@ -27,7 +27,7 @@ describe('Create proof request with xpath', () => {
 		expect(request.template.name).toBe('YC')
 		expect(request.template.claims.length).toEqual(1)
 		// expect(request.callbackId).toBe('1234')
-		// console.log(await request.getReclaimUrl())
+		console.log(await request.getReclaimUrl())
 	})
 
 	it('should correctly create proof request without xPath', () => {
@@ -82,20 +82,14 @@ const REQUEST_PROOF_WITH_XPATH = {
 		new reclaim.HttpsProvider({
 			name: 'YC https provider',
 			logoUrl: 'https://www.redditstatic.com/desktop2x/img/favicon/android-icon-192x192.png',
-			url: 'https://bookface.ycombinator.com/home',
+			url: 'https://bookface.ycombinator.com/bookface_api/home/home_current_user.json',
 			loginUrl: 'https://bookface.ycombinator.com/home',
 			loginCookies: ['_sso.key'],
 			responseSelection: [
 				{
-					jsonPath:'$.currentUser',
-					responseMatch:'\\{"id":{{YC_USER_ID}},.*?waas_admin.*?:{.*?}.*?:\\{.*?}.*?(?:full_name|first_name).*?}',
-					xPath:"//*[@id='js-react-on-rails-context']"
+					jsonPath:'$.id',
+					responseMatch:'{"id":{{YC_USER_ID}},.*?}}.*?}',
 				},
-				{
-					jsonPath:'$.hasBookface',
-					responseMatch:'"hasBookface":true',
-					xPath:"//script[@data-component-name='BookfaceCsrApp']"
-				}
 			]
 		}),
 		// new reclaim.HttpsProvider({
