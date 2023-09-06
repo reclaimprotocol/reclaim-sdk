@@ -1,32 +1,5 @@
-import { ClaimID, ClaimInfo, CompleteClaimData, SignedClaim } from '@reclaimprotocol/witness-sdk'
+import { createSignDataForClaim, SignedClaim } from '@reclaimprotocol/witness-sdk'
 import { utils } from 'ethers'
-
-export const signatures = {
-	getAddress(publicKey) {
-		return utils.computeAddress(publicKey).toLowerCase()
-	},
-}
-
-export function hashClaimInfo(info: ClaimInfo): ClaimID {
-	const str = `${info.provider}\n${info.parameters}\n${info.context || ''}`
-	return utils.keccak256(Buffer.from(str, 'utf-8')).toLowerCase()
-}
-
-export function createSignDataForClaim(
-	data: CompleteClaimData
-) {
-	const identifier = 'identifier' in data
-		? data.identifier
-		: hashClaimInfo(data)
-	const lines = [
-		identifier,
-		data.owner.toLowerCase(),
-		data.timestampS.toString(),
-		data.epoch.toString(),
-	]
-
-	return lines.join('\n')
-}
 
 /** recovers the addresses of those that signed the claim */
 export function recoverSignersOfSignedClaim({ claim, signatures }: SignedClaim) {

@@ -1,10 +1,10 @@
-import { SignedClaim } from '@reclaimprotocol/witness-sdk'
+import { getIdentifierFromClaimInfo, SignedClaim } from '@reclaimprotocol/witness-sdk'
 import { ETH_SIGNATURE_PROVIDER } from '@reclaimprotocol/witness-sdk/lib/signatures/eth'
 import serialize from 'canonicalize'
 import { utils } from 'ethers'
 import P from 'pino'
 import { Proof, ProofRequest, SubmittedProof, Template } from '../types'
-import { assertValidSignedClaim, hashClaimInfo } from '../utils'
+import { assertValidSignedClaim } from '../utils'
 import { decodeContext, encodeContext, generateCallbackUrl, generateUuid, getCallbackIdFromUrl, getWitnessesForClaim, transformProofsToverify } from '../utils'
 import { CustomProvider } from './CustomProvider'
 import { HttpsProvider } from './HttpsProvider'
@@ -94,7 +94,7 @@ export class Reclaim {
 				// then encode it again with the expected sessionId
 				const encodedCtx = encodeContext({ sessionId: expectedSessionId, contextMessage: decodedCtx.contextMessage, contextAddress: decodedCtx.contextAddress }, true)
 				// then hash the claim info with the encoded ctx to get the identifier
-				const calculatedIdentifier = hashClaimInfo({ parameters: serialize(proof.parameters)!, provider: proof.provider, context: encodedCtx })
+				const calculatedIdentifier = getIdentifierFromClaimInfo({ parameters: serialize(proof.parameters)!, provider: proof.provider, context: encodedCtx })
 				// check if the identifier matches the one in the proof
 				if(calculatedIdentifier !== proof.identifier) {
 					logger.error('Identifier mismatch')
