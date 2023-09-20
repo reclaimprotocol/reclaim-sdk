@@ -27,20 +27,31 @@ describe('Create proof request with xpath', () => {
 		expect(request.template.name).toBe('YC')
 		expect(request.template.claims.length).toEqual(1)
 		// expect(request.callbackId).toBe('1234')
-		console.log(await request.getReclaimUrl())
+		// console.log(await request.getReclaimUrl())
 	})
 
-	it('should correctly create proof request without xPath', () => {
+	it('should correctly create proof request without xPath', async() => {
 		const reclaim = new reclaimprotocol.Reclaim()
 		const request = reclaim.requestProofs(
 			REQUEST_PROOF_WITHOUT_XPATH
 		)
 
-		// console.log(await request.getReclaimUrl())
+		// console.log(await request.getReclaimHandshakeUrl())
 
 		expect(request.template.name).toBe('Proof of Reddit Karma')
 		expect(request.template.claims.length).toEqual(1)
 		// expect(request.callbackId).toBe('1234')
+	})
+
+	it('should correctly create proof request with jsonPath', async() => {
+		const reclaim = new reclaimprotocol.Reclaim()
+		const request = reclaim.requestProofs(
+			REQUEST_PROOF_WITH_JSONPATH
+		)
+		expect(request.template.name).toBe('YC email id')
+		expect(request.template.claims.length).toEqual(1)
+
+		console.log('url --', await request.getReclaimUrl())
 	})
 })
 
@@ -61,9 +72,9 @@ const REQUEST_PROOF_WITHOUT_XPATH: ProofRequest = {
 			responseSelection: [
 				{
 					jsonPath: '',
-					'xPath': "//*[@id='email-collection-tooltip-id']/span/span[2]/span",
-					responseMatch: '<span>{{karma}} karma</span>'
-				}
+					'xPath': '//*[@id="email-collection-tooltip-id"]/span/span[2]',
+					responseMatch: '<span class="Rz5N3cHNgTGZsIQJqBfgk">.*?<span>{{KARMA}} karma</span></span>'
+				},
 			],
 		}),
 
@@ -82,13 +93,14 @@ const REQUEST_PROOF_WITH_XPATH = {
 		new reclaim.HttpsProvider({
 			name: 'YC https provider',
 			logoUrl: 'https://www.redditstatic.com/desktop2x/img/favicon/android-icon-192x192.png',
-			url: 'https://bookface.ycombinator.com/bookface_api/home/home_current_user.json',
+			url: 'https://bookface.ycombinator.com/home/',
 			loginUrl: 'https://bookface.ycombinator.com/home',
 			loginCookies: ['_sso.key'],
 			responseSelection: [
 				{
-					jsonPath:'$.id',
-					responseMatch:'{"id":{{YC_USER_ID}},.*?}}.*?}',
+					'jsonPath': '$.currentUser',
+					'xPath': "//*[@id='js-react-on-rails-context']",
+					responseMatch:'\\{"id":{{YC_USER_ID}},.*?waas_admin.*?:{.*?}.*?:\\{.*?}.*?(?:full_name|first_name).*?}',
 				},
 			]
 		}),
@@ -111,5 +123,26 @@ const REQUEST_PROOF_WITH_XPATH = {
 		// 		}
 		// 	]
 		// })
+	]
+}
+
+const REQUEST_PROOF_WITH_JSONPATH = {
+	title: 'YC email id',
+	baseCallbackUrl: 'https://example.com/',
+	callbackId: '1234',
+	requestedProofs: [
+		new reclaim.HttpsProvider({
+			name: 'YC company id',
+			url: 'https://bookface.ycombinator.com/bookface_api/home/home_current_user.json',
+			loginUrl: 'https://bookface.ycombinator.com/home',
+			loginCookies: ['_sso.key'],
+			logoUrl: 'https://dev.reclaimprotocol.org/assets/logo.png',
+			responseSelection: [
+				{
+					jsonPath: '$.email',
+					responseMatch: '.*email":"{{YC_EMAIL_ID}}".*'
+				}
+			]
+		})
 	]
 }

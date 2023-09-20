@@ -80,7 +80,7 @@ export class Reclaim {
 						owner: ETH_SIGNATURE_PROVIDER.getAddress(Buffer.from(proof.ownerPublicKey, 'hex')),
 						provider: proof.provider,
 						timestampS: parseInt(proof.timestampS),
-						context: proof.context,
+						context: proof.context ? proof.context : '',
 						parameters: serialize(proof.parameters)!,
 						epoch: proof.epoch,
 						identifier: proof.identifier,
@@ -89,10 +89,16 @@ export class Reclaim {
 						return utils.arrayify(signature)
 					})
 				}
-				// first decode ctx
-				const decodedCtx = decodeContext(proof.context)
-				// then encode it again with the expected sessionId
-				const encodedCtx = encodeContext({ sessionId: expectedSessionId, contextMessage: decodedCtx.contextMessage, contextAddress: decodedCtx.contextAddress }, true)
+
+				// for proofs generated directly on the app, the context is empty
+				let encodedCtx = ''
+				if(proof.context) {
+					// first decode ctx
+					const decodedCtx = decodeContext(proof.context)
+					// then encode it again with the expected sessionId
+					encodedCtx = encodeContext({ sessionId: expectedSessionId, contextMessage: decodedCtx.contextMessage, contextAddress: decodedCtx.contextAddress }, true)
+				}
+
 				// then hash the claim info with the encoded ctx to get the identifier
 				const calculatedIdentifier = getIdentifierFromClaimInfo({ parameters: serialize(proof.parameters)!, provider: proof.provider, context: encodedCtx })
 				// check if the identifier matches the one in the proof
@@ -120,7 +126,7 @@ export class Reclaim {
 	 * @param proofs
 	 * @returns {string}
 	 */
-	 getClaimIdsFromProofs = (proofs: Proof[]): string[] => {
+	getClaimIdsFromProofs = (proofs: Proof[]): string[] => {
 		const claimIdArray: string[] = []
 		for(const proof of proofs) {
 			const claimId = proof.identifier

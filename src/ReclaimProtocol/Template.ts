@@ -1,4 +1,4 @@
-import { RECLAIM_APP_URL } from '../config'
+import { RECLAIM_APP_URL, RECLAIM_HANDSHAKE_URL } from '../config'
 import { Options, Template } from '../types'
 import { encodeBase64, getCallbackIdFromUrl, getShortenedUrl } from '../utils'
 
@@ -70,6 +70,23 @@ export default class TemplateInstance {
 
 		const url = await getShortenedUrl(
 			RECLAIM_APP_URL + encodeURIComponent(JSON.stringify(this._template))
+		)
+		return url
+	}
+
+	/**
+	 * function to get the reclaim handshake url
+	 * @return {string}
+	 */
+	getReclaimHandshakeUrl = async({ shortened = true }: Options = { shortened: true }): Promise<string> => {
+		if(!shortened) {
+			return (
+				RECLAIM_HANDSHAKE_URL + encodeURIComponent(JSON.stringify(this._template))
+			)
+		}
+
+		const url = await getShortenedUrl(
+			RECLAIM_HANDSHAKE_URL + encodeURIComponent(JSON.stringify(this._template))
 		)
 		return url
 	}

@@ -1,6 +1,6 @@
 {
   "name": "@reclaimprotocol/reclaim-sdk",
-  "version": "5.0.2",
+  "version": "5.1.1",
   "description": "Reclaim SDK for integrating Reclaim protocol with third party applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,11 +10,11 @@
     "build": "tsc"
   },
   "keywords": [],
-  "author": "",
+  "files": ["dist"],
+  "author": "Sweta Shaw",
   "license": "ISC",
   "dependencies": {
-    "@reclaimprotocol/reclaim-node": "^1.0.2",
-    "@reclaimprotocol/witness-sdk": "github:reclaimprotocol/witness-sdk",
+    "@reclaimprotocol/witness-sdk": "^0.0.1",
     "canonicalize": "^2.0.0",
     "ethers": "^5.7.2",
     "pino": "^8.11.0",

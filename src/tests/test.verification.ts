@@ -46,25 +46,41 @@ describe('Verification', () => {
 		expect(result).toBe(false)
 	})
 })
-const EXPECTED_SESSION_ID = '2a61da2f-e3b8-4ce5-a4cc-22964890aea0'
+const EXPECTED_SESSION_ID = ''
 
 const CORRECT_PROOF: SubmittedProof = {
-	'templateClaimId': '0',
-	'provider': 'google-login',
-	'parameters': '{"emailAddress":"sweta@creatoros.co"}',
-	'ownerPublicKey': '03f9d34be41e082528d5e8541cf1d77bc88a1727612479b16e29e80810a1c8e1be',
-	'timestampS': '1691839255',
-	'witnessAddresses': [
-	  'https://reclaim-node.questbook.app'
+	templateClaimId: '8ba32de9-4ada-44ba-9adf-0916c62ea03e',
+	provider: 'google-login',
+	parameters: '{"emailAddress":"amanzrx4@gmail.com"}',
+	ownerPublicKey: '02d0fb133ce9b2ebe26e91310a4554acf95afd72d68855fee1999b3ead8ae0a744',
+	timestampS: '1694771941',
+	witnessAddresses: ['https://reclaim-node.questbook.app'],
+	signatures: [
+		'0x9b0122c84780224eea0e9a61291bab3c7bc041ccd022fe2dea06d17d4262289a15f728f2e2e0e75c3a602ab94df827bcabe199510ca40753cbd281e7234be5ad1b'
 	],
-	'signatures': [
-	  '0xbbafd90ff1fa6e40fbae421a44a4d1cb84b48067d2407245fd46aa02633b8a21716a6ebe2f8cca22b8f96b0f3d78847c677755e95e2cf18abef492d0019e28f71b'
-	],
-	'redactedParameters': '{"emailAddress":"*****@creatoros.co"}',
-	'context': '{"contextAddress":"0x0","contextMessage":"0xe37a4cb1f11d7989933d53d8c243b03701a887ed26c0d37e752e0749b463cf67","sessionId":"2a61da2f-e3b8-4ce5-a4cc-22964890aea0"}',
-	'epoch': 2,
-	'identifier': '0x57c8e8c8a1765afcfd5667d8a6465ebb8bcf5218f33a717f2138a3ba22bf1549'
+	context: '',
+	redactedParameters: '{"emailAddress":"********@gmail.com"}',
+	epoch: 2,
+	identifier: '0x6316682c203b1257be4d09498096d03106bf44649c54888e01273b97be36e3ee'
 }
+
+// const CORRECT_PROOF: SubmittedProof = {
+// 	'templateClaimId': '0',
+// 	'provider': 'google-login',
+// 	'parameters': '{"emailAddress":"sweta@creatoros.co"}',
+// 	'ownerPublicKey': '03f9d34be41e082528d5e8541cf1d77bc88a1727612479b16e29e80810a1c8e1be',
+// 	'timestampS': '1691839255',
+// 	'witnessAddresses': [
+// 	  'https://reclaim-node.questbook.app'
+// 	],
+// 	'signatures': [
+// 	  '0xbbafd90ff1fa6e40fbae421a44a4d1cb84b48067d2407245fd46aa02633b8a21716a6ebe2f8cca22b8f96b0f3d78847c677755e95e2cf18abef492d0019e28f71b'
+// 	],
+// 	'redactedParameters': '{"emailAddress":"*****@creatoros.co"}',
+// 	'context': '{"contextAddress":"0x0","contextMessage":"0xe37a4cb1f11d7989933d53d8c243b03701a887ed26c0d37e752e0749b463cf67","sessionId":"2a61da2f-e3b8-4ce5-a4cc-22964890aea0"}',
+// 	'epoch': 2,
+// 	'identifier': '0x57c8e8c8a1765afcfd5667d8a6465ebb8bcf5218f33a717f2138a3ba22bf1549'
+// }
 
 // const CORRECT_PROOF: SubmittedProof = {
 // 	'chainId': 420,
