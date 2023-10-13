@@ -4,7 +4,7 @@ export function generateUuid() {
 	return uuidv4()
 }
 
-function isValidUrl(url: string) {
+export function isValidUrl(url: string) {
 	try {
 		new URL(url)
 		return true

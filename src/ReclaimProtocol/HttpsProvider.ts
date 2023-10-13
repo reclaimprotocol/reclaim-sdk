@@ -22,6 +22,7 @@ export class HttpsProvider {
 				xPath: '',
 				responseMatch: ''
 			}],
+			useZk: true,
 			parameters: {},
 		}
 	}
@@ -33,6 +34,11 @@ export class HttpsProvider {
 		// check if params are of type HttpsProviderParams
 		if(!params.name || !params.logoUrl || !params.url || !params.loginUrl || !params.loginCookies || !params.responseSelection) {
 			throw new Error('Invalid parameters passed to HttpsProvider')
+		}
+
+		// check if user has passed useZk as true or false
+		if(params.useZk !== true && params.useZk !== false) {
+			throw new Error('Invalid value for useZk')
 		}
 
 		// set params
@@ -49,6 +55,7 @@ export class HttpsProvider {
 			},
 			responseSelections: params.responseSelection,
 			parameters: {},
+			useZk: params.useZk,
 		}
 
 		// set regex

@@ -70,6 +70,11 @@ export type HttpsProviderParams = {
 	 * Regex to extract the required data from the response
 	 */
 	responseSelection: responseSelection[]
+
+	/**
+	 * Use ZK for this provider
+	*/
+	useZk: boolean
 }
 
 export type ProviderParams =
@@ -130,6 +135,7 @@ export type ProviderParams =
 	| { provider: 'uidai-address', payload: {} }
 	| { provider: 'twitter-followers-count', payload: {} }
 	| { provider: 'twitter-username', payload: {} }
+	| { provider: 'kaggle-username', payload: {} }
 	| {
 		provider: 'http'
 		payload: {
@@ -147,6 +153,7 @@ export type ProviderParams =
 			parameters: {
 				[key: string]: string
 			}
+			useZk: boolean
 		}
 	}
 
