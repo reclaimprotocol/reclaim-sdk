@@ -48,6 +48,9 @@ export class HttpsProvider {
 				name: params.name,
 				logoUrl: params.logoUrl
 			},
+			method: params.method ? params.method : 'GET',
+			body: params.body ? params.body : '',
+			headers: params.headers ? params.headers : [],
 			url: params.url,
 			login: {
 				url: params.loginUrl,
