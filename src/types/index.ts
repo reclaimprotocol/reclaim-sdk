@@ -75,6 +75,9 @@ export type HttpsProviderParams = {
 	 * Use ZK for this provider
 	*/
 	useZk: boolean
+	headers?: HeadersType[]
+	method?: 'GET' | 'POST'
+	body?: string
 }
 
 export type ProviderParams =
@@ -107,10 +110,12 @@ export type ProviderParams =
 	| { provider: 'spotify-account-type', payload: {} }
 	| { provider: 'spotify-username', payload: {} }
 	| { provider: 'spotify-email', payload: {} }
-	| { provider: 'tumblr-follower'
+	| {
+		provider: 'tumblr-follower'
 		payload: {
-		followingAccount: string
-	} }
+			followingAccount: string
+		}
+	}
 	| { provider: 'swiggy-total-count', payload: {} }
 	| { provider: 'wikipedia-user', payload: {} }
 	| { provider: 'facebook-friends-count', payload: {} }
@@ -136,6 +141,7 @@ export type ProviderParams =
 	| { provider: 'twitter-followers-count', payload: {} }
 	| { provider: 'twitter-username', payload: {} }
 	| { provider: 'kaggle-username', payload: {} }
+	| { provider: 'uber-rides', payload: {} }
 	| {
 		provider: 'http'
 		payload: {
@@ -143,13 +149,19 @@ export type ProviderParams =
 				name: string
 				logoUrl: string
 			}
-			method: 'GET' | 'POST'
 			url: string
+			headers?: HeadersType[]
+			method: 'GET' | 'POST'
+			body?: string
 			login: {
 				url: string
 				checkLoginCookies: string[]
 			}
-			responseSelections: responseSelection[]
+			responseSelections: {
+				responseMatch: string
+				xPath?: string
+				jsonPath?: string
+			}[]
 			parameters: {
 				[key: string]: string
 			}
@@ -179,6 +191,12 @@ export type Template = {
 	requestorAddress?: string
 	/** ephemeral public key of the requestor */
 	requestorPublicKey?: string
+}
+
+export type HeadersType = {
+	key: string
+	value: string | null
+	type: 'CONSTANT' | 'DYNAMIC'
 }
 
 export type ProofClaim = Omit<Claim, 'payload'> & {
@@ -238,6 +256,6 @@ export type SearchQueryObject = {
 }
 
 
-export type Options ={
+export type Options = {
 	shortened?: boolean
 }

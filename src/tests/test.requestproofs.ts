@@ -46,12 +46,12 @@ describe('Create proof request with xpath', () => {
 	it('should correctly create proof request with jsonPath', async() => {
 		const reclaim = new reclaimprotocol.Reclaim()
 		const request = reclaim.requestProofs(
-			REQUEST_PROOF_WITH_JSONPATH
+			REQUEST_PROOF_WITH_JSONPATH_2
 		)
-		expect(request.template.name).toBe('YC email id')
+		expect(request.template.name).toBe('Razor Pay Salary')
 		expect(request.template.claims.length).toEqual(1)
 
-		console.log('url --', await request.getReclaimUrl())
+		console.log('url --', await request.getReclaimUrl({ shortened: true }))
 	})
 })
 
@@ -65,6 +65,7 @@ const REQUEST_PROOF_WITHOUT_XPATH: ProofRequest = {
 	requestedProofs: [
 		new reclaim.HttpsProvider({
 			name: 'Reddit',
+			method: 'GET',
 			logoUrl: 'https://www.redditstatic.com/desktop2x/img/favicon/android-icon-192x192.png',
 			url: 'https://www.reddit.com/',
 			loginUrl: 'https://www.reddit.com/login',
@@ -128,22 +129,62 @@ const REQUEST_PROOF_WITH_XPATH = {
 	]
 }
 
-const REQUEST_PROOF_WITH_JSONPATH = {
-	title: 'YC email id',
-	baseCallbackUrl: 'https://example.com/',
-	callbackId: '1234',
+// const REQUEST_PROOF_WITH_JSONPATH = {
+// 	title: 'YC email id',
+// 	baseCallbackUrl: 'https://example.com/',
+// 	callbackId: '1234',
+// 	requestedProofs: [
+// 		new reclaim.HttpsProvider({
+// 			name: 'YC company id',
+// 			url: 'https://bookface.ycombinator.com/bookface_api/home/home_current_user.json',
+// 			loginUrl: 'https://bookface.ycombinator.com/home',
+// 			loginCookies: ['_sso.key'],
+// 			logoUrl: 'https://dev.reclaimprotocol.org/assets/logo.png',
+// 			responseSelection: [
+// 				{
+// 					jsonPath: '$.email',
+// 					responseMatch: '.*email":"{{YC_EMAIL_ID}}".*'
+// 				}
+// 			],
+// 			useZk: true,
+// 		})
+// 	]
+// }
+
+const REQUEST_PROOF_WITH_JSONPATH_2 = {
+	title: 'Razor Pay Salary',
+	baseCallbackUrl: 'http://localhost:3003/callback/',
+	callbackId: 'ac424fc8-a0d5-4b89-bdce-f08563c8c134',
 	requestedProofs: [
 		new reclaim.HttpsProvider({
-			name: 'YC company id',
-			url: 'https://bookface.ycombinator.com/bookface_api/home/home_current_user.json',
-			loginUrl: 'https://bookface.ycombinator.com/home',
-			loginCookies: ['_sso.key'],
-			logoUrl: 'https://dev.reclaimprotocol.org/assets/logo.png',
+			name: 'Razorpay Salary',
+			url: 'https://payroll.razorpay.com/v2/api/me',
+			loginUrl: 'https://payroll.razorpay.com/login',
+			loginCookies: ['opfinproduction'],
+			headers: [
+				{
+				  'key': 'Accept',
+				  'value': 'application/json',
+				  'type': 'CONSTANT'
+				},
+				{
+				  'key': 'Content-Type',
+				  'value': 'application/json',
+				  'type': 'CONSTANT'
+				},
+				{
+				  'key': 'csrf',
+				  'value': '',
+				  'type': 'DYNAMIC'
+				}
+			  ],
+			logoUrl: 'https://http-provider.s3.ap-south-1.amazonaws.com/razorpay-logo.jpeg',
 			responseSelection: [
 				{
-					jsonPath: '$.email',
-					responseMatch: '.*email":"{{YC_EMAIL_ID}}".*'
-				}
+					'xPath': '',
+					'responseMatch': '"title":"{{CLAIM_DATA}}"',
+					'jsonPath': '$.currentOrganization.employeeDetails.title'
+				  }
 			],
 			useZk: true,
 		})
