@@ -77,7 +77,7 @@ const REQUEST_PROOF_WITHOUT_XPATH: ProofRequest = {
 					responseMatch: '<span class="Rz5N3cHNgTGZsIQJqBfgk">.*?<span>{{KARMA}} karma</span></span>'
 				},
 			],
-			useZk: true,
+			useZK: true,
 		}),
 
 		// new reclaim.CustomProvider({
@@ -105,7 +105,7 @@ const REQUEST_PROOF_WITH_XPATH = {
 					responseMatch:'\\{"id":{{YC_USER_ID}},.*?waas_admin.*?:{.*?}.*?:\\{.*?}.*?(?:full_name|first_name).*?}',
 				},
 			],
-			useZk: true,
+			useZK: true,
 		}),
 		// new reclaim.HttpsProvider({
 		// 	name: 'YC https provider',
@@ -146,7 +146,7 @@ const REQUEST_PROOF_WITH_XPATH = {
 // 					responseMatch: '.*email":"{{YC_EMAIL_ID}}".*'
 // 				}
 // 			],
-// 			useZk: true,
+// 			useZK: true,
 // 		})
 // 	]
 // }
@@ -186,7 +186,7 @@ const REQUEST_PROOF_WITH_JSONPATH_2 = {
 					'jsonPath': '$.currentOrganization.employeeDetails.title'
 				  }
 			],
-			useZk: true,
+			useZK: true,
 		})
 	]
 }

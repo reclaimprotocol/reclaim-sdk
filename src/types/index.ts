@@ -74,7 +74,7 @@ export type HttpsProviderParams = {
 	/**
 	 * Use ZK for this provider
 	*/
-	useZk: boolean
+	useZK: boolean
 	headers?: HeadersType[]
 	method?: 'GET' | 'POST'
 	body?: string
@@ -165,7 +165,7 @@ export type ProviderParams =
 			parameters: {
 				[key: string]: string
 			}
-			useZk: boolean
+			useZK: boolean
 		}
 	}
 
