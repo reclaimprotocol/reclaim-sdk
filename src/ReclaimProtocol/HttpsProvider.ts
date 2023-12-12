@@ -22,7 +22,7 @@ export class HttpsProvider {
 				xPath: '',
 				responseMatch: ''
 			}],
-			useZk: true,
+			useZK: true,
 			parameters: {},
 		}
 	}
@@ -36,9 +36,9 @@ export class HttpsProvider {
 			throw new Error('Invalid parameters passed to HttpsProvider')
 		}
 
-		// check if user has passed useZk as true or false
-		if(params.useZk !== true && params.useZk !== false) {
-			throw new Error('Invalid value for useZk')
+		// check if user has passed useZK as true or false
+		if(params.useZK !== true && params.useZK !== false) {
+			throw new Error('Invalid value for useZK')
 		}
 
 		// set params
@@ -58,7 +58,7 @@ export class HttpsProvider {
 			},
 			responseSelections: params.responseSelection,
 			parameters: {},
-			useZk: params.useZk,
+			useZK: params.useZK,
 		}
 
 		// set regex
