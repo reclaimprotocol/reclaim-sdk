@@ -12,10 +12,10 @@ export class HttpsProvider {
 				logoUrl: ''
 			},
 			method: 'GET',
+			urlType: 'REGEX',
 			url: '',
 			login: {
-				url: '',
-				checkLoginCookies: ['']
+				url: ''
 			},
 			responseSelections: [{
 				jsonPath: '',
@@ -32,7 +32,7 @@ export class HttpsProvider {
 
 	constructor(params: HttpsProviderParams) {
 		// check if params are of type HttpsProviderParams
-		if(!params.name || !params.logoUrl || !params.url || !params.loginUrl || !params.loginCookies || !params.responseSelection) {
+		if(!params.name || !params.logoUrl || !params.url || !params.loginUrl || !params.responseSelection) {
 			throw new Error('Invalid parameters passed to HttpsProvider')
 		}
 
@@ -48,16 +48,18 @@ export class HttpsProvider {
 				name: params.name,
 				logoUrl: params.logoUrl
 			},
-			method: params.method ? params.method : 'GET',
-			body: params.body ? params.body : '',
-			headers: params.headers ? params.headers : [],
 			url: params.url,
+			urlType: params.urlType ? params.urlType : 'REGEX',
+			headers: params.headers ? params.headers : {},
+			method: params.method ? params.method : 'GET',
 			login: {
 				url: params.loginUrl,
-				checkLoginCookies: params.loginCookies
 			},
 			responseSelections: params.responseSelection,
 			parameters: {},
+			customInjection: params.customInjection ? params.customInjection : null,
+			bodySniff: params.bodySniff ? params.bodySniff : null,
+			userAgent: params.userAgent ? params.userAgent : null,
 			useZK: params.useZK,
 		}
 

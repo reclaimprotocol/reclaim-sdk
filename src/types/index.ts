@@ -58,6 +58,7 @@ export type HttpsProviderParams = {
 	 * Url of the website
 	 */
 	url: string
+	urlType?: UrlType
 	/**
 	 * Login url of the website
 	 */
@@ -65,7 +66,7 @@ export type HttpsProviderParams = {
 	/**
 	 * Login cookies of the website
 	 */
-	loginCookies: string[]
+	loginCookies?: string[]
 	/**
 	 * Regex to extract the required data from the response
 	 */
@@ -75,9 +76,73 @@ export type HttpsProviderParams = {
 	 * Use ZK for this provider
 	*/
 	useZK: boolean
-	headers?: HeadersType[]
+	headers?: HeadersType
 	method?: 'GET' | 'POST'
-	body?: string
+	customInjection?: string
+	parameters?: {
+		[key: string]: string
+	}
+	bodySniff?: {
+		enabled: boolean
+		regex?: string
+	}
+	userAgent?: {
+		ios?: string
+		android?: string
+	}
+}
+
+export type HeaderMap = { [key: string]: string }
+export type UrlType = 'CONSTANT' | 'REGEX'
+
+export type HttpsProviderParamsV2 = {
+	/**
+	 * Name of the website to be displayed on the UI
+	 */
+	name: string
+	/**
+	 * Logo url of the website to be displayed on the UI
+	 */
+	logoUrl: string
+	/**
+	 * Url of the website
+	 */
+	url: string
+	/**
+	 * Login url of the website
+	 */
+	loginUrl: string
+	/**
+	 * which portions to select from a response.
+	 * These are selected in order, xpath => jsonPath => regex
+	 *
+	 * These redactions are done client side and only the selected
+	 * portions are sent to the witness. The witness will only be able
+	 * to see the selected portions alongside the first line of the HTTP
+	 * response (i.e. "HTTP/1.1 200 OK")
+	 *
+	 * To disable any redactions, pass an empty array
+	 * */
+	responseRedactions: ResponseRedactions[]
+	/**
+	 * The witness will use this list to check
+	 * that the redacted response does indeed match
+	 * all of the provided strings/regexes
+	*/
+	responseMatches: ResponseMatches[]
+	method?: 'GET' | 'POST'
+	bodySniff?: BodySniff
+	customInjection?: string
+	/**
+	 * Specify the geographical location from where
+	 * to proxy the request
+	 */
+	geoLocation?: string
+}
+
+export type BodySniff = {
+	enabled: boolean
+	regex: string
 }
 
 export type ProviderParams =
@@ -150,20 +215,28 @@ export type ProviderParams =
 				logoUrl: string
 			}
 			url: string
-			headers?: HeadersType[]
+			urlType: UrlType
+			headers?: HeadersType
 			method: 'GET' | 'POST'
-			body?: string
 			login: {
 				url: string
-				checkLoginCookies: string[]
 			}
 			responseSelections: {
 				responseMatch: string
 				xPath?: string
 				jsonPath?: string
 			}[]
+			customInjection?: string
 			parameters: {
 				[key: string]: string
+			}
+			bodySniff?: {
+				enabled: boolean
+				regex?: string
+			}
+			userAgent?: {
+				ios?: string
+				android?: string
 			}
 			useZK: boolean
 		}
@@ -174,6 +247,37 @@ export type responseSelection = {
 	jsonPath?: string
 	xPath?: string
 	responseMatch: string
+}
+
+export type ResponseRedactions = {
+	/**
+	* expect an HTML response, and to contain a certain xpath
+	* for eg. "/html/body/div.a1/div.a2/span.a5"
+	*/
+	xPath?: string
+	/**
+	 * expect a JSON response, retrieve the item at this path
+	 * using dot notation
+	 * for e.g. 'email.addresses.0'
+	 */
+	jsonPath?: string
+	/**
+	 * select a regex match from the response
+	 */
+	regex?: string
+}
+
+export type ResponseMatches = {
+	/**
+	* "regex": the response must match the regex
+	* "contains": the response must contain the provided
+	*  string exactly
+	*/
+	type: 'regex' | 'contains'
+	/**
+	 * The string/regex to match against
+	 */
+	value: string
 }
 
 export type Claim = {
@@ -193,11 +297,7 @@ export type Template = {
 	requestorPublicKey?: string
 }
 
-export type HeadersType = {
-	key: string
-	value: string | null
-	type: 'CONSTANT' | 'DYNAMIC'
-}
+export type HeadersType = { [key: string]: string }
 
 export type ProofClaim = Omit<Claim, 'payload'> & {
 	parameters: {
