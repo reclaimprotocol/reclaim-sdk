@@ -50,8 +50,16 @@ describe('Create proof request with xpath', () => {
 		)
 		expect(request.template.name).toBe('Razor Pay Salary')
 		expect(request.template.claims.length).toEqual(1)
+	})
 
-		console.log('url --', await request.getReclaimUrl({ shortened: true }))
+	it('should correctly create proof request for swiggy', async() => {
+		const reclaim = new reclaimprotocol.Reclaim()
+		const request = reclaim.requestProofs(
+			REQUEST_PROOF_SWIGGY
+		)
+		expect(request.template.name).toBe('Swiggy')
+		expect(request.template.claims.length).toEqual(1)
+		console.log(await request.getReclaimUrl())
 	})
 })
 
@@ -68,8 +76,8 @@ const REQUEST_PROOF_WITHOUT_XPATH: ProofRequest = {
 			method: 'GET',
 			logoUrl: 'https://www.redditstatic.com/desktop2x/img/favicon/android-icon-192x192.png',
 			url: 'https://www.reddit.com/',
+			urlType: 'CONSTANT',
 			loginUrl: 'https://www.reddit.com/login',
-			loginCookies: ['session', 'reddit_session', 'loid', 'token_v2', 'edgebucket'],
 			responseSelection: [
 				{
 					jsonPath: '',
@@ -96,6 +104,7 @@ const REQUEST_PROOF_WITH_XPATH = {
 			name: 'YC https provider',
 			logoUrl: 'https://www.redditstatic.com/desktop2x/img/favicon/android-icon-192x192.png',
 			url: 'https://bookface.ycombinator.com/home/',
+			urlType: 'CONSTANT',
 			loginUrl: 'https://bookface.ycombinator.com/home',
 			loginCookies: ['_sso.key'],
 			responseSelection: [
@@ -106,6 +115,83 @@ const REQUEST_PROOF_WITH_XPATH = {
 				},
 			],
 			useZK: true,
+		}),
+		// new reclaim.HttpsProvider({
+		// 	name: 'YC https provider',
+		// 	logoUrl: 'https://www.redditstatic.com/desktop2x/img/favicon/android-icon-192x192.png',
+		// 	url: 'https://bookface.ycombinator.com/home',
+		// 	loginUrl: 'https://bookface.ycombinator.com/home',
+		// 	loginCookies: ['_sso.key'],
+		// 	responseSelection: [
+		// 		{
+		// 			jsonPath:'$.currentUser',
+		// 			responseMatch:'\\{"id":{{YC_USER_ID}},.*?waas_admin.*?:{.*?}.*?:\\{.*?}.*?(?:full_name|first_name).*?}',
+		// 			xPath:"//script[@id='js-react-on-rails-context']"
+		// 		},
+		// 		{
+		// 			jsonPath:'$.hasBookface',
+		// 			responseMatch:'"hasBookface":true',
+		// 			xPath:"//script[@data-component-name='BookfaceCsrApp']"
+		// 		}
+		// 	]
+		// })
+	]
+}
+
+const REQUEST_PROOF_SWIGGY = {
+	title: 'Swiggy',
+	baseCallbackUrl: 'https://api.reclaimprotocol.org/',
+	callbackId: 'sweta-swiggy',
+	requestedProofs: [
+		new reclaim.HttpsProvider({
+			name: 'Swiggy https provider',
+			logoUrl: 'https://www.redditstatic.com/desktop2x/img/favicon/android-icon-192x192.png',
+			url: 'https://www.swiggy.com/dapi/order/all\\\\?order_id=',
+			loginUrl: 'https://www.swiggy.com/auth',
+			responseSelection: [
+				{
+					'xPath': '',
+					'responseMatch': '"restaurant_name":"{{restaurant_1}}"',
+					'jsonPath': '$.data.orders[0].restaurant_name'
+				  },
+				  {
+					'xPath': '',
+					'responseMatch': '"name":"{{restaurant_1_order_item_name}}"',
+					'jsonPath': '$.data.orders[0].order_items[0].name'
+				  },
+				  {
+					'xPath': '',
+					'responseMatch': '"category_details":{{restaurant_1_order_category}}',
+					'jsonPath': '$.data.orders[0].order_items[0].category_details'
+				  },
+				  {
+					'xPath': '',
+					'responseMatch': '"order_total":{{res_1_amount_paid}}',
+					'jsonPath': '$.data.orders[0].order_total'
+				  },
+				  {
+					'xPath': '',
+					'responseMatch': '"restaurant_name":"{{restaurant_2}}"',
+					'jsonPath': '$.data.orders[1].restaurant_name'
+				  },
+				  {
+					'xPath': '',
+					'responseMatch': '"name":"{{restaurant_2_order_item_name}}"',
+					'jsonPath': '$.data.orders[1].order_items[0].name'
+				  },
+				  {
+					'xPath': '',
+					'responseMatch': '"category_details":{{restaurant_2_order_category}}',
+					'jsonPath': '$.data.orders[1].order_items[0].category_details'
+				  },
+				  {
+					'xPath': '',
+					'responseMatch': '"order_total":{{res_2_amount_paid}}',
+					'jsonPath': '$.data.orders[1].order_total'
+				  }
+			],
+			useZK: true,
+			customInjection: "window.getCookie = function(name) {var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));if (match) return match[2];};setInterval(() => {if(getCookie('_is_logged_in')&& window.location.href === 'https://www.swiggy.com/' && !window.rcnav){window.rcnav = true;  window.location.href = 'https://www.swiggy.com/my-account/';}},1000);"
 		}),
 		// new reclaim.HttpsProvider({
 		// 	name: 'YC https provider',
@@ -161,23 +247,7 @@ const REQUEST_PROOF_WITH_JSONPATH_2 = {
 			url: 'https://payroll.razorpay.com/v2/api/me',
 			loginUrl: 'https://payroll.razorpay.com/login',
 			loginCookies: ['opfinproduction'],
-			headers: [
-				{
-				  'key': 'Accept',
-				  'value': 'application/json',
-				  'type': 'CONSTANT'
-				},
-				{
-				  'key': 'Content-Type',
-				  'value': 'application/json',
-				  'type': 'CONSTANT'
-				},
-				{
-				  'key': 'csrf',
-				  'value': '',
-				  'type': 'DYNAMIC'
-				}
-			  ],
+			urlType: 'CONSTANT',
 			logoUrl: 'https://http-provider.s3.ap-south-1.amazonaws.com/razorpay-logo.jpeg',
 			responseSelection: [
 				{
