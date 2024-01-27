@@ -12,7 +12,7 @@ or scan QR below 👇
 
 ### Play Store (for Android users)
 
-[Download the Reclaim app from Play Store](https://play.google.com/store/apps/details?id=com.credentialswallet)
+[Download the Reclaim app from Play Store](https://play.google.com/store/apps/details?id=com.reclaim.protocol)
 
 or scan QR below 👇
 
