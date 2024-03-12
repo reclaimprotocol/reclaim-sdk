@@ -1,0 +1,28 @@
+{
+  "name": "example-backend-2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/index.js",
+    "dev": "npx tsc && node dist/index.js",
+    "build": "tsc node.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@reclaimprotocol/js-sdk": "^0.1.5",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.25",
+    "@types/pg": "^8.11.2",
+    "typescript": "^5.4.2"
+  }
+}
