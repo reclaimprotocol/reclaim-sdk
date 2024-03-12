@@ -1,6 +1,8 @@
 {
   "extends": "@creatoros",
   "rules": {
-    "no-console": 1
+    "no-console": 1,
+    "indent" : "off",
+    "space-before-function-paren": "off"
   }
 }
